@@ -1,0 +1,295 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─── ENUMS ────────────────────────────────────────────────
+
+enum RoleType {
+  OWNER
+  STAFF
+}
+
+enum InventoryStatus {
+  ON_HAND
+  RESERVED
+  SOLD_OUT
+}
+
+enum SaleStatus {
+  DRAFT
+  CONFIRMED
+  CANCELLED
+  REFUNDED
+}
+
+enum CashType {
+  IN
+  OUT
+}
+
+enum CashCategory {
+  SALE_INCOME
+  INVENTORY_BUY
+  SHIPPING_COST
+  SUPPLIES
+  PLATFORM_FEES
+  CAPITAL_IN
+  OTHER
+}
+
+enum PaymentMethod {
+  GCASH
+  MAYA
+  BANK
+  CASH
+  MIXED
+  OTHER
+}
+
+enum SalesChannel {
+  FB_PAGE
+  FB_PROFILE
+  MEETUP
+  SHIPPING
+  OTHER
+}
+
+enum ProductType {
+  SEALED_BOX
+  PACK
+  ETB
+  SINGLE
+  BULK_LOT
+  ACCESSORY
+}
+
+enum LanguageType {
+  EN
+  JP
+  OTHER
+}
+
+// ─── MODELS ───────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  displayName  String   @map("display_name")
+  role         RoleType @default(OWNER)
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  inventoryLots    InventoryLot[]
+  purchases        Purchase[]
+  sales            Sale[]
+  cashTransactions CashTransaction[]
+  auditLogs        AuditLog[]
+
+  @@map("users")
+}
+
+model Supplier {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  contact   String?
+  notes     String?
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  purchases     Purchase[]
+  inventoryLots InventoryLot[]
+
+  @@map("suppliers")
+}
+
+model ProductCatalog {
+  id          String      @id @default(uuid()) @db.Uuid
+  brand       String
+  productType ProductType @map("product_type")
+  setCode     String?     @map("set_code")
+  productName String      @map("product_name")
+  language    LanguageType @default(EN)
+  rarity      String?
+  sku         String?     @unique
+  imageUrl    String?     @map("image_url")
+  createdAt   DateTime    @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime    @updatedAt @map("updated_at") @db.Timestamptz
+
+  purchaseLineItems PurchaseLineItem[]
+  inventoryLots     InventoryLot[]
+
+  @@map("product_catalog")
+}
+
+model Purchase {
+  id           String   @id @default(uuid()) @db.Uuid
+  supplierId   String?  @map("supplier_id") @db.Uuid
+  purchasedAt  DateTime @default(now()) @map("purchased_at") @db.Timestamptz
+  shippingCost Decimal  @default(0) @map("shipping_cost") @db.Decimal(12, 2)
+  fees         Decimal  @default(0) @db.Decimal(12, 2)
+  notes        String?
+  createdById  String?  @map("created_by") @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  supplier  Supplier? @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  createdBy User?     @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  lineItems        PurchaseLineItem[]
+  inventoryLots    InventoryLot[]
+  cashTransactions CashTransaction[]
+
+  @@map("purchases")
+}
+
+model PurchaseLineItem {
+  id          String      @id @default(uuid()) @db.Uuid
+  purchaseId  String      @map("purchase_id") @db.Uuid
+  catalogId   String?     @map("catalog_id") @db.Uuid
+  brand       String
+  productType ProductType @map("product_type")
+  setCode     String?     @map("set_code")
+  productName String      @map("product_name")
+  language    LanguageType @default(EN)
+  rarity      String?
+  condition   String?
+  qty         Int
+  unitCost    Decimal     @map("unit_cost") @db.Decimal(12, 2)
+  createdAt   DateTime    @default(now()) @map("created_at") @db.Timestamptz
+
+  purchase Purchase       @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  catalog  ProductCatalog? @relation(fields: [catalogId], references: [id], onDelete: SetNull)
+
+  @@map("purchase_line_items")
+}
+
+model InventoryLot {
+  id          String          @id @default(uuid()) @db.Uuid
+  catalogId   String?         @map("catalog_id") @db.Uuid
+  brand       String
+  productType ProductType     @map("product_type")
+  setCode     String?         @map("set_code")
+  productName String          @map("product_name")
+  language    LanguageType    @default(EN)
+  rarity      String?
+  condition   String?
+  notes       String?
+  acquiredAt  DateTime        @default(now()) @map("acquired_at") @db.Timestamptz
+  supplierId  String?         @map("supplier_id") @db.Uuid
+  purchaseId  String?         @map("purchase_id") @db.Uuid
+  qtyOnHand   Int             @map("qty_on_hand")
+  unitCost    Decimal         @map("unit_cost") @db.Decimal(12, 2)
+  status      InventoryStatus @default(ON_HAND)
+  location    String?
+  createdById String?         @map("created_by") @db.Uuid
+  createdAt   DateTime        @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime        @updatedAt @map("updated_at") @db.Timestamptz
+
+  catalog   ProductCatalog? @relation(fields: [catalogId], references: [id], onDelete: SetNull)
+  supplier  Supplier?       @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  purchase  Purchase?       @relation(fields: [purchaseId], references: [id], onDelete: SetNull)
+  createdBy User?           @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  saleLineItems SaleLineItem[]
+
+  @@index([brand, setCode, productType, status], map: "idx_inventory_search")
+  @@map("inventory_lots")
+}
+
+model Sale {
+  id              String        @id @default(uuid()) @db.Uuid
+  soldAt          DateTime      @default(now()) @map("sold_at") @db.Timestamptz
+  status          SaleStatus    @default(DRAFT)
+  channel         SalesChannel  @default(FB_PAGE)
+  buyerName       String?       @map("buyer_name")
+  paymentMethod   PaymentMethod @default(GCASH) @map("payment_method")
+  subtotal        Decimal       @default(0) @db.Decimal(12, 2)
+  discount        Decimal       @default(0) @db.Decimal(12, 2)
+  shippingCharged Decimal       @default(0) @map("shipping_charged") @db.Decimal(12, 2)
+  totalCollected  Decimal       @default(0) @map("total_collected") @db.Decimal(12, 2)
+  shippingCostPaid Decimal      @default(0) @map("shipping_cost_paid") @db.Decimal(12, 2)
+  platformFees    Decimal       @default(0) @map("platform_fees") @db.Decimal(12, 2)
+  notes           String?
+  createdById     String?       @map("created_by") @db.Uuid
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime      @updatedAt @map("updated_at") @db.Timestamptz
+
+  createdBy User? @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  lineItems        SaleLineItem[]
+  cashTransactions CashTransaction[]
+
+  @@index([soldAt], map: "idx_sales_date")
+  @@map("sales")
+}
+
+model SaleLineItem {
+  id             String  @id @default(uuid()) @db.Uuid
+  saleId         String  @map("sale_id") @db.Uuid
+  inventoryLotId String  @map("inventory_lot_id") @db.Uuid
+  qty            Int
+  unitPrice      Decimal @map("unit_price") @db.Decimal(12, 2)
+  cogsTotal      Decimal @default(0) @map("cogs_total") @db.Decimal(12, 2)
+  profitTotal    Decimal @default(0) @map("profit_total") @db.Decimal(12, 2)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  sale         Sale         @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  inventoryLot InventoryLot @relation(fields: [inventoryLotId], references: [id], onDelete: Restrict)
+
+  @@map("sale_line_items")
+}
+
+model CashTransaction {
+  id               String        @id @default(uuid()) @db.Uuid
+  date             DateTime      @default(now()) @db.Timestamptz
+  type             CashType
+  category         CashCategory
+  amount           Decimal       @db.Decimal(12, 2)
+  description      String
+  paymentMethod    PaymentMethod @default(GCASH) @map("payment_method")
+  linkedSaleId     String?       @map("linked_sale_id") @db.Uuid
+  linkedPurchaseId String?       @map("linked_purchase_id") @db.Uuid
+  createdById      String?       @map("created_by") @db.Uuid
+  createdAt        DateTime      @default(now()) @map("created_at") @db.Timestamptz
+
+  linkedSale     Sale?     @relation(fields: [linkedSaleId], references: [id], onDelete: SetNull)
+  linkedPurchase Purchase? @relation(fields: [linkedPurchaseId], references: [id], onDelete: SetNull)
+  createdBy      User?     @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([date], map: "idx_cash_date")
+  @@map("cash_transactions")
+}
+
+model Attachment {
+  id         String   @id @default(uuid()) @db.Uuid
+  entityType String   @map("entity_type")
+  entityId   String   @map("entity_id") @db.Uuid
+  fileUrl    String   @map("file_url")
+  fileName   String?  @map("file_name")
+  createdById String? @map("created_by") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("attachments")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  entityType String   @map("entity_type")
+  entityId   String   @map("entity_id") @db.Uuid
+  action     String
+  diff       Json?    @db.JsonB
+  actorId    String?  @map("actor_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@map("audit_log")
+}
