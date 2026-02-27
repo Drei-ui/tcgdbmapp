@@ -1,5 +1,6 @@
 import { getCashTransactions, getCashBalance } from "@/lib/actions/cash";
 import { CashList } from "@/components/cash/cash-list";
+import { serialize } from "@/lib/utils";
 
 export default async function CashLedgerPage({
   searchParams,
@@ -20,7 +21,7 @@ export default async function CashLedgerPage({
       </div>
 
       <CashList
-        transactions={transactions}
+        transactions={serialize(transactions)}
         balance={balance}
         defaultAction={params.action}
       />

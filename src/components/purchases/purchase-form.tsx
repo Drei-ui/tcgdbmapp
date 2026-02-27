@@ -19,7 +19,7 @@ import { createPurchase } from "@/lib/actions/purchases";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { formatCurrency } from "@/lib/utils";
-import type { Supplier } from "@/generated/prisma/client";
+import type { Supplier, ProductCatalog } from "@/generated/prisma/client";
 
 const PRODUCT_TYPES = [
   { value: "SEALED_BOX", label: "Sealed Box" },
@@ -54,7 +54,13 @@ const emptyLineItem: LineItem = {
   unitCost: "",
 };
 
-export function PurchaseForm({ suppliers }: { suppliers: Supplier[] }) {
+export function PurchaseForm({
+  suppliers,
+  catalog = [],
+}: {
+  suppliers: Supplier[];
+  catalog?: ProductCatalog[];
+}) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [supplierId, setSupplierId] = useState("");
@@ -69,6 +75,24 @@ export function PurchaseForm({ suppliers }: { suppliers: Supplier[] }) {
   function updateLineItem(index: number, field: keyof LineItem, value: string) {
     setLineItems((prev) =>
       prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+    );
+  }
+
+  function applyProduct(index: number, product: ProductCatalog) {
+    setLineItems((prev) =>
+      prev.map((item, i) =>
+        i === index
+          ? {
+              ...item,
+              brand: product.brand,
+              productType: product.productType,
+              setCode: product.setCode || "",
+              productName: product.productName,
+              language: product.language,
+              rarity: product.rarity || "",
+            }
+          : item
+      )
     );
   }
 
@@ -93,7 +117,7 @@ export function PurchaseForm({ suppliers }: { suppliers: Supplier[] }) {
   async function handleSubmit() {
     setLoading(true);
     const result = await createPurchase({
-      supplierId: supplierId || undefined,
+      supplierId: supplierId && supplierId !== "new" ? supplierId : undefined,
       newSupplierName: newSupplierName || undefined,
       shippingCost: parseFloat(shippingCost) || 0,
       fees: parseFloat(fees) || 0,
@@ -199,6 +223,30 @@ export function PurchaseForm({ suppliers }: { suppliers: Supplier[] }) {
             </div>
           </CardHeader>
           <CardContent className="space-y-3">
+            {catalog.length > 0 && (
+              <div className="space-y-1.5">
+                <Label>Saved Product</Label>
+                <Select
+                  value=""
+                  onValueChange={(id) => {
+                    const product = catalog.find((p) => p.id === id);
+                    if (product) applyProduct(index, product);
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Pick from saved products..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {catalog.map((p) => (
+                      <SelectItem key={p.id} value={p.id}>
+                        {p.brand} — {p.productName}
+                        {p.setCode ? ` (${p.setCode})` : ""}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label>Type</Label>

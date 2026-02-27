@@ -3,6 +3,7 @@ import { SaleForm } from "@/components/sales/sale-form";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { serialize } from "@/lib/utils";
 
 export default async function NewSalePage() {
   const lots = await getInventoryLots({ status: "ON_HAND" });
@@ -16,7 +17,7 @@ export default async function NewSalePage() {
         </Button>
       </Link>
       <h2 className="text-2xl font-bold">Create Sale</h2>
-      <SaleForm lots={lots} />
+      <SaleForm lots={serialize(lots)} />
     </div>
   );
 }

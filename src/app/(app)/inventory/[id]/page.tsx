@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { formatCurrency, formatDate, daysAgo } from "@/lib/utils";
+import { formatCurrency, formatDate, daysAgo, serialize } from "@/lib/utils";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { LotActions } from "@/components/inventory/lot-actions";
@@ -159,7 +159,7 @@ export default async function InventoryDetailPage({
         </CardContent>
       </Card>
 
-      <LotActions lot={lot} />
+      <LotActions lot={serialize(lot)} />
     </div>
   );
 }

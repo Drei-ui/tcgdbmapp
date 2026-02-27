@@ -5,6 +5,7 @@ import { InventoryList } from "@/components/inventory/inventory-list";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { serialize } from "@/lib/utils";
 
 export default async function InventoryPage({
   searchParams,
@@ -44,7 +45,7 @@ export default async function InventoryPage({
         <FilterChips brands={brands} />
       </Suspense>
 
-      <InventoryList lots={lots} />
+      <InventoryList lots={serialize(lots)} />
     </div>
   );
 }

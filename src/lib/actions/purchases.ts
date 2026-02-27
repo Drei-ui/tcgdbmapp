@@ -10,6 +10,13 @@ function toNum(val: unknown): number {
   return parseFloat(String(val)) || 0;
 }
 
+export async function getProductCatalog() {
+  await requireUser();
+  return prisma.productCatalog.findMany({
+    orderBy: [{ brand: "asc" }, { productName: "asc" }],
+  });
+}
+
 export async function getSuppliers() {
   await requireUser();
   return prisma.supplier.findMany({ orderBy: { name: "asc" } });
@@ -86,16 +93,73 @@ export async function createPurchase(data: {
     supplierId = supplier.id;
   }
 
-  const purchase = await prisma.purchase.create({
-    data: {
-      supplierId,
-      purchasedAt: parsed.data.purchasedAt || new Date(),
-      shippingCost: parsed.data.shippingCost,
-      fees: parsed.data.fees,
-      notes: parsed.data.notes,
-      createdById: user.id,
-      lineItems: {
-        create: parsed.data.lineItems.map((item) => ({
+  const items = parsed.data.lineItems;
+  const shippingCost = parsed.data.shippingCost;
+  const fees = parsed.data.fees;
+
+  // Calculate per-item share of shipping + fees
+  const totalItemCost = items.reduce(
+    (sum, item) => sum + item.unitCost * item.qty,
+    0
+  );
+
+  const purchase = await prisma.$transaction(async (tx) => {
+    const p = await tx.purchase.create({
+      data: {
+        supplierId,
+        purchasedAt: parsed.data.purchasedAt || new Date(),
+        shippingCost,
+        fees,
+        notes: parsed.data.notes,
+        createdById: user.id,
+        lineItems: {
+          create: items.map((item) => ({
+            brand: item.brand,
+            productType: item.productType as never,
+            setCode: item.setCode,
+            productName: item.productName,
+            language: (item.language || "EN") as never,
+            rarity: item.rarity,
+            condition: item.condition,
+            qty: item.qty,
+            unitCost: item.unitCost,
+          })),
+        },
+      },
+    });
+
+    // Auto-save products to catalog (upsert by name+brand+type+language)
+    for (const item of items) {
+      await tx.productCatalog.upsert({
+        where: {
+          sku: `${item.brand}|${item.productType}|${item.productName}|${item.language || "EN"}`,
+        },
+        update: {
+          setCode: item.setCode,
+          rarity: item.rarity,
+        },
+        create: {
+          brand: item.brand,
+          productType: item.productType as never,
+          setCode: item.setCode,
+          productName: item.productName,
+          language: (item.language || "EN") as never,
+          rarity: item.rarity,
+          sku: `${item.brand}|${item.productType}|${item.productName}|${item.language || "EN"}`,
+        },
+      });
+    }
+
+    // Auto-create inventory lots
+    for (const item of items) {
+      const itemTotal = item.unitCost * item.qty;
+      const proportion = totalItemCost > 0 ? itemTotal / totalItemCost : 0;
+      const allocatedExtra = (shippingCost + fees) * proportion;
+      const adjustedUnitCost =
+        item.unitCost + allocatedExtra / item.qty;
+
+      await tx.inventoryLot.create({
+        data: {
           brand: item.brand,
           productType: item.productType as never,
           setCode: item.setCode,
@@ -103,15 +167,103 @@ export async function createPurchase(data: {
           language: (item.language || "EN") as never,
           rarity: item.rarity,
           condition: item.condition,
-          qty: item.qty,
-          unitCost: item.unitCost,
-        })),
+          qtyOnHand: item.qty,
+          unitCost: Math.round(adjustedUnitCost * 100) / 100,
+          purchaseId: p.id,
+          supplierId,
+          createdById: user.id,
+        },
+      });
+    }
+
+    // Auto-create cash OUT entry
+    const totalAmount = totalItemCost + shippingCost + fees;
+    await tx.cashTransaction.create({
+      data: {
+        type: "OUT",
+        category: "INVENTORY_BUY",
+        amount: totalAmount,
+        description: `Purchase #${p.id.slice(0, 8)} — ${items.length} item${items.length !== 1 ? "s" : ""}`,
+        paymentMethod: "CASH",
+        linkedPurchaseId: p.id,
+        createdById: user.id,
       },
-    },
+    });
+
+    // Audit log
+    await tx.auditLog.create({
+      data: {
+        entityType: "purchase",
+        entityId: p.id,
+        action: "CREATE_PURCHASE",
+        diff: { lineItemCount: items.length, autoReceived: true },
+        actorId: user.id,
+      },
+    });
+
+    return p;
   });
 
   revalidatePath("/purchases");
+  revalidatePath("/inventory");
+  revalidatePath("/cash");
+  revalidatePath("/dashboard");
   return { success: true, purchaseId: purchase.id };
+}
+
+export async function deletePurchase(purchaseId: string) {
+  const user = await requireUser();
+
+  const purchase = await prisma.purchase.findUnique({
+    where: { id: purchaseId },
+    include: { inventoryLots: { include: { saleLineItems: true } } },
+  });
+
+  if (!purchase) return { error: "Purchase not found" };
+
+  // Check if any inventory lots have been sold
+  const soldLots = purchase.inventoryLots.filter(
+    (lot) => lot.saleLineItems.length > 0
+  );
+  if (soldLots.length > 0) {
+    return {
+      error:
+        "Cannot delete: some items from this purchase have been sold. Refund those sales first.",
+    };
+  }
+
+  await prisma.$transaction(async (tx) => {
+    // Delete linked cash transactions
+    await tx.cashTransaction.deleteMany({
+      where: { linkedPurchaseId: purchaseId },
+    });
+
+    // Delete inventory lots created from this purchase
+    await tx.inventoryLot.deleteMany({
+      where: { purchaseId },
+    });
+
+    // Delete purchase (cascades to line items)
+    await tx.purchase.delete({
+      where: { id: purchaseId },
+    });
+
+    // Audit log
+    await tx.auditLog.create({
+      data: {
+        entityType: "purchase",
+        entityId: purchaseId,
+        action: "DELETE_PURCHASE",
+        actorId: user.id,
+      },
+    });
+  });
+
+  revalidatePath("/purchases");
+  revalidatePath("/inventory");
+  revalidatePath("/cash");
+  revalidatePath("/dashboard");
+  return { success: true };
 }
 
 export async function receivePurchase(purchaseId: string) {

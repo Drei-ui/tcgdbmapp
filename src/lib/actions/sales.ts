@@ -38,29 +38,89 @@ export async function quickSell(data: {
 
   const subtotal = parsed.data.unitPrice * parsed.data.qty;
   const totalCollected = subtotal + parsed.data.shippingCharged;
+  const cogs = toNum(lot.unitCost) * parsed.data.qty;
+  const profit = subtotal - cogs;
 
-  const sale = await prisma.sale.create({
-    data: {
-      status: "DRAFT",
-      channel: parsed.data.channel as never,
-      paymentMethod: parsed.data.paymentMethod as never,
-      subtotal,
-      totalCollected,
-      shippingCharged: parsed.data.shippingCharged,
-      shippingCostPaid: parsed.data.shippingCostPaid,
-      createdById: user.id,
-      lineItems: {
-        create: {
-          inventoryLotId: parsed.data.inventoryLotId,
-          qty: parsed.data.qty,
-          unitPrice: parsed.data.unitPrice,
+  const sale = await prisma.$transaction(async (tx) => {
+    // Create sale as CONFIRMED directly
+    const s = await tx.sale.create({
+      data: {
+        status: "CONFIRMED",
+        channel: parsed.data.channel as never,
+        paymentMethod: parsed.data.paymentMethod as never,
+        subtotal,
+        totalCollected,
+        shippingCharged: parsed.data.shippingCharged,
+        shippingCostPaid: parsed.data.shippingCostPaid,
+        createdById: user.id,
+        lineItems: {
+          create: {
+            inventoryLotId: parsed.data.inventoryLotId,
+            qty: parsed.data.qty,
+            unitPrice: parsed.data.unitPrice,
+            cogsTotal: cogs,
+            profitTotal: profit,
+          },
         },
       },
-    },
+    });
+
+    // Decrement inventory
+    const newQty = lot.qtyOnHand - parsed.data.qty;
+    await tx.inventoryLot.update({
+      where: { id: lot.id },
+      data: {
+        qtyOnHand: newQty,
+        status: newQty === 0 ? "SOLD_OUT" : lot.status,
+      },
+    });
+
+    // Cash IN for the sale
+    await tx.cashTransaction.create({
+      data: {
+        type: "IN",
+        category: "SALE_INCOME",
+        amount: totalCollected,
+        description: `Sale #${s.id.slice(0, 8)} — quick sell`,
+        paymentMethod: parsed.data.paymentMethod as never,
+        linkedSaleId: s.id,
+        createdById: user.id,
+      },
+    });
+
+    // Cash OUT for shipping cost if any
+    if (parsed.data.shippingCostPaid > 0) {
+      await tx.cashTransaction.create({
+        data: {
+          type: "OUT",
+          category: "SHIPPING_COST",
+          amount: parsed.data.shippingCostPaid,
+          description: `Shipping for sale #${s.id.slice(0, 8)}`,
+          paymentMethod: parsed.data.paymentMethod as never,
+          linkedSaleId: s.id,
+          createdById: user.id,
+        },
+      });
+    }
+
+    // Audit log
+    await tx.auditLog.create({
+      data: {
+        entityType: "sale",
+        entityId: s.id,
+        action: "QUICK_SELL",
+        diff: { cogs: cogs.toFixed(2), profit: profit.toFixed(2) },
+        actorId: user.id,
+      },
+    });
+
+    return s;
   });
 
   revalidatePath("/inventory");
   revalidatePath("/sales");
+  revalidatePath("/cash");
+  revalidatePath("/dashboard");
   return { success: true, saleId: sale.id };
 }
 
@@ -280,6 +340,59 @@ export async function confirmSale(saleId: string) {
 
   revalidatePath("/sales");
   revalidatePath(`/sales/${saleId}`);
+  revalidatePath("/inventory");
+  revalidatePath("/cash");
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
+export async function deleteSale(saleId: string) {
+  const user = await requireUser();
+
+  const sale = await prisma.sale.findUnique({
+    where: { id: saleId },
+    include: { lineItems: true },
+  });
+
+  if (!sale) return { error: "Sale not found" };
+
+  await prisma.$transaction(async (tx) => {
+    // If sale was confirmed, restore inventory
+    if (sale.status === "CONFIRMED") {
+      for (const item of sale.lineItems) {
+        await tx.inventoryLot.update({
+          where: { id: item.inventoryLotId },
+          data: {
+            qtyOnHand: { increment: item.qty },
+            status: "ON_HAND",
+          },
+        });
+      }
+    }
+
+    // Delete linked cash transactions
+    await tx.cashTransaction.deleteMany({
+      where: { linkedSaleId: saleId },
+    });
+
+    // Delete sale (cascades to line items)
+    await tx.sale.delete({
+      where: { id: saleId },
+    });
+
+    // Audit log
+    await tx.auditLog.create({
+      data: {
+        entityType: "sale",
+        entityId: saleId,
+        action: "DELETE_SALE",
+        diff: { previousStatus: sale.status },
+        actorId: user.id,
+      },
+    });
+  });
+
+  revalidatePath("/sales");
   revalidatePath("/inventory");
   revalidatePath("/cash");
   revalidatePath("/dashboard");

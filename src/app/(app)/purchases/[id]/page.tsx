@@ -8,6 +8,7 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { ReceiveButton } from "@/components/purchases/receive-button";
+import { DeletePurchaseButton } from "@/components/purchases/delete-purchase-button";
 
 export default async function PurchaseDetailPage({
   params,
@@ -162,6 +163,8 @@ export default async function PurchaseDetailPage({
       )}
 
       {!isReceived && <ReceiveButton purchaseId={id} />}
+
+      <DeletePurchaseButton purchaseId={id} />
     </div>
   );
 }

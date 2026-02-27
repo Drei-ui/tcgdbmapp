@@ -34,6 +34,23 @@ export function formatDateTime(date: Date | string): string {
   }).format(d);
 }
 
+/**
+ * Recursively convert Prisma Decimal objects to plain numbers
+ * so data can be passed from Server Components to Client Components.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function serialize<T>(obj: T): T {
+  return JSON.parse(
+    JSON.stringify(obj, (_key, value) =>
+      value !== null &&
+      typeof value === "object" &&
+      typeof value.toNumber === "function"
+        ? value.toNumber()
+        : value
+    )
+  );
+}
+
 export function daysAgo(date: Date | string): number {
   const d = typeof date === "string" ? new Date(date) : date;
   const now = new Date();
