@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { ExportButton } from "@/components/export-button";
 
 const statusColors: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
   DRAFT: "secondary",
@@ -25,12 +26,15 @@ export default async function SalesPage() {
             {sales.length} sale{sales.length !== 1 ? "s" : ""}
           </p>
         </div>
-        <Link href="/sales/new">
-          <Button size="sm">
-            <Plus className="h-4 w-4 mr-1" />
-            New Sale
-          </Button>
-        </Link>
+        <div className="flex gap-2">
+          <ExportButton type="sales" />
+          <Link href="/sales/new">
+            <Button size="sm">
+              <Plus className="h-4 w-4 mr-1" />
+              New Sale
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {sales.length === 0 ? (

@@ -5,25 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { CashForm } from "./cash-form";
-import { ArrowDownCircle, ArrowUpCircle, Plus } from "lucide-react";
+import { ArrowDownCircle, ArrowUpCircle } from "lucide-react";
 import Link from "next/link";
-import type {
-  CashTransaction,
-  Sale,
-  Purchase,
-} from "@/generated/prisma/client";
-
-type CashTxWithRelations = CashTransaction & {
-  linkedSale: Sale | null;
-  linkedPurchase: Purchase | null;
-};
+import type { CashTransaction } from "@/generated/prisma/client";
 
 export function CashList({
   transactions,
   balance,
   defaultAction,
 }: {
-  transactions: CashTxWithRelations[];
+  transactions: CashTransaction[];
   balance: number;
   defaultAction?: string;
 }) {

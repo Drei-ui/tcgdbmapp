@@ -31,10 +31,6 @@ export async function getCashTransactions(filters?: {
   return prisma.cashTransaction.findMany({
     where,
     orderBy: { date: "desc" },
-    include: {
-      linkedSale: true,
-      linkedPurchase: true,
-    },
   });
 }
 

@@ -160,7 +160,7 @@ export default async function DashboardPage() {
                 type: "purchase" as const,
                 id: p.id,
                 label: p.supplier?.name || `Purchase #${p.id.slice(0, 8)}`,
-                detail: `${p.lineItems?.length || 0} items`,
+                detail: `${p._count?.lineItems || 0} items`,
                 badge: "PURCHASE",
                 date: p.createdAt,
                 href: `/purchases/${p.id}`,

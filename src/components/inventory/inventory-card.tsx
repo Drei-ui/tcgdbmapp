@@ -6,11 +6,7 @@ import { Card } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
 import { ShoppingCart, Bookmark, PenLine } from "lucide-react";
 import Link from "next/link";
-import type { InventoryLot, Supplier } from "@/generated/prisma/client";
-
-type InventoryLotWithRelations = InventoryLot & {
-  supplier: Supplier | null;
-};
+import type { InventoryLot } from "@/generated/prisma/client";
 
 export function InventoryCard({
   lot,
@@ -18,10 +14,10 @@ export function InventoryCard({
   onReserve,
   onAdjust,
 }: {
-  lot: InventoryLotWithRelations;
-  onQuickSell: (lot: InventoryLotWithRelations) => void;
-  onReserve: (lot: InventoryLotWithRelations) => void;
-  onAdjust: (lot: InventoryLotWithRelations) => void;
+  lot: InventoryLot;
+  onQuickSell: (lot: InventoryLot) => void;
+  onReserve: (lot: InventoryLot) => void;
+  onAdjust: (lot: InventoryLot) => void;
 }) {
   const subtitle = [lot.productType.replace("_", " "), lot.setCode, lot.rarity, lot.condition]
     .filter(Boolean)

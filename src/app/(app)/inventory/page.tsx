@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { serialize } from "@/lib/utils";
+import { ExportButton } from "@/components/export-button";
 
 export default async function InventoryPage({
   searchParams,
@@ -33,12 +34,15 @@ export default async function InventoryPage({
             {lots.length} lot{lots.length !== 1 ? "s" : ""}
           </p>
         </div>
-        <Link href="/purchases/new">
-          <Button size="sm">
-            <Plus className="h-4 w-4 mr-1" />
-            Add Stock
-          </Button>
-        </Link>
+        <div className="flex gap-2">
+          <ExportButton type="inventory" />
+          <Link href="/purchases/new">
+            <Button size="sm">
+              <Plus className="h-4 w-4 mr-1" />
+              Add Stock
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <Suspense fallback={<div>Loading filters...</div>}>

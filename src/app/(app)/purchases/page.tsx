@@ -42,7 +42,7 @@ export default async function PurchasesPage() {
               itemTotal +
               parseFloat(purchase.shippingCost.toString()) +
               parseFloat(purchase.fees.toString());
-            const isReceived = purchase.inventoryLots.length > 0;
+            const isReceived = (purchase._count?.inventoryLots ?? 0) > 0;
 
             return (
               <Link key={purchase.id} href={`/purchases/${purchase.id}`}>

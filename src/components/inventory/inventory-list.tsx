@@ -11,21 +11,17 @@ import {
 } from "@/lib/actions/inventory";
 import { quickSell } from "@/lib/actions/sales";
 import { toast } from "sonner";
-import type { InventoryLot, Supplier } from "@/generated/prisma/client";
-
-type InventoryLotWithRelations = InventoryLot & {
-  supplier: Supplier | null;
-};
+import type { InventoryLot } from "@/generated/prisma/client";
 
 export function InventoryList({
   lots,
 }: {
-  lots: InventoryLotWithRelations[];
+  lots: InventoryLot[];
 }) {
   const [quickSellLot, setQuickSellLot] =
-    useState<InventoryLotWithRelations | null>(null);
+    useState<InventoryLot | null>(null);
   const [adjustLot, setAdjustLot] =
-    useState<InventoryLotWithRelations | null>(null);
+    useState<InventoryLot | null>(null);
 
   async function handleQuickSell(data: {
     inventoryLotId: string;
@@ -44,7 +40,7 @@ export function InventoryList({
     }
   }
 
-  async function handleReserve(lot: InventoryLotWithRelations) {
+  async function handleReserve(lot: InventoryLot) {
     const result =
       lot.status === "RESERVED"
         ? await unreserveInventoryLot(lot.id)

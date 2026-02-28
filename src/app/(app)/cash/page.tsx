@@ -1,6 +1,7 @@
 import { getCashTransactions, getCashBalance } from "@/lib/actions/cash";
 import { CashList } from "@/components/cash/cash-list";
 import { serialize } from "@/lib/utils";
+import { ExportButton } from "@/components/export-button";
 
 export default async function CashLedgerPage({
   searchParams,
@@ -15,9 +16,12 @@ export default async function CashLedgerPage({
 
   return (
     <div className="p-4 md:p-6 space-y-4 max-w-2xl">
-      <div>
-        <h2 className="text-2xl font-bold">Cash Ledger</h2>
-        <p className="text-muted-foreground text-sm">Track cash in and out</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold">Cash Ledger</h2>
+          <p className="text-muted-foreground text-sm">Track cash in and out</p>
+        </div>
+        <ExportButton type="cash" />
       </div>
 
       <CashList

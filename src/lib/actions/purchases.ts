@@ -39,10 +39,14 @@ export async function getPurchases() {
   await requireUser();
   return prisma.purchase.findMany({
     orderBy: { purchasedAt: "desc" },
-    include: {
-      supplier: true,
-      lineItems: true,
-      inventoryLots: true,
+    select: {
+      id: true,
+      purchasedAt: true,
+      shippingCost: true,
+      fees: true,
+      supplier: { select: { name: true } },
+      lineItems: { select: { id: true, unitCost: true, qty: true } },
+      _count: { select: { inventoryLots: true } },
     },
   });
 }

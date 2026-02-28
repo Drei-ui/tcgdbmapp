@@ -40,7 +40,6 @@ export async function getInventoryLots(filters?: {
   return prisma.inventoryLot.findMany({
     where,
     orderBy: { acquiredAt: "asc" },
-    include: { supplier: true },
   });
 }
 

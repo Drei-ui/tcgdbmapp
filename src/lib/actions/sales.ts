@@ -144,9 +144,15 @@ export async function getSales(filters?: {
   return prisma.sale.findMany({
     where,
     orderBy: { soldAt: "desc" },
-    include: {
+    select: {
+      id: true,
+      soldAt: true,
+      status: true,
+      channel: true,
+      buyerName: true,
+      totalCollected: true,
       lineItems: {
-        include: { inventoryLot: true },
+        select: { id: true, profitTotal: true },
       },
     },
   });

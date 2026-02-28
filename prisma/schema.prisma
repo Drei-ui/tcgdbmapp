@@ -201,6 +201,8 @@ model InventoryLot {
   saleLineItems SaleLineItem[]
 
   @@index([brand, setCode, productType, status], map: "idx_inventory_search")
+  @@index([status, acquiredAt], map: "idx_inventory_status_date")
+  @@index([purchaseId], map: "idx_inventory_purchase")
   @@map("inventory_lots")
 }
 
@@ -228,6 +230,8 @@ model Sale {
   cashTransactions CashTransaction[]
 
   @@index([soldAt], map: "idx_sales_date")
+  @@index([status, soldAt], map: "idx_sales_status_date")
+  @@index([createdAt], map: "idx_sales_created")
   @@map("sales")
 }
 
@@ -265,6 +269,10 @@ model CashTransaction {
   createdBy      User?     @relation(fields: [createdById], references: [id], onDelete: SetNull)
 
   @@index([date], map: "idx_cash_date")
+  @@index([type], map: "idx_cash_type")
+  @@index([linkedSaleId], map: "idx_cash_linked_sale")
+  @@index([linkedPurchaseId], map: "idx_cash_linked_purchase")
+  @@index([createdAt], map: "idx_cash_created")
   @@map("cash_transactions")
 }
 

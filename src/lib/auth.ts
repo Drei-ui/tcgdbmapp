@@ -1,8 +1,10 @@
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
-export async function getUser() {
+/** Cached per-request — deduplicates across multiple server actions/components in one render */
+export const getUser = cache(async () => {
   const supabase = await createClient();
   const {
     data: { user },
@@ -10,15 +12,11 @@ export async function getUser() {
 
   if (!user) return null;
 
-  const dbUser = await prisma.user.findUnique({
-    where: { id: user.id },
-  });
+  return prisma.user.findUnique({ where: { id: user.id } });
+});
 
-  return dbUser;
-}
-
-export async function requireUser() {
+export const requireUser = cache(async () => {
   const user = await getUser();
   if (!user) redirect("/login");
   return user;
-}
+});
