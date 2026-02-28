@@ -150,7 +150,7 @@ export async function getSales(filters?: {
   const page = Math.max(1, filters?.page ?? 1);
   const skip = (page - 1) * PAGE_SIZE;
 
-  const [items, total] = await Promise.all([
+  const [items, total] = await prisma.$transaction([
     prisma.sale.findMany({
       where,
       orderBy: { soldAt: "desc" },

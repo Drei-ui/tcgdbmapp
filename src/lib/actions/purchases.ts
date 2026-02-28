@@ -57,7 +57,7 @@ export async function getPurchases(filters?: { page?: number }) {
   const page = Math.max(1, filters?.page ?? 1);
   const skip = (page - 1) * PAGE_SIZE;
 
-  const [items, total] = await Promise.all([
+  const [items, total] = await prisma.$transaction([
     prisma.purchase.findMany({
       orderBy: { purchasedAt: "desc" },
       skip,
@@ -250,21 +250,34 @@ export async function deletePurchase(purchaseId: string) {
 
   const purchase = await prisma.purchase.findUnique({
     where: { id: purchaseId },
-    include: { inventoryLots: { include: { saleLineItems: true } } },
+    include: {
+      inventoryLots: {
+        include: {
+          saleLineItems: {
+            include: { sale: { select: { status: true } } },
+          },
+        },
+      },
+    },
   });
 
   if (!purchase) return { error: "Purchase not found" };
 
-  // Check if any inventory lots have been sold
-  const soldLots = purchase.inventoryLots.filter(
-    (lot) => lot.saleLineItems.length > 0
+  // Only block deletion if lots have ACTIVE sales (CONFIRMED or DRAFT)
+  const activeSaleLots = purchase.inventoryLots.filter((lot) =>
+    lot.saleLineItems.some(
+      (sli) => sli.sale.status === "CONFIRMED" || sli.sale.status === "DRAFT"
+    )
   );
-  if (soldLots.length > 0) {
+  if (activeSaleLots.length > 0) {
     return {
       error:
-        "Cannot delete: some items from this purchase have been sold. Refund those sales first.",
+        "Cannot delete: some items from this purchase have active sales. Refund or cancel those sales first.",
     };
   }
+
+  // Collect lot IDs for cleanup
+  const lotIds = purchase.inventoryLots.map((lot) => lot.id);
 
   await prisma.$transaction(async (tx) => {
     // Delete linked cash transactions
@@ -272,12 +285,20 @@ export async function deletePurchase(purchaseId: string) {
       where: { linkedPurchaseId: purchaseId },
     });
 
+    // Remove SaleLineItems from refunded/cancelled sales that reference these lots
+    // (we already verified no active sales exist above)
+    if (lotIds.length > 0) {
+      await tx.saleLineItem.deleteMany({
+        where: { inventoryLotId: { in: lotIds } },
+      });
+    }
+
     // Delete inventory lots created from this purchase
     await tx.inventoryLot.deleteMany({
       where: { purchaseId },
     });
 
-    // Delete purchase (cascades to line items)
+    // Delete purchase (cascades to purchase line items)
     await tx.purchase.delete({
       where: { id: purchaseId },
     });
