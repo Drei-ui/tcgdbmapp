@@ -224,28 +224,42 @@ export async function createSale(data: {
   const totalCollected =
     subtotal - parsed.data.discount + parsed.data.shippingCharged;
 
-  const sale = await prisma.sale.create({
-    data: {
-      status: "DRAFT",
-      channel: parsed.data.channel as never,
-      buyerName: parsed.data.buyerName,
-      paymentMethod: parsed.data.paymentMethod as never,
-      subtotal,
-      discount: parsed.data.discount,
-      shippingCharged: parsed.data.shippingCharged,
-      totalCollected,
-      shippingCostPaid: parsed.data.shippingCostPaid,
-      platformFees: parsed.data.platformFees,
-      notes: parsed.data.notes,
-      createdById: user.id,
-      lineItems: {
-        create: parsed.data.lineItems.map((item) => ({
-          inventoryLotId: item.inventoryLotId,
-          qty: item.qty,
-          unitPrice: item.unitPrice,
-        })),
+  const sale = await prisma.$transaction(async (tx) => {
+    const s = await tx.sale.create({
+      data: {
+        status: "DRAFT",
+        channel: parsed.data.channel as never,
+        buyerName: parsed.data.buyerName,
+        paymentMethod: parsed.data.paymentMethod as never,
+        subtotal,
+        discount: parsed.data.discount,
+        shippingCharged: parsed.data.shippingCharged,
+        totalCollected,
+        shippingCostPaid: parsed.data.shippingCostPaid,
+        platformFees: parsed.data.platformFees,
+        notes: parsed.data.notes,
+        createdById: user.id,
+        lineItems: {
+          create: parsed.data.lineItems.map((item) => ({
+            inventoryLotId: item.inventoryLotId,
+            qty: item.qty,
+            unitPrice: item.unitPrice,
+          })),
+        },
       },
-    },
+    });
+
+    await tx.auditLog.create({
+      data: {
+        entityType: "sale",
+        entityId: s.id,
+        action: "CREATE_SALE",
+        diff: { lineItemCount: parsed.data.lineItems.length, totalCollected },
+        actorId: user.id,
+      },
+    });
+
+    return s;
   });
 
   timer.done();
@@ -383,20 +397,18 @@ export async function deleteSale(saleId: string) {
 
   if (!sale) return { error: "Sale not found" };
 
-  await prisma.$transaction(async (tx) => {
-    // If sale was confirmed, restore inventory
-    if (sale.status === "CONFIRMED") {
-      for (const item of sale.lineItems) {
-        await tx.inventoryLot.update({
-          where: { id: item.inventoryLotId },
-          data: {
-            qtyOnHand: { increment: item.qty },
-            status: "ON_HAND",
-          },
-        });
-      }
-    }
+  // Only DRAFT and CANCELLED sales can be deleted
+  if (sale.status === "CONFIRMED" || sale.status === "REFUNDED") {
+    return {
+      error: `Cannot delete a ${sale.status.toLowerCase()} sale. ${
+        sale.status === "CONFIRMED"
+          ? "Refund it first if needed."
+          : "Refunded sales are financial records and cannot be removed."
+      }`,
+    };
+  }
 
+  await prisma.$transaction(async (tx) => {
     // Delete linked cash transactions
     await tx.cashTransaction.deleteMany({
       where: { linkedSaleId: saleId },

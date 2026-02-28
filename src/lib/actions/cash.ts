@@ -85,18 +85,37 @@ export async function createCashTransaction(data: {
     return { error: parsed.error.issues[0].message };
   }
 
-  await prisma.cashTransaction.create({
-    data: {
-      type: parsed.data.type as never,
-      category: parsed.data.category as never,
-      amount: parsed.data.amount,
-      description: parsed.data.description,
-      paymentMethod: parsed.data.paymentMethod as never,
-      date: parsed.data.date || new Date(),
-      linkedSaleId: parsed.data.linkedSaleId,
-      linkedPurchaseId: parsed.data.linkedPurchaseId,
-      createdById: user.id,
-    },
+  const tx = await prisma.$transaction(async (db) => {
+    const created = await db.cashTransaction.create({
+      data: {
+        type: parsed.data.type as never,
+        category: parsed.data.category as never,
+        amount: parsed.data.amount,
+        description: parsed.data.description,
+        paymentMethod: parsed.data.paymentMethod as never,
+        date: parsed.data.date || new Date(),
+        linkedSaleId: parsed.data.linkedSaleId,
+        linkedPurchaseId: parsed.data.linkedPurchaseId,
+        createdById: user.id,
+      },
+    });
+
+    await db.auditLog.create({
+      data: {
+        entityType: "cash_transaction",
+        entityId: created.id,
+        action: "CREATE",
+        diff: {
+          type: parsed.data.type,
+          category: parsed.data.category,
+          amount: parsed.data.amount,
+          description: parsed.data.description,
+        },
+        actorId: user.id,
+      },
+    });
+
+    return created;
   });
 
   timer.done();

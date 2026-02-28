@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+// ─── Sanitization helpers ─────────────────────────────────
+
+/** Trim whitespace and strip HTML tags from user input */
+const safeString = z.string().transform((s) => s.trim().replace(/<[^>]*>/g, ""));
+const safeStringRequired = (msg: string) =>
+  safeString.pipe(z.string().min(1, msg));
+const safeStringOptional = safeString.optional();
+
 // ─── Auth ─────────────────────────────────────────────────
 
 export const loginSchema = z.object({
@@ -10,7 +18,7 @@ export const loginSchema = z.object({
 export const registerSchema = z
   .object({
     email: z.string().email("Invalid email address"),
-    displayName: z.string().min(1, "Display name is required"),
+    displayName: safeStringRequired("Display name is required"),
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string(),
   })
@@ -22,7 +30,7 @@ export const registerSchema = z
 // ─── Inventory ────────────────────────────────────────────
 
 export const inventoryLotSchema = z.object({
-  brand: z.string().min(1, "Brand is required"),
+  brand: safeStringRequired("Brand is required"),
   productType: z.enum([
     "SEALED_BOX",
     "PACK",
@@ -31,35 +39,35 @@ export const inventoryLotSchema = z.object({
     "BULK_LOT",
     "ACCESSORY",
   ]),
-  setCode: z.string().optional(),
-  productName: z.string().min(1, "Product name is required"),
+  setCode: safeStringOptional,
+  productName: safeStringRequired("Product name is required"),
   language: z.enum(["EN", "JP", "OTHER"]).default("EN"),
-  rarity: z.string().optional(),
-  condition: z.string().optional(),
-  notes: z.string().optional(),
+  rarity: safeStringOptional,
+  condition: safeStringOptional,
+  notes: safeStringOptional,
   qtyOnHand: z.coerce.number().int().min(0, "Quantity must be >= 0"),
   unitCost: z.coerce.number().min(0, "Unit cost must be >= 0"),
-  location: z.string().optional(),
+  location: safeStringOptional,
 });
 
 export const adjustQtySchema = z.object({
   lotId: z.string().uuid(),
   newQty: z.coerce.number().int().min(0, "Quantity must be >= 0"),
-  reason: z.string().optional(),
+  reason: safeStringOptional,
 });
 
 // ─── Supplier ─────────────────────────────────────────────
 
 export const supplierSchema = z.object({
-  name: z.string().min(1, "Supplier name is required"),
-  contact: z.string().optional(),
-  notes: z.string().optional(),
+  name: safeStringRequired("Supplier name is required"),
+  contact: safeStringOptional,
+  notes: safeStringOptional,
 });
 
 // ─── Purchase ─────────────────────────────────────────────
 
 export const purchaseLineItemSchema = z.object({
-  brand: z.string().min(1, "Brand is required"),
+  brand: safeStringRequired("Brand is required"),
   productType: z.enum([
     "SEALED_BOX",
     "PACK",
@@ -68,22 +76,22 @@ export const purchaseLineItemSchema = z.object({
     "BULK_LOT",
     "ACCESSORY",
   ]),
-  setCode: z.string().optional(),
-  productName: z.string().min(1, "Product name is required"),
+  setCode: safeStringOptional,
+  productName: safeStringRequired("Product name is required"),
   language: z.enum(["EN", "JP", "OTHER"]).default("EN"),
-  rarity: z.string().optional(),
-  condition: z.string().optional(),
+  rarity: safeStringOptional,
+  condition: safeStringOptional,
   qty: z.coerce.number().int().min(1, "Quantity must be >= 1"),
   unitCost: z.coerce.number().min(0, "Unit cost must be >= 0"),
 });
 
 export const purchaseSchema = z.object({
   supplierId: z.string().uuid().optional(),
-  newSupplierName: z.string().optional(),
+  newSupplierName: safeStringOptional,
   purchasedAt: z.coerce.date().optional(),
   shippingCost: z.coerce.number().min(0).default(0),
   fees: z.coerce.number().min(0).default(0),
-  notes: z.string().optional(),
+  notes: safeStringOptional,
   lineItems: z.array(purchaseLineItemSchema).min(1, "At least one line item"),
 });
 
@@ -99,7 +107,7 @@ export const saleSchema = z.object({
   channel: z
     .enum(["FB_PAGE", "FB_PROFILE", "MEETUP", "SHIPPING", "OTHER"])
     .default("FB_PAGE"),
-  buyerName: z.string().optional(),
+  buyerName: safeStringOptional,
   paymentMethod: z
     .enum(["GCASH", "MAYA", "BANK", "CASH", "MIXED", "OTHER"])
     .default("GCASH"),
@@ -107,7 +115,7 @@ export const saleSchema = z.object({
   shippingCharged: z.coerce.number().min(0).default(0),
   shippingCostPaid: z.coerce.number().min(0).default(0),
   platformFees: z.coerce.number().min(0).default(0),
-  notes: z.string().optional(),
+  notes: safeStringOptional,
   lineItems: z.array(saleLineItemSchema).min(1, "At least one line item"),
 });
 
@@ -141,7 +149,7 @@ export const cashTransactionSchema = z.object({
     "OTHER",
   ]),
   amount: z.coerce.number().min(0.01, "Amount must be > 0"),
-  description: z.string().min(1, "Description is required"),
+  description: safeStringRequired("Description is required"),
   paymentMethod: z
     .enum(["GCASH", "MAYA", "BANK", "CASH", "MIXED", "OTHER"])
     .default("GCASH"),

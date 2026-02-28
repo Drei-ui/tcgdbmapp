@@ -89,13 +89,23 @@ export async function createInventoryLot(formData: FormData) {
     return { error: parsed.error.issues[0].message };
   }
 
-  await prisma.inventoryLot.create({
+  const lot = await prisma.inventoryLot.create({
     data: {
       ...parsed.data,
       productType: parsed.data.productType as never,
       language: parsed.data.language as never,
       unitCost: parsed.data.unitCost,
       createdById: user.id,
+    },
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      entityType: "inventory_lot",
+      entityId: lot.id,
+      action: "CREATE",
+      diff: parsed.data,
+      actorId: user.id,
     },
   });
 

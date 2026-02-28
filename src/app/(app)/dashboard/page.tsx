@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency, formatDateTime } from "@/lib/utils";
+import { ExportButton } from "@/components/export-button";
 import {
   Wallet,
   Package,
@@ -141,6 +142,14 @@ export default async function DashboardPage() {
                 Cash IN
               </Button>
             </Link>
+          </div>
+
+          {/* Export actions */}
+          <div className="flex gap-2 flex-wrap">
+            <ExportButton type="inventory" label="Export Inventory" />
+            <ExportButton type="sales" label="Export Sales" />
+            <ExportButton type="cash" label="Export Cash" />
+            <ExportButton type="snapshot" />
           </div>
         </div>
 

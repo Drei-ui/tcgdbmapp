@@ -29,11 +29,24 @@ export async function createSupplier(data: {
   contact?: string;
   notes?: string;
 }) {
-  await requireUser();
+  const user = await requireUser();
   const parsed = supplierSchema.safeParse(data);
   if (!parsed.success) return { error: parsed.error.issues[0].message };
 
-  const supplier = await prisma.supplier.create({ data: parsed.data });
+  const supplier = await prisma.$transaction(async (tx) => {
+    const s = await tx.supplier.create({ data: parsed.data });
+    await tx.auditLog.create({
+      data: {
+        entityType: "supplier",
+        entityId: s.id,
+        action: "CREATE",
+        diff: parsed.data,
+        actorId: user.id,
+      },
+    });
+    return s;
+  });
+
   return { success: true, supplier };
 }
 
