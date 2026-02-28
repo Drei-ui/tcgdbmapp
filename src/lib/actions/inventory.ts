@@ -1,10 +1,12 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { prisma, actionTimer } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { inventoryLotSchema, adjustQtySchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
 import { InventoryStatus, type Prisma } from "@/generated/prisma/client";
+
+const PAGE_SIZE = 50;
 
 export async function getInventoryLots(filters?: {
   brand?: string;
@@ -12,7 +14,9 @@ export async function getInventoryLots(filters?: {
   language?: string;
   status?: string;
   search?: string;
+  page?: number;
 }) {
+  const timer = actionTimer("getInventoryLots");
   await requireUser();
 
   const where: Prisma.InventoryLotWhereInput = {};
@@ -37,10 +41,21 @@ export async function getInventoryLots(filters?: {
     ];
   }
 
-  return prisma.inventoryLot.findMany({
-    where,
-    orderBy: { acquiredAt: "asc" },
-  });
+  const page = Math.max(1, filters?.page ?? 1);
+  const skip = (page - 1) * PAGE_SIZE;
+
+  const [items, total] = await Promise.all([
+    prisma.inventoryLot.findMany({
+      where,
+      orderBy: { acquiredAt: "asc" },
+      skip,
+      take: PAGE_SIZE,
+    }),
+    prisma.inventoryLot.count({ where }),
+  ]);
+
+  timer.done();
+  return { items, total, page, totalPages: Math.ceil(total / PAGE_SIZE) };
 }
 
 export async function getInventoryLot(id: string) {
@@ -52,6 +67,7 @@ export async function getInventoryLot(id: string) {
 }
 
 export async function createInventoryLot(formData: FormData) {
+  const timer = actionTimer("createInventoryLot");
   const user = await requireUser();
 
   const raw = {
@@ -83,11 +99,13 @@ export async function createInventoryLot(formData: FormData) {
     },
   });
 
+  timer.done();
   revalidatePath("/inventory");
   return { success: true };
 }
 
 export async function updateInventoryLot(id: string, formData: FormData) {
+  const timer = actionTimer("updateInventoryLot");
   const user = await requireUser();
 
   const raw = {
@@ -139,6 +157,7 @@ export async function updateInventoryLot(id: string, formData: FormData) {
     }),
   ]);
 
+  timer.done();
   revalidatePath("/inventory");
   revalidatePath(`/inventory/${id}`);
   return { success: true };
@@ -149,6 +168,7 @@ export async function adjustInventoryQty(data: {
   newQty: number;
   reason?: string;
 }) {
+  const timer = actionTimer("adjustInventoryQty");
   const user = await requireUser();
 
   const parsed = adjustQtySchema.safeParse(data);
@@ -191,6 +211,7 @@ export async function adjustInventoryQty(data: {
     }),
   ]);
 
+  timer.done();
   revalidatePath("/inventory");
   revalidatePath(`/inventory/${parsed.data.lotId}`);
   return { success: true };

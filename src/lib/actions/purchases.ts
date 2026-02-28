@@ -1,9 +1,11 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { prisma, actionTimer } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { purchaseSchema, supplierSchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
+
+const PAGE_SIZE = 50;
 
 function toNum(val: unknown): number {
   if (typeof val === "number") return val;
@@ -35,20 +37,33 @@ export async function createSupplier(data: {
   return { success: true, supplier };
 }
 
-export async function getPurchases() {
+export async function getPurchases(filters?: { page?: number }) {
+  const timer = actionTimer("getPurchases");
   await requireUser();
-  return prisma.purchase.findMany({
-    orderBy: { purchasedAt: "desc" },
-    select: {
-      id: true,
-      purchasedAt: true,
-      shippingCost: true,
-      fees: true,
-      supplier: { select: { name: true } },
-      lineItems: { select: { id: true, unitCost: true, qty: true } },
-      _count: { select: { inventoryLots: true } },
-    },
-  });
+
+  const page = Math.max(1, filters?.page ?? 1);
+  const skip = (page - 1) * PAGE_SIZE;
+
+  const [items, total] = await Promise.all([
+    prisma.purchase.findMany({
+      orderBy: { purchasedAt: "desc" },
+      skip,
+      take: PAGE_SIZE,
+      select: {
+        id: true,
+        purchasedAt: true,
+        shippingCost: true,
+        fees: true,
+        supplier: { select: { name: true } },
+        lineItems: { select: { id: true, unitCost: true, qty: true } },
+        _count: { select: { inventoryLots: true } },
+      },
+    }),
+    prisma.purchase.count(),
+  ]);
+
+  timer.done();
+  return { items, total, page, totalPages: Math.ceil(total / PAGE_SIZE) };
 }
 
 export async function getPurchase(id: string) {
@@ -97,6 +112,7 @@ export async function createPurchase(data: {
     supplierId = supplier.id;
   }
 
+  const timer = actionTimer("createPurchase");
   const items = parsed.data.lineItems;
   const shippingCost = parsed.data.shippingCost;
   const fees = parsed.data.fees;
@@ -208,6 +224,7 @@ export async function createPurchase(data: {
     return p;
   });
 
+  timer.done();
   revalidatePath("/purchases");
   revalidatePath("/inventory");
   revalidatePath("/cash");

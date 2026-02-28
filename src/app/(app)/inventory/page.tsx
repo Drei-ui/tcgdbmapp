@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { getInventoryLots, getInventoryBrands } from "@/lib/actions/inventory";
 import { FilterChips } from "@/components/inventory/filter-chips";
 import { InventoryList } from "@/components/inventory/inventory-list";
+import { Pagination } from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
@@ -17,11 +18,13 @@ export default async function InventoryPage({
     language?: string;
     status?: string;
     search?: string;
+    page?: string;
   }>;
 }) {
   const params = await searchParams;
-  const [lots, brands] = await Promise.all([
-    getInventoryLots(params),
+  const page = parseInt(params.page || "1", 10);
+  const [result, brands] = await Promise.all([
+    getInventoryLots({ ...params, page }),
     getInventoryBrands(),
   ]);
 
@@ -31,7 +34,7 @@ export default async function InventoryPage({
         <div>
           <h2 className="text-2xl font-bold">Inventory</h2>
           <p className="text-muted-foreground text-sm">
-            {lots.length} lot{lots.length !== 1 ? "s" : ""}
+            {result.total} lot{result.total !== 1 ? "s" : ""}
           </p>
         </div>
         <div className="flex gap-2">
@@ -49,7 +52,8 @@ export default async function InventoryPage({
         <FilterChips brands={brands} />
       </Suspense>
 
-      <InventoryList lots={serialize(lots)} />
+      <InventoryList lots={serialize(result.items)} />
+      <Pagination page={result.page} totalPages={result.totalPages} total={result.total} />
     </div>
   );
 }

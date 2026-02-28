@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useOptimistic, useTransition } from "react";
 import { InventoryCard } from "./inventory-card";
 import { QuickSellSheet } from "./quick-sell-sheet";
 import { AdjustQtyDialog } from "./adjust-qty-dialog";
@@ -22,6 +22,15 @@ export function InventoryList({
     useState<InventoryLot | null>(null);
   const [adjustLot, setAdjustLot] =
     useState<InventoryLot | null>(null);
+  const [pending, startTransition] = useTransition();
+
+  const [optimisticLots, setOptimisticLot] = useOptimistic(
+    lots,
+    (state, update: { id: string; status: "ON_HAND" | "RESERVED" }) =>
+      state.map((lot) =>
+        lot.id === update.id ? { ...lot, status: update.status } : lot
+      )
+  );
 
   async function handleQuickSell(data: {
     inventoryLotId: string;
@@ -36,22 +45,26 @@ export function InventoryList({
     if (result?.error) {
       toast.error(result.error);
     } else {
-      toast.success("Sale created as DRAFT");
+      toast.success("Sale created");
     }
   }
 
-  async function handleReserve(lot: InventoryLot) {
-    const result =
-      lot.status === "RESERVED"
-        ? await unreserveInventoryLot(lot.id)
-        : await reserveInventoryLot(lot.id);
-    if (result?.error) {
-      toast.error(result.error);
-    } else {
-      toast.success(
-        lot.status === "RESERVED" ? "Lot unreserved" : "Lot reserved"
-      );
-    }
+  function handleReserve(lot: InventoryLot) {
+    const newStatus = lot.status === "RESERVED" ? "ON_HAND" as const : "RESERVED" as const;
+    startTransition(async () => {
+      setOptimisticLot({ id: lot.id, status: newStatus });
+      const result =
+        lot.status === "RESERVED"
+          ? await unreserveInventoryLot(lot.id)
+          : await reserveInventoryLot(lot.id);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success(
+          lot.status === "RESERVED" ? "Lot unreserved" : "Lot reserved"
+        );
+      }
+    });
   }
 
   async function handleAdjust(
@@ -67,7 +80,7 @@ export function InventoryList({
     }
   }
 
-  if (lots.length === 0) {
+  if (optimisticLots.length === 0) {
     return (
       <div className="text-center py-12 text-muted-foreground">
         No inventory lots found. Create a purchase or add lots manually.
@@ -78,7 +91,7 @@ export function InventoryList({
   return (
     <>
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2">
-        {lots.map((lot) => (
+        {optimisticLots.map((lot) => (
           <InventoryCard
             key={lot.id}
             lot={lot}

@@ -1,4 +1,5 @@
 import { getSales } from "@/lib/actions/sales";
+import { Pagination } from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -14,8 +15,14 @@ const statusColors: Record<string, "default" | "secondary" | "outline" | "destru
   REFUNDED: "destructive",
 };
 
-export default async function SalesPage() {
-  const sales = await getSales();
+export default async function SalesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
+  const page = parseInt(params.page || "1", 10);
+  const result = await getSales({ page });
 
   return (
     <div className="p-4 md:p-6 space-y-4">
@@ -23,7 +30,7 @@ export default async function SalesPage() {
         <div>
           <h2 className="text-2xl font-bold">Sales</h2>
           <p className="text-muted-foreground text-sm">
-            {sales.length} sale{sales.length !== 1 ? "s" : ""}
+            {result.total} sale{result.total !== 1 ? "s" : ""}
           </p>
         </div>
         <div className="flex gap-2">
@@ -37,13 +44,13 @@ export default async function SalesPage() {
         </div>
       </div>
 
-      {sales.length === 0 ? (
+      {result.items.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">
           No sales yet. Create your first sale.
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2">
-          {sales.map((sale) => {
+          {result.items.map((sale) => {
             const profit = sale.lineItems.reduce(
               (sum, li) => sum + parseFloat(li.profitTotal.toString()),
               0
@@ -86,6 +93,8 @@ export default async function SalesPage() {
           })}
         </div>
       )}
+
+      <Pagination page={result.page} totalPages={result.totalPages} total={result.total} />
     </div>
   );
 }

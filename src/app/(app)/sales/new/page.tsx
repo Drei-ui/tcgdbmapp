@@ -6,7 +6,7 @@ import Link from "next/link";
 import { serialize } from "@/lib/utils";
 
 export default async function NewSalePage() {
-  const lots = await getInventoryLots({ status: "ON_HAND" });
+  const result = await getInventoryLots({ status: "ON_HAND" });
 
   return (
     <div className="p-4 md:p-6 space-y-4 max-w-4xl">
@@ -17,7 +17,7 @@ export default async function NewSalePage() {
         </Button>
       </Link>
       <h2 className="text-2xl font-bold">Create Sale</h2>
-      <SaleForm lots={serialize(lots)} />
+      <SaleForm lots={serialize(result.items)} />
     </div>
   );
 }

@@ -1,16 +1,18 @@
 import { getCashTransactions, getCashBalance } from "@/lib/actions/cash";
 import { CashList } from "@/components/cash/cash-list";
+import { Pagination } from "@/components/pagination";
 import { serialize } from "@/lib/utils";
 import { ExportButton } from "@/components/export-button";
 
 export default async function CashLedgerPage({
   searchParams,
 }: {
-  searchParams: Promise<{ action?: string }>;
+  searchParams: Promise<{ action?: string; page?: string }>;
 }) {
   const params = await searchParams;
-  const [transactions, balance] = await Promise.all([
-    getCashTransactions(),
+  const page = parseInt(params.page || "1", 10);
+  const [result, balance] = await Promise.all([
+    getCashTransactions({ page }),
     getCashBalance(),
   ]);
 
@@ -25,10 +27,11 @@ export default async function CashLedgerPage({
       </div>
 
       <CashList
-        transactions={serialize(transactions)}
+        transactions={serialize(result.items)}
         balance={balance}
         defaultAction={params.action}
       />
+      <Pagination page={result.page} totalPages={result.totalPages} total={result.total} />
     </div>
   );
 }

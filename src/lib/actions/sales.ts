@@ -1,10 +1,12 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { prisma, actionTimer } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { saleSchema, quickSellSchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
 import { SaleStatus, type Prisma } from "@/generated/prisma/client";
+
+const PAGE_SIZE = 50;
 
 /** Convert Prisma Decimal to number safely */
 function toNum(val: unknown): number {
@@ -21,6 +23,7 @@ export async function quickSell(data: {
   shippingCharged: number;
   shippingCostPaid: number;
 }) {
+  const timer = actionTimer("quickSell");
   const user = await requireUser();
 
   const parsed = quickSellSchema.safeParse(data);
@@ -117,6 +120,7 @@ export async function quickSell(data: {
     return s;
   });
 
+  timer.done();
   revalidatePath("/inventory");
   revalidatePath("/sales");
   revalidatePath("/cash");
@@ -129,7 +133,9 @@ export async function getSales(filters?: {
   channel?: string;
   dateFrom?: string;
   dateTo?: string;
+  page?: number;
 }) {
+  const timer = actionTimer("getSales");
   await requireUser();
 
   const where: Prisma.SaleWhereInput = {};
@@ -141,21 +147,32 @@ export async function getSales(filters?: {
     if (filters?.dateTo) where.soldAt.lte = new Date(filters.dateTo);
   }
 
-  return prisma.sale.findMany({
-    where,
-    orderBy: { soldAt: "desc" },
-    select: {
-      id: true,
-      soldAt: true,
-      status: true,
-      channel: true,
-      buyerName: true,
-      totalCollected: true,
-      lineItems: {
-        select: { id: true, profitTotal: true },
+  const page = Math.max(1, filters?.page ?? 1);
+  const skip = (page - 1) * PAGE_SIZE;
+
+  const [items, total] = await Promise.all([
+    prisma.sale.findMany({
+      where,
+      orderBy: { soldAt: "desc" },
+      skip,
+      take: PAGE_SIZE,
+      select: {
+        id: true,
+        soldAt: true,
+        status: true,
+        channel: true,
+        buyerName: true,
+        totalCollected: true,
+        lineItems: {
+          select: { id: true, profitTotal: true },
+        },
       },
-    },
-  });
+    }),
+    prisma.sale.count({ where }),
+  ]);
+
+  timer.done();
+  return { items, total, page, totalPages: Math.ceil(total / PAGE_SIZE) };
 }
 
 export async function getSale(id: string) {
@@ -181,6 +198,7 @@ export async function createSale(data: {
   notes?: string;
   lineItems: { inventoryLotId: string; qty: number; unitPrice: number }[];
 }) {
+  const timer = actionTimer("createSale");
   const user = await requireUser();
 
   const parsed = saleSchema.safeParse(data);
@@ -230,12 +248,14 @@ export async function createSale(data: {
     },
   });
 
+  timer.done();
   revalidatePath("/sales");
   revalidatePath("/inventory");
   return { success: true, saleId: sale.id };
 }
 
 export async function confirmSale(saleId: string) {
+  const timer = actionTimer("confirmSale");
   const user = await requireUser();
 
   const sale = await prisma.sale.findUnique({
@@ -344,6 +364,7 @@ export async function confirmSale(saleId: string) {
     });
   });
 
+  timer.done();
   revalidatePath("/sales");
   revalidatePath(`/sales/${saleId}`);
   revalidatePath("/inventory");

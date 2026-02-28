@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { prisma, actionTimer } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { SaleStatus } from "@/generated/prisma/client";
 
@@ -10,6 +10,7 @@ function toNum(val: unknown): number {
 }
 
 export async function getDashboardStats() {
+  const timer = actionTimer("getDashboardStats");
   await requireUser();
 
   const now = new Date();
@@ -123,6 +124,7 @@ export async function getDashboardStats() {
       },
     }),
   ]);
+  timer.lap("queries");
 
   // Compute cash balance
   let cashBalance = 0;
@@ -151,6 +153,7 @@ export async function getDashboardStats() {
     };
   }
 
+  timer.done();
   return {
     cashBalance,
     inventoryValue,

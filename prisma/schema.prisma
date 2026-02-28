@@ -147,6 +147,8 @@ model Purchase {
   inventoryLots    InventoryLot[]
   cashTransactions CashTransaction[]
 
+  @@index([supplierId], map: "idx_purchase_supplier")
+  @@index([createdById], map: "idx_purchase_created_by")
   @@map("purchases")
 }
 
@@ -168,6 +170,8 @@ model PurchaseLineItem {
   purchase Purchase       @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
   catalog  ProductCatalog? @relation(fields: [catalogId], references: [id], onDelete: SetNull)
 
+  @@index([purchaseId], map: "idx_pli_purchase")
+  @@index([catalogId], map: "idx_pli_catalog")
   @@map("purchase_line_items")
 }
 
@@ -203,6 +207,9 @@ model InventoryLot {
   @@index([brand, setCode, productType, status], map: "idx_inventory_search")
   @@index([status, acquiredAt], map: "idx_inventory_status_date")
   @@index([purchaseId], map: "idx_inventory_purchase")
+  @@index([supplierId], map: "idx_inventory_supplier")
+  @@index([catalogId], map: "idx_inventory_catalog")
+  @@index([createdById], map: "idx_inventory_created_by")
   @@map("inventory_lots")
 }
 
@@ -248,6 +255,8 @@ model SaleLineItem {
   sale         Sale         @relation(fields: [saleId], references: [id], onDelete: Cascade)
   inventoryLot InventoryLot @relation(fields: [inventoryLotId], references: [id], onDelete: Restrict)
 
+  @@index([saleId], map: "idx_sli_sale")
+  @@index([inventoryLotId], map: "idx_sli_inventory_lot")
   @@map("sale_line_items")
 }
 

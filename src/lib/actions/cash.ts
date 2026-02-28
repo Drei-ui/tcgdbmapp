@@ -1,10 +1,12 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { prisma, actionTimer } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { cashTransactionSchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
 import { type Prisma, CashType } from "@/generated/prisma/client";
+
+const PAGE_SIZE = 50;
 
 function toNum(val: unknown): number {
   if (typeof val === "number") return val;
@@ -16,7 +18,9 @@ export async function getCashTransactions(filters?: {
   category?: string;
   dateFrom?: string;
   dateTo?: string;
+  page?: number;
 }) {
+  const timer = actionTimer("getCashTransactions");
   await requireUser();
 
   const where: Prisma.CashTransactionWhereInput = {};
@@ -28,10 +32,21 @@ export async function getCashTransactions(filters?: {
     if (filters?.dateTo) where.date.lte = new Date(filters.dateTo);
   }
 
-  return prisma.cashTransaction.findMany({
-    where,
-    orderBy: { date: "desc" },
-  });
+  const page = Math.max(1, filters?.page ?? 1);
+  const skip = (page - 1) * PAGE_SIZE;
+
+  const [items, total] = await Promise.all([
+    prisma.cashTransaction.findMany({
+      where,
+      orderBy: { date: "desc" },
+      skip,
+      take: PAGE_SIZE,
+    }),
+    prisma.cashTransaction.count({ where }),
+  ]);
+
+  timer.done();
+  return { items, total, page, totalPages: Math.ceil(total / PAGE_SIZE) };
 }
 
 export async function getCashBalance() {
@@ -62,6 +77,7 @@ export async function createCashTransaction(data: {
   linkedSaleId?: string;
   linkedPurchaseId?: string;
 }) {
+  const timer = actionTimer("createCashTransaction");
   const user = await requireUser();
 
   const parsed = cashTransactionSchema.safeParse(data);
@@ -83,6 +99,7 @@ export async function createCashTransaction(data: {
     },
   });
 
+  timer.done();
   revalidatePath("/cash");
   revalidatePath("/dashboard");
   return { success: true };

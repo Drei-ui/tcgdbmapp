@@ -1,4 +1,5 @@
 import { getPurchases } from "@/lib/actions/purchases";
+import { Pagination } from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,8 +7,14 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
-export default async function PurchasesPage() {
-  const purchases = await getPurchases();
+export default async function PurchasesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
+  const page = parseInt(params.page || "1", 10);
+  const result = await getPurchases({ page });
 
   return (
     <div className="p-4 md:p-6 space-y-4">
@@ -15,7 +22,7 @@ export default async function PurchasesPage() {
         <div>
           <h2 className="text-2xl font-bold">Purchases</h2>
           <p className="text-muted-foreground text-sm">
-            {purchases.length} purchase{purchases.length !== 1 ? "s" : ""}
+            {result.total} purchase{result.total !== 1 ? "s" : ""}
           </p>
         </div>
         <Link href="/purchases/new">
@@ -26,13 +33,13 @@ export default async function PurchasesPage() {
         </Link>
       </div>
 
-      {purchases.length === 0 ? (
+      {result.items.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">
           No purchases yet. Create your first purchase order.
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2">
-          {purchases.map((purchase) => {
+          {result.items.map((purchase) => {
             const itemTotal = purchase.lineItems.reduce(
               (sum, li) =>
                 sum + parseFloat(li.unitCost.toString()) * li.qty,
@@ -76,6 +83,8 @@ export default async function PurchasesPage() {
           })}
         </div>
       )}
+
+      <Pagination page={result.page} totalPages={result.totalPages} total={result.total} />
     </div>
   );
 }
