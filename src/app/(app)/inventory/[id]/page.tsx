@@ -22,7 +22,7 @@ export default async function InventoryDetailPage({
   const age = daysAgo(lot.acquiredAt);
 
   return (
-    <div className="p-4 md:p-6 space-y-4 max-w-2xl">
+    <div className="p-4 md:p-6 space-y-4 max-w-4xl">
       <Link href="/inventory">
         <Button variant="ghost" size="sm">
           <ArrowLeft className="h-4 w-4 mr-1" />
@@ -57,7 +57,7 @@ export default async function InventoryDetailPage({
           <CardTitle className="text-base">Details</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="grid grid-cols-2 gap-3 text-sm">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
             <div>
               <span className="text-muted-foreground">Brand</span>
               <p className="font-medium">{lot.brand}</p>

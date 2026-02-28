@@ -40,7 +40,7 @@ export default async function SaleDetailPage({
     parseFloat(sale.platformFees.toString());
 
   return (
-    <div className="p-4 md:p-6 space-y-4 max-w-2xl">
+    <div className="p-4 md:p-6 space-y-4 max-w-4xl">
       <Link href="/sales">
         <Button variant="ghost" size="sm">
           <ArrowLeft className="h-4 w-4 mr-1" />
@@ -67,7 +67,7 @@ export default async function SaleDetailPage({
           <CardTitle className="text-base">Summary</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 gap-3 text-sm">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
             <div>
               <span className="text-muted-foreground">Channel</span>
               <p className="font-medium">{sale.channel.replace("_", " ")}</p>

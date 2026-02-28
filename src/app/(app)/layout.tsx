@@ -13,7 +13,9 @@ export default function AppLayout({
       <div className="flex flex-1">
         <SidebarNav />
         <main className="flex-1 overflow-auto pb-20 md:pb-4">
-          {children}
+          <div className="mx-auto w-full max-w-screen-xl">
+            {children}
+          </div>
         </main>
       </div>
       <BottomNav />

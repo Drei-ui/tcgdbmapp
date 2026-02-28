@@ -31,7 +31,7 @@ export default async function PurchasesPage() {
           No purchases yet. Create your first purchase order.
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2">
           {purchases.map((purchase) => {
             const itemTotal = purchase.lineItems.reduce(
               (sum, li) =>

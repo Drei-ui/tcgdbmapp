@@ -15,7 +15,7 @@ export default async function CashLedgerPage({
   ]);
 
   return (
-    <div className="p-4 md:p-6 space-y-4 max-w-2xl">
+    <div className="p-4 md:p-6 space-y-4 max-w-4xl">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Cash Ledger</h2>

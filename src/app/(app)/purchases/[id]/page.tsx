@@ -31,7 +31,7 @@ export default async function PurchaseDetailPage({
     parseFloat(purchase.fees.toString());
 
   return (
-    <div className="p-4 md:p-6 space-y-4 max-w-2xl">
+    <div className="p-4 md:p-6 space-y-4 max-w-4xl">
       <Link href="/purchases">
         <Button variant="ghost" size="sm">
           <ArrowLeft className="h-4 w-4 mr-1" />
