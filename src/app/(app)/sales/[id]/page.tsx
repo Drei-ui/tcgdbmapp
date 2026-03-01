@@ -22,7 +22,30 @@ export default async function SaleDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const sale = await getSale(id);
+  const sale = await getSale(id) as {
+    id: string;
+    soldAt: string;
+    status: string;
+    channel: string;
+    paymentMethod: string;
+    buyerName?: string;
+    subtotal: string;
+    discount: string;
+    shippingCharged: string;
+    totalCollected: string;
+    shippingCostPaid: string;
+    platformFees: string;
+    notes?: string;
+    lineItems: {
+      id: string;
+      inventoryLotId: string;
+      qty: number;
+      unitPrice: string;
+      cogsTotal: string;
+      profitTotal: string;
+      inventoryLot: { setCode?: string; productName: string };
+    }[];
+  } | null;
 
   if (!sale) notFound();
 

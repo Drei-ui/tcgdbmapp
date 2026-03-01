@@ -3,7 +3,8 @@
 import { prisma, actionTimer } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { saleSchema, quickSellSchema } from "@/lib/validators";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
+import { unstable_cache } from "next/cache";
 import { SaleStatus, type Prisma } from "@/generated/prisma/client";
 
 const PAGE_SIZE = 50;
@@ -13,6 +14,55 @@ function toNum(val: unknown): number {
   if (typeof val === "number") return val;
   return parseFloat(String(val)) || 0;
 }
+
+// ── Cached data fetchers ──
+
+const fetchSales = unstable_cache(
+  async (whereJSON: string, skip: number, take: number) => {
+    const where: Prisma.SaleWhereInput = JSON.parse(whereJSON);
+    const [items, total] = await prisma.$transaction([
+      prisma.sale.findMany({
+        where,
+        orderBy: { soldAt: "desc" },
+        skip,
+        take,
+        select: {
+          id: true,
+          soldAt: true,
+          status: true,
+          channel: true,
+          buyerName: true,
+          totalCollected: true,
+          lineItems: {
+            select: { id: true, profitTotal: true },
+          },
+        },
+      }),
+      prisma.sale.count({ where }),
+    ]);
+    return { items: JSON.parse(JSON.stringify(items)), total };
+  },
+  ["sales-list"],
+  { revalidate: 60, tags: ["sales"] }
+);
+
+const fetchSale = unstable_cache(
+  async (id: string) => {
+    const sale = await prisma.sale.findUnique({
+      where: { id },
+      include: {
+        lineItems: {
+          include: { inventoryLot: true },
+        },
+      },
+    });
+    return sale ? JSON.parse(JSON.stringify(sale)) : null;
+  },
+  ["sale-detail"],
+  { revalidate: 60, tags: ["sales"] }
+);
+
+// ── Public server actions ──
 
 export async function quickSell(data: {
   inventoryLotId: string;
@@ -45,7 +95,6 @@ export async function quickSell(data: {
   const profit = subtotal - cogs;
 
   const sale = await prisma.$transaction(async (tx) => {
-    // Create sale as CONFIRMED directly
     const s = await tx.sale.create({
       data: {
         status: "CONFIRMED",
@@ -68,7 +117,6 @@ export async function quickSell(data: {
       },
     });
 
-    // Decrement inventory
     const newQty = lot.qtyOnHand - parsed.data.qty;
     await tx.inventoryLot.update({
       where: { id: lot.id },
@@ -78,7 +126,6 @@ export async function quickSell(data: {
       },
     });
 
-    // Cash IN for the sale
     await tx.cashTransaction.create({
       data: {
         type: "IN",
@@ -91,7 +138,6 @@ export async function quickSell(data: {
       },
     });
 
-    // Cash OUT for shipping cost if any
     if (parsed.data.shippingCostPaid > 0) {
       await tx.cashTransaction.create({
         data: {
@@ -106,7 +152,6 @@ export async function quickSell(data: {
       });
     }
 
-    // Audit log
     await tx.auditLog.create({
       data: {
         entityType: "sale",
@@ -125,6 +170,11 @@ export async function quickSell(data: {
   revalidatePath("/sales");
   revalidatePath("/cash");
   revalidatePath("/dashboard");
+  updateTag("inventory");
+  updateTag("sales");
+  updateTag("cash");
+  updateTag("dashboard");
+  updateTag("reports");
   return { success: true, saleId: sale.id };
 }
 
@@ -150,41 +200,15 @@ export async function getSales(filters?: {
   const page = Math.max(1, filters?.page ?? 1);
   const skip = (page - 1) * PAGE_SIZE;
 
-  const [items, total] = await prisma.$transaction([
-    prisma.sale.findMany({
-      where,
-      orderBy: { soldAt: "desc" },
-      skip,
-      take: PAGE_SIZE,
-      select: {
-        id: true,
-        soldAt: true,
-        status: true,
-        channel: true,
-        buyerName: true,
-        totalCollected: true,
-        lineItems: {
-          select: { id: true, profitTotal: true },
-        },
-      },
-    }),
-    prisma.sale.count({ where }),
-  ]);
+  const result = await fetchSales(JSON.stringify(where), skip, PAGE_SIZE);
 
   timer.done();
-  return { items, total, page, totalPages: Math.ceil(total / PAGE_SIZE) };
+  return { ...result, page, totalPages: Math.ceil(result.total / PAGE_SIZE) };
 }
 
 export async function getSale(id: string) {
   await requireUser();
-  return prisma.sale.findUnique({
-    where: { id },
-    include: {
-      lineItems: {
-        include: { inventoryLot: true },
-      },
-    },
-  });
+  return fetchSale(id);
 }
 
 export async function createSale(data: {
@@ -206,7 +230,6 @@ export async function createSale(data: {
     return { error: parsed.error.issues[0].message };
   }
 
-  // Validate all lots exist and have sufficient qty
   for (const item of parsed.data.lineItems) {
     const lot = await prisma.inventoryLot.findUnique({
       where: { id: item.inventoryLotId },
@@ -265,6 +288,9 @@ export async function createSale(data: {
   timer.done();
   revalidatePath("/sales");
   revalidatePath("/inventory");
+  updateTag("sales");
+  updateTag("inventory");
+  updateTag("reports");
   return { success: true, saleId: sale.id };
 }
 
@@ -280,7 +306,6 @@ export async function confirmSale(saleId: string) {
   if (!sale) return { error: "Sale not found" };
   if (sale.status !== "DRAFT") return { error: "Sale is not a draft" };
 
-  // Validate all line items still have sufficient qty
   for (const item of sale.lineItems) {
     if (item.inventoryLot.qtyOnHand < item.qty) {
       return {
@@ -289,29 +314,22 @@ export async function confirmSale(saleId: string) {
     }
   }
 
-  // Execute confirmation in a transaction
   await prisma.$transaction(async (tx) => {
     let totalCogs = 0;
 
     for (const item of sale.lineItems) {
       const lot = item.inventoryLot;
-      // COGS = unit_cost * qty (lot-based cost)
       const itemCogs = toNum(lot.unitCost) * item.qty;
       const itemRevenue = toNum(item.unitPrice) * item.qty;
       const itemProfit = itemRevenue - itemCogs;
 
       totalCogs += itemCogs;
 
-      // Update line item with COGS and profit
       await tx.saleLineItem.update({
         where: { id: item.id },
-        data: {
-          cogsTotal: itemCogs,
-          profitTotal: itemProfit,
-        },
+        data: { cogsTotal: itemCogs, profitTotal: itemProfit },
       });
 
-      // Decrement inventory
       const newQty = lot.qtyOnHand - item.qty;
       await tx.inventoryLot.update({
         where: { id: lot.id },
@@ -322,20 +340,17 @@ export async function confirmSale(saleId: string) {
       });
     }
 
-    // Calculate total profit
     const totalProfit =
       toNum(sale.totalCollected) -
       totalCogs -
       toNum(sale.shippingCostPaid) -
       toNum(sale.platformFees);
 
-    // Update sale status
     await tx.sale.update({
       where: { id: saleId },
       data: { status: "CONFIRMED" },
     });
 
-    // Auto-create linked cash IN transaction
     await tx.cashTransaction.create({
       data: {
         type: "IN",
@@ -348,7 +363,6 @@ export async function confirmSale(saleId: string) {
       },
     });
 
-    // If there's shipping cost paid, create cash OUT
     if (toNum(sale.shippingCostPaid) > 0) {
       await tx.cashTransaction.create({
         data: {
@@ -363,7 +377,6 @@ export async function confirmSale(saleId: string) {
       });
     }
 
-    // Audit log
     await tx.auditLog.create({
       data: {
         entityType: "sale",
@@ -384,6 +397,11 @@ export async function confirmSale(saleId: string) {
   revalidatePath("/inventory");
   revalidatePath("/cash");
   revalidatePath("/dashboard");
+  updateTag("sales");
+  updateTag("inventory");
+  updateTag("cash");
+  updateTag("dashboard");
+  updateTag("reports");
   return { success: true };
 }
 
@@ -397,29 +415,21 @@ export async function deleteSale(saleId: string) {
 
   if (!sale) return { error: "Sale not found" };
 
-  // Only DRAFT and CANCELLED sales can be deleted
-  if (sale.status === "CONFIRMED" || sale.status === "REFUNDED") {
+  if (sale.status === "CONFIRMED") {
     return {
-      error: `Cannot delete a ${sale.status.toLowerCase()} sale. ${
-        sale.status === "CONFIRMED"
-          ? "Refund it first if needed."
-          : "Refunded sales are financial records and cannot be removed."
-      }`,
+      error: "Cannot delete a confirmed sale. Refund it first if needed.",
     };
   }
 
   await prisma.$transaction(async (tx) => {
-    // Delete linked cash transactions
     await tx.cashTransaction.deleteMany({
       where: { linkedSaleId: saleId },
     });
 
-    // Delete sale (cascades to line items)
     await tx.sale.delete({
       where: { id: saleId },
     });
 
-    // Audit log
     await tx.auditLog.create({
       data: {
         entityType: "sale",
@@ -435,6 +445,11 @@ export async function deleteSale(saleId: string) {
   revalidatePath("/inventory");
   revalidatePath("/cash");
   revalidatePath("/dashboard");
+  updateTag("sales");
+  updateTag("inventory");
+  updateTag("cash");
+  updateTag("dashboard");
+  updateTag("reports");
   return { success: true };
 }
 
@@ -465,6 +480,8 @@ export async function cancelSale(saleId: string) {
 
   revalidatePath("/sales");
   revalidatePath(`/sales/${saleId}`);
+  updateTag("sales");
+  updateTag("reports");
   return { success: true };
 }
 
@@ -480,7 +497,6 @@ export async function refundSale(saleId: string) {
     return { error: "Only confirmed sales can be refunded" };
 
   await prisma.$transaction(async (tx) => {
-    // Restore inventory
     for (const item of sale.lineItems) {
       await tx.inventoryLot.update({
         where: { id: item.inventoryLotId },
@@ -491,13 +507,11 @@ export async function refundSale(saleId: string) {
       });
     }
 
-    // Update sale status
     await tx.sale.update({
       where: { id: saleId },
       data: { status: "REFUNDED" },
     });
 
-    // Create reversing cash transaction
     await tx.cashTransaction.create({
       data: {
         type: "OUT",
@@ -510,7 +524,6 @@ export async function refundSale(saleId: string) {
       },
     });
 
-    // Audit log
     await tx.auditLog.create({
       data: {
         entityType: "sale",
@@ -526,5 +539,10 @@ export async function refundSale(saleId: string) {
   revalidatePath("/inventory");
   revalidatePath("/cash");
   revalidatePath("/dashboard");
+  updateTag("sales");
+  updateTag("inventory");
+  updateTag("cash");
+  updateTag("dashboard");
+  updateTag("reports");
   return { success: true };
 }

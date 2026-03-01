@@ -3,10 +3,58 @@
 import { prisma, actionTimer } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { inventoryLotSchema, adjustQtySchema } from "@/lib/validators";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
+import { unstable_cache } from "next/cache";
 import { InventoryStatus, type Prisma } from "@/generated/prisma/client";
 
 const PAGE_SIZE = 50;
+
+// ── Cached data fetchers ──
+
+const fetchInventoryLots = unstable_cache(
+  async (whereJSON: string, skip: number, take: number) => {
+    const where: Prisma.InventoryLotWhereInput = JSON.parse(whereJSON);
+    const [items, total] = await prisma.$transaction([
+      prisma.inventoryLot.findMany({
+        where,
+        orderBy: { acquiredAt: "asc" },
+        skip,
+        take,
+      }),
+      prisma.inventoryLot.count({ where }),
+    ]);
+    return { items: JSON.parse(JSON.stringify(items)), total };
+  },
+  ["inventory-list"],
+  { revalidate: 60, tags: ["inventory"] }
+);
+
+const fetchInventoryLot = unstable_cache(
+  async (id: string) => {
+    const lot = await prisma.inventoryLot.findUnique({
+      where: { id },
+      include: { supplier: true, purchase: true },
+    });
+    return lot ? JSON.parse(JSON.stringify(lot)) : null;
+  },
+  ["inventory-detail"],
+  { revalidate: 60, tags: ["inventory"] }
+);
+
+const fetchInventoryBrands = unstable_cache(
+  async () => {
+    const brands = await prisma.inventoryLot.findMany({
+      select: { brand: true },
+      distinct: ["brand"],
+      orderBy: { brand: "asc" },
+    });
+    return brands.map((b) => b.brand);
+  },
+  ["inventory-brands"],
+  { revalidate: 60, tags: ["inventory"] }
+);
+
+// ── Public server actions ──
 
 export async function getInventoryLots(filters?: {
   brand?: string;
@@ -44,26 +92,15 @@ export async function getInventoryLots(filters?: {
   const page = Math.max(1, filters?.page ?? 1);
   const skip = (page - 1) * PAGE_SIZE;
 
-  const [items, total] = await prisma.$transaction([
-    prisma.inventoryLot.findMany({
-      where,
-      orderBy: { acquiredAt: "asc" },
-      skip,
-      take: PAGE_SIZE,
-    }),
-    prisma.inventoryLot.count({ where }),
-  ]);
+  const result = await fetchInventoryLots(JSON.stringify(where), skip, PAGE_SIZE);
 
   timer.done();
-  return { items, total, page, totalPages: Math.ceil(total / PAGE_SIZE) };
+  return { ...result, page, totalPages: Math.ceil(result.total / PAGE_SIZE) };
 }
 
 export async function getInventoryLot(id: string) {
   await requireUser();
-  return prisma.inventoryLot.findUnique({
-    where: { id },
-    include: { supplier: true, purchase: true },
-  });
+  return fetchInventoryLot(id);
 }
 
 export async function createInventoryLot(formData: FormData) {
@@ -111,6 +148,9 @@ export async function createInventoryLot(formData: FormData) {
 
   timer.done();
   revalidatePath("/inventory");
+  updateTag("inventory");
+  updateTag("dashboard");
+  updateTag("reports");
   return { success: true };
 }
 
@@ -170,6 +210,9 @@ export async function updateInventoryLot(id: string, formData: FormData) {
   timer.done();
   revalidatePath("/inventory");
   revalidatePath(`/inventory/${id}`);
+  updateTag("inventory");
+  updateTag("dashboard");
+  updateTag("reports");
   return { success: true };
 }
 
@@ -224,6 +267,9 @@ export async function adjustInventoryQty(data: {
   timer.done();
   revalidatePath("/inventory");
   revalidatePath(`/inventory/${parsed.data.lotId}`);
+  updateTag("inventory");
+  updateTag("dashboard");
+  updateTag("reports");
   return { success: true };
 }
 
@@ -252,6 +298,8 @@ export async function reserveInventoryLot(lotId: string) {
 
   revalidatePath("/inventory");
   revalidatePath(`/inventory/${lotId}`);
+  updateTag("inventory");
+  updateTag("reports");
   return { success: true };
 }
 
@@ -280,15 +328,12 @@ export async function unreserveInventoryLot(lotId: string) {
 
   revalidatePath("/inventory");
   revalidatePath(`/inventory/${lotId}`);
+  updateTag("inventory");
+  updateTag("reports");
   return { success: true };
 }
 
 export async function getInventoryBrands() {
   await requireUser();
-  const brands = await prisma.inventoryLot.findMany({
-    select: { brand: true },
-    distinct: ["brand"],
-    orderBy: { brand: "asc" },
-  });
-  return brands.map((b) => b.brand);
+  return fetchInventoryBrands();
 }

@@ -3,7 +3,8 @@
 import { prisma, actionTimer } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { cashTransactionSchema } from "@/lib/validators";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
+import { unstable_cache } from "next/cache";
 import { type Prisma, CashType } from "@/generated/prisma/client";
 
 const PAGE_SIZE = 50;
@@ -12,6 +13,48 @@ function toNum(val: unknown): number {
   if (typeof val === "number") return val;
   return parseFloat(String(val)) || 0;
 }
+
+// ── Cached data fetchers ──
+
+const fetchCashTransactions = unstable_cache(
+  async (whereJSON: string, skip: number, take: number) => {
+    const where: Prisma.CashTransactionWhereInput = JSON.parse(whereJSON);
+    const [items, total] = await prisma.$transaction([
+      prisma.cashTransaction.findMany({
+        where,
+        orderBy: { date: "desc" },
+        skip,
+        take,
+      }),
+      prisma.cashTransaction.count({ where }),
+    ]);
+    return { items: JSON.parse(JSON.stringify(items)), total };
+  },
+  ["cash-list"],
+  { revalidate: 60, tags: ["cash"] }
+);
+
+const fetchCashBalance = unstable_cache(
+  async () => {
+    const result = await prisma.cashTransaction.groupBy({
+      by: ["type"],
+      _sum: { amount: true },
+    });
+
+    let balance = 0;
+    for (const row of result) {
+      const amount = toNum(row._sum.amount);
+      if (row.type === "IN") balance += amount;
+      else balance -= amount;
+    }
+
+    return balance;
+  },
+  ["cash-balance"],
+  { revalidate: 60, tags: ["cash"] }
+);
+
+// ── Public server actions ──
 
 export async function getCashTransactions(filters?: {
   type?: string;
@@ -35,36 +78,15 @@ export async function getCashTransactions(filters?: {
   const page = Math.max(1, filters?.page ?? 1);
   const skip = (page - 1) * PAGE_SIZE;
 
-  const [items, total] = await prisma.$transaction([
-    prisma.cashTransaction.findMany({
-      where,
-      orderBy: { date: "desc" },
-      skip,
-      take: PAGE_SIZE,
-    }),
-    prisma.cashTransaction.count({ where }),
-  ]);
+  const result = await fetchCashTransactions(JSON.stringify(where), skip, PAGE_SIZE);
 
   timer.done();
-  return { items, total, page, totalPages: Math.ceil(total / PAGE_SIZE) };
+  return { ...result, page, totalPages: Math.ceil(result.total / PAGE_SIZE) };
 }
 
 export async function getCashBalance() {
   await requireUser();
-
-  const result = await prisma.cashTransaction.groupBy({
-    by: ["type"],
-    _sum: { amount: true },
-  });
-
-  let balance = 0;
-  for (const row of result) {
-    const amount = toNum(row._sum.amount);
-    if (row.type === "IN") balance += amount;
-    else balance -= amount;
-  }
-
-  return balance;
+  return fetchCashBalance();
 }
 
 export async function createCashTransaction(data: {
@@ -121,6 +143,9 @@ export async function createCashTransaction(data: {
   timer.done();
   revalidatePath("/cash");
   revalidatePath("/dashboard");
+  updateTag("cash");
+  updateTag("dashboard");
+  updateTag("reports");
   return { success: true };
 }
 
@@ -153,5 +178,8 @@ export async function deleteCashTransaction(id: string) {
 
   revalidatePath("/cash");
   revalidatePath("/dashboard");
+  updateTag("cash");
+  updateTag("dashboard");
+  updateTag("reports");
   return { success: true };
 }

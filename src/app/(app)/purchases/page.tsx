@@ -14,7 +14,20 @@ export default async function PurchasesPage({
 }) {
   const params = await searchParams;
   const page = parseInt(params.page || "1", 10);
-  const result = await getPurchases({ page });
+  const result = await getPurchases({ page }) as {
+    items: {
+      id: string;
+      purchasedAt: string;
+      shippingCost: string;
+      fees: string;
+      supplier: { name: string } | null;
+      lineItems: { id: string; unitCost: string; qty: number }[];
+      _count: { inventoryLots: number };
+    }[];
+    total: number;
+    page: number;
+    totalPages: number;
+  };
 
   return (
     <div className="p-4 md:p-6 space-y-4">

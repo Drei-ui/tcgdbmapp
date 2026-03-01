@@ -16,7 +16,16 @@ export default async function PurchaseDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const purchase = await getPurchase(id);
+  const purchase = await getPurchase(id) as {
+    id: string;
+    purchasedAt: string;
+    shippingCost: string;
+    fees: string;
+    notes?: string;
+    supplier?: { name: string };
+    lineItems: { id: string; productType: string; setCode?: string; productName: string; language: string; condition?: string; qty: number; unitCost: string; brand: string; rarity?: string }[];
+    inventoryLots: { id: string; setCode?: string; productName: string; qtyOnHand: number; unitCost: string }[];
+  } | null;
 
   if (!purchase) notFound();
 

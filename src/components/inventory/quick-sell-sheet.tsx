@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/utils";
 import type { InventoryLot } from "@/generated/prisma/client";
 
@@ -94,19 +97,23 @@ export function QuickSellSheet({
   }
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto">
-        <SheetHeader>
-          <SheetTitle className="text-left">
-            Quick Sell: {lot.productName}
-          </SheetTitle>
-        </SheetHeader>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            Quick Sell
+            <Badge variant="secondary" className="font-normal text-xs">
+              Final
+            </Badge>
+          </DialogTitle>
+          <DialogDescription>
+            {lot.productName} — {lot.qtyOnHand} available @{" "}
+            {formatCurrency(lot.unitCost.toString())} each
+          </DialogDescription>
+        </DialogHeader>
 
-        <div className="space-y-4 mt-4">
-          <div className="text-sm text-muted-foreground">
-            Available: {lot.qtyOnHand} @ {formatCurrency(lot.unitCost.toString())} each
-          </div>
-
+        <div className="space-y-3">
+          {/* Row 1: Qty + Unit Price */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label htmlFor="qs-qty">Qty</Label>
@@ -133,6 +140,7 @@ export function QuickSellSheet({
             </div>
           </div>
 
+          {/* Row 2: Channel + Payment */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label>Channel</Label>
@@ -166,9 +174,10 @@ export function QuickSellSheet({
             </div>
           </div>
 
+          {/* Row 3: Shipping fields */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label htmlFor="qs-ship-charged">Shipping Charged</Label>
+              <Label htmlFor="qs-ship-charged">Ship Charged</Label>
               <Input
                 id="qs-ship-charged"
                 type="number"
@@ -179,7 +188,7 @@ export function QuickSellSheet({
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="qs-ship-cost">Shipping Cost (yours)</Label>
+              <Label htmlFor="qs-ship-cost">Ship Cost</Label>
               <Input
                 id="qs-ship-cost"
                 type="number"
@@ -190,12 +199,17 @@ export function QuickSellSheet({
               />
             </div>
           </div>
+        </div>
 
-          <div className="flex items-center justify-between rounded-md bg-muted p-3">
-            <span className="text-sm font-medium">Total Collected</span>
-            <span className="text-lg font-bold">{formatCurrency(total)}</span>
-          </div>
+        {/* Total bar */}
+        <div className="flex items-center justify-between rounded-md bg-muted p-3">
+          <span className="text-sm font-medium text-muted-foreground">
+            Total Collected
+          </span>
+          <span className="text-lg font-bold">{formatCurrency(total)}</span>
+        </div>
 
+        <DialogFooter className="sm:flex-col gap-2">
           <Button
             className="w-full"
             onClick={handleConfirm}
@@ -203,8 +217,12 @@ export function QuickSellSheet({
           >
             {loading ? "Creating Sale..." : "Confirm Sale"}
           </Button>
-        </div>
-      </SheetContent>
-    </Sheet>
+          <p className="text-xs text-center text-muted-foreground">
+            This sale is final — inventory will be deducted and cash entry
+            created immediately.
+          </p>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

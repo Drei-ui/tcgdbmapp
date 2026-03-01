@@ -22,7 +22,20 @@ export default async function SalesPage({
 }) {
   const params = await searchParams;
   const page = parseInt(params.page || "1", 10);
-  const result = await getSales({ page });
+  const result = await getSales({ page }) as {
+    items: {
+      id: string;
+      soldAt: string;
+      status: string;
+      channel: string;
+      buyerName?: string;
+      totalCollected: string;
+      lineItems: { id: string; profitTotal: string }[];
+    }[];
+    total: number;
+    page: number;
+    totalPages: number;
+  };
 
   return (
     <div className="p-4 md:p-6 space-y-4">

@@ -3,7 +3,9 @@
 import { prisma, actionTimer } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { purchaseSchema, supplierSchema } from "@/lib/validators";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
+import { unstable_cache } from "next/cache";
+import { type Prisma } from "@/generated/prisma/client";
 
 const PAGE_SIZE = 50;
 
@@ -12,16 +14,79 @@ function toNum(val: unknown): number {
   return parseFloat(String(val)) || 0;
 }
 
+// ── Cached data fetchers ──
+
+const fetchProductCatalog = unstable_cache(
+  async () => {
+    const items = await prisma.productCatalog.findMany({
+      orderBy: [{ brand: "asc" }, { productName: "asc" }],
+    });
+    return JSON.parse(JSON.stringify(items));
+  },
+  ["product-catalog"],
+  { revalidate: 60, tags: ["purchases"] }
+);
+
+const fetchSuppliers = unstable_cache(
+  async () => {
+    const items = await prisma.supplier.findMany({ orderBy: { name: "asc" } });
+    return JSON.parse(JSON.stringify(items));
+  },
+  ["suppliers-list"],
+  { revalidate: 60, tags: ["purchases"] }
+);
+
+const fetchPurchases = unstable_cache(
+  async (skip: number, take: number) => {
+    const [items, total] = await prisma.$transaction([
+      prisma.purchase.findMany({
+        orderBy: { purchasedAt: "desc" },
+        skip,
+        take,
+        select: {
+          id: true,
+          purchasedAt: true,
+          shippingCost: true,
+          fees: true,
+          supplier: { select: { name: true } },
+          lineItems: { select: { id: true, unitCost: true, qty: true } },
+          _count: { select: { inventoryLots: true } },
+        },
+      }),
+      prisma.purchase.count(),
+    ]);
+    return { items: JSON.parse(JSON.stringify(items)), total };
+  },
+  ["purchases-list"],
+  { revalidate: 60, tags: ["purchases"] }
+);
+
+const fetchPurchase = unstable_cache(
+  async (id: string) => {
+    const purchase = await prisma.purchase.findUnique({
+      where: { id },
+      include: {
+        supplier: true,
+        lineItems: true,
+        inventoryLots: true,
+      },
+    });
+    return purchase ? JSON.parse(JSON.stringify(purchase)) : null;
+  },
+  ["purchase-detail"],
+  { revalidate: 60, tags: ["purchases"] }
+);
+
+// ── Public server actions ──
+
 export async function getProductCatalog() {
   await requireUser();
-  return prisma.productCatalog.findMany({
-    orderBy: [{ brand: "asc" }, { productName: "asc" }],
-  });
+  return fetchProductCatalog();
 }
 
 export async function getSuppliers() {
   await requireUser();
-  return prisma.supplier.findMany({ orderBy: { name: "asc" } });
+  return fetchSuppliers();
 }
 
 export async function createSupplier(data: {
@@ -47,6 +112,8 @@ export async function createSupplier(data: {
     return s;
   });
 
+  updateTag("purchases");
+  updateTag("reports");
   return { success: true, supplier };
 }
 
@@ -57,38 +124,15 @@ export async function getPurchases(filters?: { page?: number }) {
   const page = Math.max(1, filters?.page ?? 1);
   const skip = (page - 1) * PAGE_SIZE;
 
-  const [items, total] = await prisma.$transaction([
-    prisma.purchase.findMany({
-      orderBy: { purchasedAt: "desc" },
-      skip,
-      take: PAGE_SIZE,
-      select: {
-        id: true,
-        purchasedAt: true,
-        shippingCost: true,
-        fees: true,
-        supplier: { select: { name: true } },
-        lineItems: { select: { id: true, unitCost: true, qty: true } },
-        _count: { select: { inventoryLots: true } },
-      },
-    }),
-    prisma.purchase.count(),
-  ]);
+  const result = await fetchPurchases(skip, PAGE_SIZE);
 
   timer.done();
-  return { items, total, page, totalPages: Math.ceil(total / PAGE_SIZE) };
+  return { ...result, page, totalPages: Math.ceil(result.total / PAGE_SIZE) };
 }
 
 export async function getPurchase(id: string) {
   await requireUser();
-  return prisma.purchase.findUnique({
-    where: { id },
-    include: {
-      supplier: true,
-      lineItems: true,
-      inventoryLots: true,
-    },
-  });
+  return fetchPurchase(id);
 }
 
 export async function createPurchase(data: {
@@ -242,6 +286,11 @@ export async function createPurchase(data: {
   revalidatePath("/inventory");
   revalidatePath("/cash");
   revalidatePath("/dashboard");
+  updateTag("purchases");
+  updateTag("inventory");
+  updateTag("cash");
+  updateTag("dashboard");
+  updateTag("reports");
   return { success: true, purchaseId: purchase.id };
 }
 
@@ -318,6 +367,11 @@ export async function deletePurchase(purchaseId: string) {
   revalidatePath("/inventory");
   revalidatePath("/cash");
   revalidatePath("/dashboard");
+  updateTag("purchases");
+  updateTag("inventory");
+  updateTag("cash");
+  updateTag("dashboard");
+  updateTag("reports");
   return { success: true };
 }
 
@@ -401,5 +455,10 @@ export async function receivePurchase(purchaseId: string) {
   revalidatePath("/inventory");
   revalidatePath("/cash");
   revalidatePath("/dashboard");
+  updateTag("purchases");
+  updateTag("inventory");
+  updateTag("cash");
+  updateTag("dashboard");
+  updateTag("reports");
   return { success: true };
 }
