@@ -1,8 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Experimental config for serverless function region
-  // Match Supabase region (ap-south-1 = Mumbai)
+  devIndicators: false,
   experimental: {
     serverActions: {
       bodySizeLimit: "2mb",
