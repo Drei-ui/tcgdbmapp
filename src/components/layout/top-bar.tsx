@@ -21,7 +21,7 @@ export function TopBar() {
   return (
     <header className="sticky top-0 z-50 border-b bg-background">
       <div className="flex h-14 items-center gap-3 px-4">
-        <h1 className="text-lg font-bold whitespace-nowrap">TCG Manager</h1>
+        <h1 className="text-lg font-bold whitespace-nowrap">TCG DBM</h1>
 
         <div className="flex-1" />
 

@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Drastik's TCG Manager",
+  title: "TCG DBM",
   description: "Inventory + Cash + Sales management for TCG business",
 };
 
