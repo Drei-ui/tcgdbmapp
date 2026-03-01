@@ -1,36 +1,162 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TCG DBM
+
+A full-stack inventory and sales management app built for TCG (Trading Card Game) resellers. Track stock, record purchases, manage sales across multiple channels, monitor cash flow, and generate business reports — all from one dashboard.
+
+## Features
+
+### Dashboard
+- Cash balance, inventory value, and 30-day profit at a glance
+- Sales stats for today, 7 days, and 30 days
+- Low stock alerts and oldest stock indicators
+- Recent activity feed (sales, purchases, cash transactions)
+- Quick actions for common tasks
+
+### Inventory
+- Full inventory lot management with quantity tracking
+- Filter by brand, product type, language, status, and condition
+- Quick sell directly from inventory list
+- Quantity adjustments with audit trail
+- Status tracking: On Hand, Reserved, Sold Out
+
+### Sales
+- Multi-item sale creation with automatic profit calculation
+- Sales channels: FB Page, FB Profile, Meetup, Shipping, Other
+- Payment methods: GCash, Maya, Bank, Cash, Mixed
+- Sale statuses: Draft, Confirmed, Cancelled, Refunded
+- Buyer tracking and shipping cost management
+
+### Purchases
+- Record purchases with multiple line items
+- Supplier management
+- Receive stock into inventory from purchase orders
+- Track shipping costs and fees per purchase
+
+### Cash Ledger
+- Complete cash-in and cash-out tracking
+- Categories: Sale Income, Inventory Buy, Shipping, Supplies, Platform Fees, Capital In
+- Transactions linked to sales and purchases
+- Running balance calculation
+
+### Reports
+- **Profit Report** — Revenue, cost, and profit grouped by day/week/month with date range and filter support
+- **Inventory Aging** — Identify slow-moving stock with suggested actions
+- **Best Sellers** — Top products by revenue, profit, quantity, or turnover speed
+- **Channel Performance** — Revenue and profit breakdown by sales channel
+- **Cash Flow** — Income vs expenses with net change and running balance
+- CSV export for all report sections
+
+### Exports
+- CSV export for inventory, sales, cash transactions, and full data snapshots
+- Per-section report exports with applied filters
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | [Next.js 16](https://nextjs.org) (App Router) |
+| Language | TypeScript |
+| Database | PostgreSQL ([Neon](https://neon.tech)) |
+| ORM | [Prisma 6](https://prisma.io) |
+| Auth | [Supabase Auth](https://supabase.com) |
+| UI | [shadcn/ui](https://ui.shadcn.com) + [Radix UI](https://radix-ui.com) |
+| Styling | [Tailwind CSS 4](https://tailwindcss.com) |
+| Validation | [Zod 4](https://zod.dev) |
+| Hosting | [Vercel](https://vercel.com) |
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── (app)/              # Protected routes (dashboard, inventory, sales, etc.)
+│   ├── (auth)/             # Login & register pages
+│   └── api/export/         # CSV export endpoints
+├── components/
+│   ├── cash/               # Cash transaction components
+│   ├── inventory/          # Inventory list, cards, dialogs
+│   ├── layout/             # TopBar, SidebarNav, BottomNav
+│   ├── purchases/          # Purchase form & detail
+│   ├── reports/            # Report tabs & visualizations
+│   ├── sales/              # Sale form & detail
+│   └── ui/                 # shadcn/ui base components
+└── lib/
+    ├── actions/            # Server actions (data fetching & mutations)
+    ├── supabase/           # Supabase client & middleware
+    ├── prisma.ts           # Prisma client with connection pooling
+    ├── utils.ts            # Formatting & helpers
+    └── validators.ts       # Zod schemas
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js 18+
+- A [Neon](https://neon.tech) PostgreSQL database
+- A [Supabase](https://supabase.com) project (for authentication)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone the repo**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   git clone https://github.com/Drei-ui/tcgdbmapp.git
+   cd tcgdbmapp
+   ```
 
-## Learn More
+2. **Install dependencies**
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Configure environment variables**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   Create `.env` and `.env.local` files:
 
-## Deploy on Vercel
+   ```env
+   # .env
+   DATABASE_URL="postgresql://user:pass@host/db?sslmode=require"
+   DIRECT_URL="postgresql://user:pass@host/db?sslmode=require"
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```env
+   # .env.local
+   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Run database migrations**
+
+   ```bash
+   npx prisma migrate deploy
+   ```
+
+5. **Start the dev server**
+
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000)
+
+## Deployment
+
+Deploy to Vercel in one click. Make sure to add all 4 environment variables in the Vercel dashboard:
+
+- `DATABASE_URL` — Neon pooled connection string
+- `DIRECT_URL` — Neon direct connection string
+- `NEXT_PUBLIC_SUPABASE_URL` — Supabase project URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Supabase anon key
+
+## Database Schema
+
+**Core Models:** User, Supplier, ProductCatalog, Purchase, PurchaseLineItem, InventoryLot, Sale, SaleLineItem, CashTransaction, Attachment, AuditLog
+
+**Key Enums:** InventoryStatus, SaleStatus, SalesChannel, PaymentMethod, CashType, CashCategory, ProductType, LanguageType
+
+Full schema in [`prisma/schema.prisma`](prisma/schema.prisma).
+
+## License
+
+Private project. All rights reserved.
