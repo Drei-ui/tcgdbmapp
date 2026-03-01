@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
 import { ShoppingCart, Bookmark, PenLine } from "lucide-react";
 import Link from "next/link";
-import type { InventoryLot } from "@/generated/prisma/client";
+import type { InventoryLot } from "@prisma/client";
 
 export function InventoryCard({
   lot,

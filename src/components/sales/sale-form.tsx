@@ -19,7 +19,7 @@ import { createSale } from "@/lib/actions/sales";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { formatCurrency } from "@/lib/utils";
-import type { InventoryLot } from "@/generated/prisma/client";
+import type { InventoryLot } from "@prisma/client";
 
 const CHANNELS = [
   { value: "FB_PAGE", label: "FB Page" },

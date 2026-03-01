@@ -5,7 +5,7 @@ import { requireUser } from "@/lib/auth";
 import { purchaseSchema, supplierSchema } from "@/lib/validators";
 import { revalidatePath, updateTag } from "next/cache";
 import { unstable_cache } from "next/cache";
-import { type Prisma } from "@/generated/prisma/client";
+import { type Prisma } from "@prisma/client";
 
 const PAGE_SIZE = 50;
 

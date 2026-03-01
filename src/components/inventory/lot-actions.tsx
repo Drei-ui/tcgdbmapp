@@ -12,7 +12,7 @@ import {
 import { quickSell } from "@/lib/actions/sales";
 import { toast } from "sonner";
 import { ShoppingCart, Bookmark, PenLine } from "lucide-react";
-import type { InventoryLot } from "@/generated/prisma/client";
+import type { InventoryLot } from "@prisma/client";
 
 export function LotActions({ lot }: { lot: InventoryLot }) {
   const [showQuickSell, setShowQuickSell] = useState(false);

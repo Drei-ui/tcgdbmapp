@@ -19,7 +19,7 @@ import { createPurchase } from "@/lib/actions/purchases";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { formatCurrency } from "@/lib/utils";
-import type { Supplier, ProductCatalog } from "@/generated/prisma/client";
+import type { Supplier, ProductCatalog } from "@prisma/client";
 
 const PRODUCT_TYPES = [
   { value: "SEALED_BOX", label: "Sealed Box" },

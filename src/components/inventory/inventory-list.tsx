@@ -11,7 +11,7 @@ import {
 } from "@/lib/actions/inventory";
 import { quickSell } from "@/lib/actions/sales";
 import { toast } from "sonner";
-import type { InventoryLot } from "@/generated/prisma/client";
+import type { InventoryLot } from "@prisma/client";
 
 export function InventoryList({
   lots,

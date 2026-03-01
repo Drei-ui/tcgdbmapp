@@ -7,7 +7,7 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 import { CashForm } from "./cash-form";
 import { ArrowDownCircle, ArrowUpCircle } from "lucide-react";
 import Link from "next/link";
-import type { CashTransaction } from "@/generated/prisma/client";
+import type { CashTransaction } from "@prisma/client";
 
 export function CashList({
   transactions,
