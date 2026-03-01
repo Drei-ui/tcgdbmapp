@@ -83,7 +83,7 @@ export async function GET(
   switch (section) {
     case "profit": {
       const data = await getReportProfit(start, end, group, filters);
-      const headers = ["Period", "Sales", "COGS", "Profit", "Margin%", "Orders"];
+      const headers = ["Period", "Sales", "Total Cost", "Profit", "Margin%", "Orders"];
       const rows = data.rows.map((r) => [
         new Date(r.period).toISOString().split("T")[0],
         r.sales.toFixed(2),

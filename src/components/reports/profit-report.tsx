@@ -130,7 +130,7 @@ export function ProfitReport({
             <TableRow>
               <TableHead>Period</TableHead>
               <TableHead className="text-right">Sales</TableHead>
-              <TableHead className="text-right">COGS</TableHead>
+              <TableHead className="text-right">Cost</TableHead>
               <TableHead className="text-right">Profit</TableHead>
               <TableHead className="text-right">Margin</TableHead>
               <TableHead className="text-right">Orders</TableHead>

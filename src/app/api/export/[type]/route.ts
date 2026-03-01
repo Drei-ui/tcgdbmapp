@@ -97,7 +97,7 @@ export async function GET(
         "Discount",
         "Shipping Charged",
         "Total Collected",
-        "COGS",
+        "Total Cost",
         "Shipping Cost",
         "Fees",
         "Net Profit",

@@ -130,7 +130,7 @@ export default async function SaleDetailPage({
               <Separator className="my-3" />
               <div className="grid grid-cols-3 gap-3 text-sm">
                 <div>
-                  <span className="text-muted-foreground">COGS</span>
+                  <span className="text-muted-foreground">Total Cost</span>
                   <p className="font-medium text-red-600">
                     -{formatCurrency(totalCogs)}
                   </p>
@@ -200,7 +200,7 @@ export default async function SaleDetailPage({
                 {sale.status === "CONFIRMED" && (
                   <div className="flex justify-between text-xs text-muted-foreground mt-0.5">
                     <span>
-                      COGS: {formatCurrency(item.cogsTotal.toString())}
+                      Cost: {formatCurrency(item.cogsTotal.toString())}
                     </span>
                     <span
                       className={
