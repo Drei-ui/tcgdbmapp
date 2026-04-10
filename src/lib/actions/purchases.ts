@@ -2,7 +2,7 @@
 
 import { prisma, actionTimer } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
-import { purchaseSchema, supplierSchema } from "@/lib/validators";
+import { purchaseSchema, supplierSchema, updatePurchaseSchema } from "@/lib/validators";
 import { revalidatePath, updateTag } from "next/cache";
 import { unstable_cache } from "next/cache";
 import { type Prisma } from "@prisma/client";
@@ -292,6 +292,112 @@ export async function createPurchase(data: {
   updateTag("dashboard");
   updateTag("reports");
   return { success: true, purchaseId: purchase.id };
+}
+
+export async function updatePurchase(
+  purchaseId: string,
+  data: {
+    shippingCost: number;
+    fees: number;
+    notes?: string;
+    supplierId?: string;
+    purchasedAt?: string;
+  }
+) {
+  const user = await requireUser();
+
+  const parsed = updatePurchaseSchema.safeParse(data);
+  if (!parsed.success) return { error: parsed.error.issues[0].message };
+
+  const purchase = await prisma.purchase.findUnique({
+    where: { id: purchaseId },
+    include: { lineItems: true, inventoryLots: true },
+  });
+  if (!purchase) return { error: "Purchase not found" };
+
+  const { shippingCost, fees, notes, supplierId, purchasedAt } = parsed.data;
+  const isReceived = purchase.inventoryLots.length > 0;
+
+  const totalItemCost = purchase.lineItems.reduce(
+    (sum, item) => sum + toNum(item.unitCost) * item.qty,
+    0
+  );
+
+  await prisma.$transaction(async (tx) => {
+    await tx.purchase.update({
+      where: { id: purchaseId },
+      data: {
+        shippingCost,
+        fees,
+        notes,
+        supplierId: supplierId ?? purchase.supplierId,
+        ...(purchasedAt && { purchasedAt }),
+      },
+    });
+
+    // Recalculate inventory lot unit costs if purchase is received
+    if (isReceived) {
+      // Build a lookup map: signature → line items (to handle duplicate products)
+      const lineItemMap = new Map<string, typeof purchase.lineItems>();
+      for (const item of purchase.lineItems) {
+        const sig = `${item.brand}|${item.productType}|${item.productName}|${item.language}`;
+        if (!lineItemMap.has(sig)) lineItemMap.set(sig, []);
+        lineItemMap.get(sig)!.push(item);
+      }
+      const usageCount = new Map<string, number>();
+
+      for (const lot of purchase.inventoryLots) {
+        const sig = `${lot.brand}|${lot.productType}|${lot.productName}|${lot.language}`;
+        const matchingItems = lineItemMap.get(sig) ?? [];
+        const count = usageCount.get(sig) ?? 0;
+        const matchedItem = matchingItems[count] ?? matchingItems[0];
+
+        if (matchedItem) {
+          usageCount.set(sig, count + 1);
+          const itemTotal = toNum(matchedItem.unitCost) * matchedItem.qty;
+          const proportion = totalItemCost > 0 ? itemTotal / totalItemCost : 0;
+          const allocatedExtra = (shippingCost + fees) * proportion;
+          const newUnitCost =
+            Math.round(
+              (toNum(matchedItem.unitCost) + allocatedExtra / matchedItem.qty) *
+                100
+            ) / 100;
+          await tx.inventoryLot.update({
+            where: { id: lot.id },
+            data: { unitCost: newUnitCost },
+          });
+        }
+      }
+    }
+
+    // Update linked cash transaction amount
+    await tx.cashTransaction.updateMany({
+      where: { linkedPurchaseId: purchaseId },
+      data: { amount: totalItemCost + shippingCost + fees },
+    });
+
+    await tx.auditLog.create({
+      data: {
+        entityType: "purchase",
+        entityId: purchaseId,
+        action: "UPDATE_PURCHASE",
+        diff: { shippingCost, fees, notes },
+        actorId: user.id,
+      },
+    });
+  });
+
+  revalidatePath("/purchases");
+  revalidatePath(`/purchases/${purchaseId}`);
+  revalidatePath("/inventory");
+  revalidatePath("/cash");
+  revalidatePath("/dashboard");
+  updateTag("purchases");
+  updateTag("inventory");
+  updateTag("cash");
+  updateTag("dashboard");
+  updateTag("reports");
+  return { success: true };
 }
 
 export async function deletePurchase(purchaseId: string) {

@@ -9,6 +9,7 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { ReceiveButton } from "@/components/purchases/receive-button";
 import { DeletePurchaseButton } from "@/components/purchases/delete-purchase-button";
+import { EditPurchaseButton } from "@/components/purchases/edit-purchase-button";
 
 export default async function PurchaseDetailPage({
   params,
@@ -172,6 +173,16 @@ export default async function PurchaseDetailPage({
       )}
 
       {!isReceived && <ReceiveButton purchaseId={id} />}
+
+      <EditPurchaseButton
+        purchaseId={id}
+        initialValues={{
+          shippingCost: purchase.shippingCost,
+          fees: purchase.fees,
+          notes: purchase.notes,
+        }}
+        isReceived={isReceived}
+      />
 
       <DeletePurchaseButton purchaseId={id} />
     </div>

@@ -158,6 +158,16 @@ export const cashTransactionSchema = z.object({
   linkedPurchaseId: z.string().uuid().optional(),
 });
 
+// ─── Update Purchase ──────────────────────────────────────
+
+export const updatePurchaseSchema = z.object({
+  shippingCost: z.coerce.number().min(0).default(0),
+  fees: z.coerce.number().min(0).default(0),
+  notes: safeStringOptional,
+  supplierId: z.string().uuid().optional().or(z.literal("")).transform((v) => v || undefined),
+  purchasedAt: z.coerce.date().optional(),
+});
+
 // ─── Types ────────────────────────────────────────────────
 
 export type LoginInput = z.infer<typeof loginSchema>;
@@ -171,3 +181,4 @@ export type SaleInput = z.infer<typeof saleSchema>;
 export type SaleLineItemInput = z.infer<typeof saleLineItemSchema>;
 export type QuickSellInput = z.infer<typeof quickSellSchema>;
 export type CashTransactionInput = z.infer<typeof cashTransactionSchema>;
+export type UpdatePurchaseInput = z.infer<typeof updatePurchaseSchema>;
