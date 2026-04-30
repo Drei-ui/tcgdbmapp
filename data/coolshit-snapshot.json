@@ -1,0 +1,1325 @@
+{
+  "107532294": {
+    "id": 107532294,
+    "name": "Cool Shit Black Trucker Hat",
+    "status": "sold-out",
+    "url": "/product/cool-shit-black-trucker-hat",
+    "price": 10
+  },
+  "107532519": {
+    "id": 107532519,
+    "name": "COOL SHIT AIR FRESHENER ",
+    "status": "active",
+    "url": "/product/cool-shit-air-freshener",
+    "price": 3
+  },
+  "107532552": {
+    "id": 107532552,
+    "name": "Black Core Tee",
+    "status": "active",
+    "url": "/product/cool-shit-black-tee",
+    "price": 20
+  },
+  "107532657": {
+    "id": 107532657,
+    "name": "Pink Core Tee",
+    "status": "active",
+    "url": "/product/pink-core-tee",
+    "price": 20
+  },
+  "107532675": {
+    "id": 107532675,
+    "name": "Ecru Core Tee ",
+    "status": "active",
+    "url": "/product/ecru-core-tee",
+    "price": 20
+  },
+  "107532912": {
+    "id": 107532912,
+    "name": "Cool Shit Black Tee",
+    "status": "active",
+    "url": "/product/cool-shit-black",
+    "price": 20
+  },
+  "107532969": {
+    "id": 107532969,
+    "name": "Staple Tee",
+    "status": "active",
+    "url": "/product/staple-tee",
+    "price": 20
+  },
+  "107533053": {
+    "id": 107533053,
+    "name": "If It Ain't Cool It Ain't Here Tee",
+    "status": "active",
+    "url": "/product/if-it-ain-t-cool-it-ain-t-here-tee",
+    "price": 20
+  },
+  "107568099": {
+    "id": 107568099,
+    "name": "Cool Sh*t Skateboard -",
+    "status": "active",
+    "url": "/product/cool-sh-t-skateboard-pre-order",
+    "price": 49
+  },
+  "107903385": {
+    "id": 107903385,
+    "name": "Cool Shit Club Trucker Cap",
+    "status": "active",
+    "url": "/product/cool-shit-club-trucker-cap",
+    "price": 10
+  },
+  "107903427": {
+    "id": 107903427,
+    "name": "Cream Club Hoodie",
+    "status": "active",
+    "url": "/product/cream-club-hoodie",
+    "price": 29
+  },
+  "107903448": {
+    "id": 107903448,
+    "name": "Club Tee Cream",
+    "status": "active",
+    "url": "/product/club-tee-cream",
+    "price": 13
+  },
+  "112932528": {
+    "id": 112932528,
+    "name": "The Chosen One",
+    "status": "sold-out",
+    "url": "/product/lebron-chosen-one-tee",
+    "price": 59.99
+  },
+  "112932552": {
+    "id": 112932552,
+    "name": "Black Mamba",
+    "status": "sold-out",
+    "url": "/product/kobe-black-mamba",
+    "price": 59.99
+  },
+  "112932555": {
+    "id": 112932555,
+    "name": "Michael Jordan 23",
+    "status": "sold-out",
+    "url": "/product/michael-jordan-tee",
+    "price": 59.99
+  },
+  "112932570": {
+    "id": 112932570,
+    "name": "Antman Slam ",
+    "status": "sold-out",
+    "url": "/product/antman-slam-tee",
+    "price": 59.99
+  },
+  "112932573": {
+    "id": 112932573,
+    "name": "Doncic ",
+    "status": "sold-out",
+    "url": "/product/doncic-tee",
+    "price": 59.99
+  },
+  "112932582": {
+    "id": 112932582,
+    "name": "King James ",
+    "status": "sold-out",
+    "url": "/product/king-james-tee",
+    "price": 59.99
+  },
+  "112932591": {
+    "id": 112932591,
+    "name": "MJ Bulls",
+    "status": "sold-out",
+    "url": "/product/mj-tee",
+    "price": 59.99
+  },
+  "112932597": {
+    "id": 112932597,
+    "name": "Doncic Lakers ",
+    "status": "sold-out",
+    "url": "/product/doncic-lakers-tee",
+    "price": 59.99
+  },
+  "112932603": {
+    "id": 112932603,
+    "name": "Ja Morant ",
+    "status": "sold-out",
+    "url": "/product/ja-morant-tee",
+    "price": 59.99
+  },
+  "112932606": {
+    "id": 112932606,
+    "name": "Shaq ",
+    "status": "sold-out",
+    "url": "/product/shaq-tee",
+    "price": 59.99
+  },
+  "112932834": {
+    "id": 112932834,
+    "name": "Gulf of America ",
+    "status": "sold-out",
+    "url": "/product/gulf-of-america-tee",
+    "price": 59.99
+  },
+  "112932858": {
+    "id": 112932858,
+    "name": "Eminem ",
+    "status": "sold-out",
+    "url": "/product/eminem-legends-range",
+    "price": 59.99
+  },
+  "112932867": {
+    "id": 112932867,
+    "name": "Mike Tyson ",
+    "status": "sold-out",
+    "url": "/product/mike-tyson-legends-range",
+    "price": 59.99
+  },
+  "112932891": {
+    "id": 112932891,
+    "name": "Scarface ",
+    "status": "sold-out",
+    "url": "/product/scarface-legends-range",
+    "price": 59.99
+  },
+  "112932894": {
+    "id": 112932894,
+    "name": "50 Cent ",
+    "status": "sold-out",
+    "url": "/product/50-cent-legends-range",
+    "price": 59.99
+  },
+  "112932897": {
+    "id": 112932897,
+    "name": "Eazy E ",
+    "status": "sold-out",
+    "url": "/product/eazy-e-legends-range",
+    "price": 59.99
+  },
+  "112933554": {
+    "id": 112933554,
+    "name": "Monkey D Luffy ",
+    "status": "sold-out",
+    "url": "/product/monkey-d-luffy-one-piece-range",
+    "price": 59.99
+  },
+  "112933557": {
+    "id": 112933557,
+    "name": "Nami ",
+    "status": "sold-out",
+    "url": "/product/nami-one-piece-range",
+    "price": 59.99
+  },
+  "112933566": {
+    "id": 112933566,
+    "name": "Vinsmoke ",
+    "status": "sold-out",
+    "url": "/product/vinsmoke-one-piece-range",
+    "price": 59.99
+  },
+  "112933608": {
+    "id": 112933608,
+    "name": "Zoro ",
+    "status": "sold-out",
+    "url": "/product/zoro-one-piece-range",
+    "price": 59.99
+  },
+  "112933647": {
+    "id": 112933647,
+    "name": "One Piece ",
+    "status": "sold-out",
+    "url": "/product/one-piece-range",
+    "price": 59.99
+  },
+  "112951404": {
+    "id": 112951404,
+    "name": "Tyler The Creator ",
+    "status": "sold-out",
+    "url": "/product/tyler-the-creator-legends-range",
+    "price": 59.99
+  },
+  "112951410": {
+    "id": 112951410,
+    "name": "Melo Ball",
+    "status": "sold-out",
+    "url": "/product/lamelo-ball-legends-range",
+    "price": 59.99
+  },
+  "112952790": {
+    "id": 112952790,
+    "name": "Kobe Rings",
+    "status": "sold-out",
+    "url": "/product/kobe-rings-legends-range",
+    "price": 59.99
+  },
+  "112952970": {
+    "id": 112952970,
+    "name": "Bulls Dynasty ",
+    "status": "sold-out",
+    "url": "/product/bulls-dynasty-legends-range",
+    "price": 59.99
+  },
+  "112952973": {
+    "id": 112952973,
+    "name": "Juice World ",
+    "status": "sold-out",
+    "url": "/product/juice-world-legends-range",
+    "price": 59.99
+  },
+  "112952979": {
+    "id": 112952979,
+    "name": "Ringmasters ",
+    "status": "sold-out",
+    "url": "/product/ringmasters-legends-range",
+    "price": 59.99
+  },
+  "113414130": {
+    "id": 113414130,
+    "name": "Pokémon TCG: Rival Battle Deck— Steven",
+    "status": "sold-out",
+    "url": "/product/pok%C3%A9mon-tcg-rival-battle-deckmarniesteven",
+    "price": 39
+  },
+  "113755941": {
+    "id": 113755941,
+    "name": "Tyrese Haliburton Pacers",
+    "status": "sold-out",
+    "url": "/product/haliburton-legend-tee",
+    "price": 59.99
+  },
+  "113755944": {
+    "id": 113755944,
+    "name": "Big X Tha Plug ",
+    "status": "sold-out",
+    "url": "/product/big-x-tha-plug-legends-tee",
+    "price": 59.99
+  },
+  "113781825": {
+    "id": 113781825,
+    "name": "Chiefs Mana ",
+    "status": "sold-out",
+    "url": "/product/chiefs-mana-tee",
+    "price": 59.99
+  },
+  "113962440": {
+    "id": 113962440,
+    "name": "Big X ThaPlug",
+    "status": "sold-out",
+    "url": "/product/big-x-diamond-tee",
+    "price": 59.99
+  },
+  "113962446": {
+    "id": 113962446,
+    "name": "Tyrese Haliburton ",
+    "status": "sold-out",
+    "url": "/product/tyrese-haliburton-finals-tee",
+    "price": 59.99
+  },
+  "114346548": {
+    "id": 114346548,
+    "name": "Liam Lawson Red Bull",
+    "status": "sold-out",
+    "url": "/product/liam-lawson-graphic-tee",
+    "price": 59.99
+  },
+  "114346551": {
+    "id": 114346551,
+    "name": "Lewis Hamilton",
+    "status": "sold-out",
+    "url": "/product/lewis-hamilton-graphic-tee",
+    "price": 59.99
+  },
+  "114346554": {
+    "id": 114346554,
+    "name": "Max Verstappen ",
+    "status": "sold-out",
+    "url": "/product/max-verstappen-graphic-tee",
+    "price": 59.99
+  },
+  "114421203": {
+    "id": 114421203,
+    "name": "Liam Lawson Racing Bulls",
+    "status": "sold-out",
+    "url": "/product/lawson-graphic-tee",
+    "price": 59.99
+  },
+  "115332006": {
+    "id": 115332006,
+    "name": "Bieber",
+    "status": "sold-out",
+    "url": "/product/justin-bieber",
+    "price": 59.99
+  },
+  "115332090": {
+    "id": 115332090,
+    "name": "Best President by Par",
+    "status": "sold-out",
+    "url": "/product/best-president-by-par",
+    "price": 59.99
+  },
+  "115569102": {
+    "id": 115569102,
+    "name": "Freedom Hoodie ",
+    "status": "sold-out",
+    "url": "/product/freedom-hoodie",
+    "price": 160
+  },
+  "115569300": {
+    "id": 115569300,
+    "name": "Freedom T-Shirt",
+    "status": "sold-out",
+    "url": "/product/copy-of-freedom-hoodie",
+    "price": 70
+  },
+  "115569315": {
+    "id": 115569315,
+    "name": "Beer Barbeque Freedom",
+    "status": "sold-out",
+    "url": "/product/beer-barbeque-freedom",
+    "price": 59.99
+  },
+  "115569321": {
+    "id": 115569321,
+    "name": "Making Groceries Affordable Again",
+    "status": "sold-out",
+    "url": "/product/making-groceries-affordable-again",
+    "price": 59.99
+  },
+  "115569462": {
+    "id": 115569462,
+    "name": "STFU U SILLY CAAARNT",
+    "status": "sold-out",
+    "url": "/product/stfu-u-silly-caaarnt",
+    "price": 69
+  },
+  "115720440": {
+    "id": 115720440,
+    "name": "Pokemon TCG: Dec 25 Collectors Chest ",
+    "status": "sold-out",
+    "url": "/product/pokemon-tcg-dec-25-collectors-chest-pre-order",
+    "price": 69
+  },
+  "115720446": {
+    "id": 115720446,
+    "name": "Pokemon TCG: Pokeball Tin 2025 ",
+    "status": "sold-out",
+    "url": "/product/copy-of-pokemon-tcg-dec-25-collectors-chest-pre-order",
+    "price": 35
+  },
+  "115720476": {
+    "id": 115720476,
+    "name": "Mega Evolution - Phantasmal Flames Three Booster Blister ",
+    "status": "sold-out",
+    "url": "/product/mega-evolution-phantasmal-flames-three-booster-blister-pre-order",
+    "price": 39
+  },
+  "115735605": {
+    "id": 115735605,
+    "name": "Pokémon TCG: Mega Venusaur ex Premium Collection",
+    "status": "sold-out",
+    "url": "/product/pok%C3%A9mon-tcg-mega-venusaur-ex-premium-collectionpre-order",
+    "price": 95
+  },
+  "116946702": {
+    "id": 116946702,
+    "name": "Kevin Durant",
+    "status": "sold-out",
+    "url": "/product/copy-of-the-chosen-one",
+    "price": 59.99
+  },
+  "116946720": {
+    "id": 116946720,
+    "name": "Floyd Mayweather 50-0",
+    "status": "sold-out",
+    "url": "/product/floyd-mayweather-50-0",
+    "price": 59.99
+  },
+  "116946726": {
+    "id": 116946726,
+    "name": "Iron Mike",
+    "status": "sold-out",
+    "url": "/product/iron-mike",
+    "price": 59.99
+  },
+  "116946729": {
+    "id": 116946729,
+    "name": "Gervonta Davis",
+    "status": "sold-out",
+    "url": "/product/gervonta-davis",
+    "price": 59.99
+  },
+  "116946732": {
+    "id": 116946732,
+    "name": "Pacquiao",
+    "status": "sold-out",
+    "url": "/product/pacquiao",
+    "price": 59.99
+  },
+  "116946738": {
+    "id": 116946738,
+    "name": "Tom Brady",
+    "status": "sold-out",
+    "url": "/product/copy-of-pacquiao",
+    "price": 59.99
+  },
+  "116946747": {
+    "id": 116946747,
+    "name": "Bad Bunny",
+    "status": "sold-out",
+    "url": "/product/bad-bunny",
+    "price": 59.99
+  },
+  "116946753": {
+    "id": 116946753,
+    "name": "Scarface Face",
+    "status": "sold-out",
+    "url": "/product/scarface-face",
+    "price": 59.99
+  },
+  "116946759": {
+    "id": 116946759,
+    "name": "Soprano",
+    "status": "sold-out",
+    "url": "/product/soprano",
+    "price": 59.99
+  },
+  "116946762": {
+    "id": 116946762,
+    "name": "Paid in Full",
+    "status": "sold-out",
+    "url": "/product/paid-in-full",
+    "price": 59.99
+  },
+  "116946771": {
+    "id": 116946771,
+    "name": "Kobe Stars",
+    "status": "sold-out",
+    "url": "/product/kobe-stars",
+    "price": 59.99
+  },
+  "116946780": {
+    "id": 116946780,
+    "name": "Kobe Defense",
+    "status": "sold-out",
+    "url": "/product/kobe-defense",
+    "price": 59.99
+  },
+  "116946789": {
+    "id": 116946789,
+    "name": "Kobe Shh",
+    "status": "sold-out",
+    "url": "/product/kobe-shh",
+    "price": 59.99
+  },
+  "116946795": {
+    "id": 116946795,
+    "name": "Aaliyah",
+    "status": "sold-out",
+    "url": "/product/aaliyah",
+    "price": 59.99
+  },
+  "116946804": {
+    "id": 116946804,
+    "name": "Ice Cube",
+    "status": "sold-out",
+    "url": "/product/ice-cube",
+    "price": 59.99
+  },
+  "116946810": {
+    "id": 116946810,
+    "name": "DMX",
+    "status": "sold-out",
+    "url": "/product/dmx",
+    "price": 59.99
+  },
+  "116946819": {
+    "id": 116946819,
+    "name": "Frank Ocean",
+    "status": "sold-out",
+    "url": "/product/frank-ocean",
+    "price": 59.99
+  },
+  "116946822": {
+    "id": 116946822,
+    "name": "Fugees",
+    "status": "sold-out",
+    "url": "/product/fugees",
+    "price": 59.99
+  },
+  "116946825": {
+    "id": 116946825,
+    "name": "The College Dropout",
+    "status": "sold-out",
+    "url": "/product/the-college-dropout",
+    "price": 59.99
+  },
+  "116946834": {
+    "id": 116946834,
+    "name": " Juice World Lucid Dreams",
+    "status": "sold-out",
+    "url": "/product/juice-world-lucid-dreams",
+    "price": 59.99
+  },
+  "116946843": {
+    "id": 116946843,
+    "name": "Michael Jackson",
+    "status": "sold-out",
+    "url": "/product/michael-jackson",
+    "price": 59.99
+  },
+  "116946855": {
+    "id": 116946855,
+    "name": "Tupac",
+    "status": "sold-out",
+    "url": "/product/tupac",
+    "price": 59.99
+  },
+  "116946864": {
+    "id": 116946864,
+    "name": "Michael Jackson Lakers",
+    "status": "sold-out",
+    "url": "/product/michael-jackson-lakers",
+    "price": 59.99
+  },
+  "116946867": {
+    "id": 116946867,
+    "name": "Rihana",
+    "status": "sold-out",
+    "url": "/product/rihana",
+    "price": 59.99
+  },
+  "116946873": {
+    "id": 116946873,
+    "name": "Yung Dolph",
+    "status": "sold-out",
+    "url": "/product/yung-dolph",
+    "price": 59.99
+  },
+  "116946882": {
+    "id": 116946882,
+    "name": "Marvelous Hagler",
+    "status": "sold-out",
+    "url": "/product/marvelous-hagler",
+    "price": 59.99
+  },
+  "116946891": {
+    "id": 116946891,
+    "name": "Muhammad The Greatest",
+    "status": "sold-out",
+    "url": "/product/muhammad-the-greatest",
+    "price": 59.99
+  },
+  "116946903": {
+    "id": 116946903,
+    "name": "Crawford",
+    "status": "sold-out",
+    "url": "/product/crawford",
+    "price": 59.99
+  },
+  "116946915": {
+    "id": 116946915,
+    "name": "Tank Davis",
+    "status": "sold-out",
+    "url": "/product/tank-davis",
+    "price": 59.99
+  },
+  "116946939": {
+    "id": 116946939,
+    "name": "Mookie Betts",
+    "status": "sold-out",
+    "url": "/product/mookie-betts",
+    "price": 59.99
+  },
+  "116946948": {
+    "id": 116946948,
+    "name": "Aaron Judge",
+    "status": "sold-out",
+    "url": "/product/aaron-judge",
+    "price": 59.99
+  },
+  "116946954": {
+    "id": 116946954,
+    "name": "Barry Bonds",
+    "status": "sold-out",
+    "url": "/product/barry-bonds",
+    "price": 59.99
+  },
+  "116946960": {
+    "id": 116946960,
+    "name": "Lebron Chosen One",
+    "status": "sold-out",
+    "url": "/product/lebron-chosen-one",
+    "price": 59.99
+  },
+  "116946969": {
+    "id": 116946969,
+    "name": "Celtics Champions",
+    "status": "sold-out",
+    "url": "/product/celtics-champions",
+    "price": 59.99
+  },
+  "116946972": {
+    "id": 116946972,
+    "name": "Chicago Bulls ",
+    "status": "sold-out",
+    "url": "/product/chicago-bulls",
+    "price": 59.99
+  },
+  "116946975": {
+    "id": 116946975,
+    "name": "Hakeem The Dream",
+    "status": "sold-out",
+    "url": "/product/hakeem-the-dream",
+    "price": 59.99
+  },
+  "116946987": {
+    "id": 116946987,
+    "name": "Allen Iverson",
+    "status": "sold-out",
+    "url": "/product/allen-iverson",
+    "price": 59.99
+  },
+  "116946993": {
+    "id": 116946993,
+    "name": "Be Different",
+    "status": "sold-out",
+    "url": "/product/be-different",
+    "price": 59.99
+  },
+  "116946996": {
+    "id": 116946996,
+    "name": "The Black Mamba",
+    "status": "sold-out",
+    "url": "/product/the-black-mamba",
+    "price": 59.99
+  },
+  "116947002": {
+    "id": 116947002,
+    "name": "Kyrie Irving",
+    "status": "sold-out",
+    "url": "/product/kyrie-irving",
+    "price": 59.99
+  },
+  "116947005": {
+    "id": 116947005,
+    "name": "Lebron Dunk ",
+    "status": "sold-out",
+    "url": "/product/lebron-dunk",
+    "price": 59.99
+  },
+  "116947014": {
+    "id": 116947014,
+    "name": "Michael Jordan A Star is Born",
+    "status": "sold-out",
+    "url": "/product/michael-jordan-a-star-is-born",
+    "price": 59.99
+  },
+  "116947023": {
+    "id": 116947023,
+    "name": "Michael Jordan North Carolina",
+    "status": "sold-out",
+    "url": "/product/michael-jordan-north-carolina",
+    "price": 59.99
+  },
+  "116947029": {
+    "id": 116947029,
+    "name": "Michael Jordan Arena",
+    "status": "sold-out",
+    "url": "/product/michael-jordan-arena",
+    "price": 59.99
+  },
+  "116947035": {
+    "id": 116947035,
+    "name": "Denis Rodman",
+    "status": "sold-out",
+    "url": "/product/denis-rodman",
+    "price": 59.99
+  },
+  "116947041": {
+    "id": 116947041,
+    "name": "O Neal Magic",
+    "status": "sold-out",
+    "url": "/product/o-neal-magic",
+    "price": 59.99
+  },
+  "116947044": {
+    "id": 116947044,
+    "name": "SGA",
+    "status": "sold-out",
+    "url": "/product/sga",
+    "price": 59.99
+  },
+  "116947047": {
+    "id": 116947047,
+    "name": "Edwards",
+    "status": "sold-out",
+    "url": "/product/edwards",
+    "price": 59.99
+  },
+  "116947050": {
+    "id": 116947050,
+    "name": "Edwards Dunk",
+    "status": "sold-out",
+    "url": "/product/edwards-dunk",
+    "price": 59.99
+  },
+  "116947059": {
+    "id": 116947059,
+    "name": "Antman",
+    "status": "sold-out",
+    "url": "/product/antman",
+    "price": 59.99
+  },
+  "116947062": {
+    "id": 116947062,
+    "name": "Chicago Bulls Champions",
+    "status": "sold-out",
+    "url": "/product/chicago-bulls-champions",
+    "price": 59.99
+  },
+  "116947281": {
+    "id": 116947281,
+    "name": "Chris Brown",
+    "status": "sold-out",
+    "url": "/product/chris-brown",
+    "price": 59.99
+  },
+  "116947284": {
+    "id": 116947284,
+    "name": "Sydney Sweeney",
+    "status": "sold-out",
+    "url": "/product/sydney-sweeney",
+    "price": 59.99
+  },
+  "116947314": {
+    "id": 116947314,
+    "name": "Lil Baby",
+    "status": "sold-out",
+    "url": "/product/lil-baby",
+    "price": 59.99
+  },
+  "116947422": {
+    "id": 116947422,
+    "name": "Nipsey Hussle",
+    "status": "sold-out",
+    "url": "/product/nipsey-hussle",
+    "price": 59.99
+  },
+  "117248706": {
+    "id": 117248706,
+    "name": "Mega Evolution—Ascended Heroes Collection—Erika/Larry",
+    "status": "sold-out",
+    "url": "/product/pok%C3%A9mon-tcg-mega-evolutionascended-heroes-collectionerikalarry",
+    "price": 24
+  },
+  "117248709": {
+    "id": 117248709,
+    "name": "Mega Charizard Tin ",
+    "status": "sold-out",
+    "url": "/product/pok%C3%A9mon-tcg-mega-charizard-tin",
+    "price": 55
+  },
+  "117248718": {
+    "id": 117248718,
+    "name": "Pokémon TCG: Mega Evolution  Ascended Heroes First Partners Deluxe Pin Collection",
+    "status": "sold-out",
+    "url": "/product/pok%C3%A9mon-tcg-mega-evolution-ascended-heroes-first-partners-deluxe-pin-collection",
+    "price": 65
+  },
+  "117248727": {
+    "id": 117248727,
+    "name": "Mega Evolution Ascended Heroes Elite Trainer Box",
+    "status": "sold-out",
+    "url": "/product/mega-evolution-ascended-heroes-elite-trainer-box",
+    "price": 130
+  },
+  "117248733": {
+    "id": 117248733,
+    "name": "Mega Evolution Ascended Heroes Mini Tin",
+    "status": "sold-out",
+    "url": "/product/mega-evolution-ascended-heroes-mini-tin",
+    "price": 25
+  },
+  "117248736": {
+    "id": 117248736,
+    "name": "Mega Evolution Ascended Heroes Premium Poster Collection—Mega Lucario or Mega Gardevoir",
+    "status": "sold-out",
+    "url": "/product/mega-evolutionascended-heroes-premium-poster-collectionmega-lucario-or-mega-gardevoir",
+    "price": 120
+  },
+  "117248742": {
+    "id": 117248742,
+    "name": "Mega Evolution Ascended Heroes Mega Meganium ex Box, Mega Emboar ex Box, or Mega Feraligatr ex Box",
+    "status": "sold-out",
+    "url": "/product/mega-evolutionascended-heroes-mega-meganium-ex-box-mega-emboar-ex-box-or-mega-feraligatr-ex-box",
+    "price": 55
+  },
+  "117248751": {
+    "id": 117248751,
+    "name": "Mega Evolution Ascended Heroes Booster Bundle",
+    "status": "sold-out",
+    "url": "/product/mega-evolution-ascended-heroes-booster-bundle",
+    "price": 69
+  },
+  "117248775": {
+    "id": 117248775,
+    "name": "Mega Evolution— Perfect Order Build & Battle Box",
+    "status": "coming-soon",
+    "url": "/product/copy-of-mega-evolution-ascended-heroes-booster-bundle",
+    "price": 50
+  },
+  "117248793": {
+    "id": 117248793,
+    "name": "Mega Evolution-Perfect Order Booster Box (Pre-Order)",
+    "status": "sold-out",
+    "url": "/product/mega-evolution-perfect-order-booster-box",
+    "price": 360
+  },
+  "117248808": {
+    "id": 117248808,
+    "name": "Mega Evolution Perfect Order Booster Bundle (Pre-Order)",
+    "status": "sold-out",
+    "url": "/product/mega-evolution-perfect-order-booster-bundle",
+    "price": 69
+  },
+  "117248817": {
+    "id": 117248817,
+    "name": "Mega Evolution— Perfect Order Elite Trainer Box (Pre-Order)",
+    "status": "sold-out",
+    "url": "/product/mega-evolution-perfect-order-elite-trainer-box",
+    "price": 130
+  },
+  "117248829": {
+    "id": 117248829,
+    "name": "First Partner Illustration Collection—Series 1 (Pre-Order)",
+    "status": "sold-out",
+    "url": "/product/mega-evolutionperfect-order-3-booster-blister",
+    "price": 45
+  },
+  "117248847": {
+    "id": 117248847,
+    "name": "Pokemon TCG: 2-Pack Blister",
+    "status": "sold-out",
+    "url": "/product/pokemon-tcg-2-pack-blister",
+    "price": 25
+  },
+  "117387135": {
+    "id": 117387135,
+    "name": "F1 Turbo Attax 2025 Starter Packs",
+    "status": "active",
+    "url": "/product/f1-turbo-attax-2025-starter-packs",
+    "price": 24.99
+  },
+  "117387159": {
+    "id": 117387159,
+    "name": "Panini Donruss Optic 2025 NFL Football Blaster",
+    "status": "active",
+    "url": "/product/panini-donruss-optic-2025-nfl-football-blaster",
+    "price": 79.99
+  },
+  "117387168": {
+    "id": 117387168,
+    "name": "Panini Donruss Optic 2025 NFL Football Fat Pack",
+    "status": "coming-soon",
+    "url": "/product/panini-donruss-optic-2025-nfl-football-fat-pack",
+    "price": 39.99
+  },
+  "117387195": {
+    "id": 117387195,
+    "name": "Panini NFL Absolute Football Fat Pack 2025",
+    "status": "active",
+    "url": "/product/panini-nfl-absolute-football-fat-pack-2025",
+    "price": 19.99
+  },
+  "117387201": {
+    "id": 117387201,
+    "name": "Panini NFL Absolute Football Retail 2025",
+    "status": "active",
+    "url": "/product/panini-nfl-absolute-football-retail-2025",
+    "price": 8.5
+  },
+  "117387204": {
+    "id": 117387204,
+    "name": "Panini Prizm NFL Football Counter Display 2025",
+    "status": "coming-soon",
+    "url": "/product/panini-prizm-nfl-football-counter-display-2025",
+    "price": 249.99
+  },
+  "117387207": {
+    "id": 117387207,
+    "name": "Panini Score 2025 NFL Football Blaster Box",
+    "status": "active",
+    "url": "/product/panini-score-2025-nfl-football-blaster-box",
+    "price": 59.99
+  },
+  "117387219": {
+    "id": 117387219,
+    "name": "Panini Select 2024-2025 NFL Football Trading Card Blaster",
+    "status": "active",
+    "url": "/product/panini-score-2025-nfl-football-retail-pack",
+    "price": 69.99
+  },
+  "117387231": {
+    "id": 117387231,
+    "name": "Topps WWE Universe - Hobby Value Box 2025",
+    "status": "sold-out",
+    "url": "/product/wwe",
+    "price": 69.99
+  },
+  "117387237": {
+    "id": 117387237,
+    "name": "Topps Premier League 2026 - Trading Cards",
+    "status": "active",
+    "url": "/product/topps-premier-league-2026-trading-cards",
+    "price": 5.99
+  },
+  "117387246": {
+    "id": 117387246,
+    "name": "Panini EPL TOP Class 2025 Soccer Cards",
+    "status": "active",
+    "url": "/product/panini-epl-top-class-2025-soccer-cards",
+    "price": 129.99
+  },
+  "117387270": {
+    "id": 117387270,
+    "name": "Panini Score 2025 NFL Football Mega Box",
+    "status": "active",
+    "url": "/product/panini-score-2025-nfl-football-mega-box",
+    "price": 109.99
+  },
+  "117416100": {
+    "id": 117416100,
+    "name": "LPG Essentials Penny Sleeves",
+    "status": "coming-soon",
+    "url": "/product/lpg-essentials-penny-sleeves",
+    "price": 1.99
+  },
+  "117416130": {
+    "id": 117416130,
+    "name": "Ultra Pro 3\" X 4\" Clear Regular Toploader 25ct",
+    "status": "active",
+    "url": "/product/ultra-pro-3-x-4-clear-regular-toploader-25ct",
+    "price": 5.99
+  },
+  "117416178": {
+    "id": 117416178,
+    "name": "Yugioh - Phantom Revenge Booster Display",
+    "status": "coming-soon",
+    "url": "/product/yugioh-phantom-revenge-booster-display",
+    "price": 189.99
+  },
+  "117416190": {
+    "id": 117416190,
+    "name": "Yugioh - Burst Protocol Booster Display",
+    "status": "coming-soon",
+    "url": "/product/yugioh-burst-protocol-booster-display",
+    "price": 189.99
+  },
+  "117416211": {
+    "id": 117416211,
+    "name": "Yugioh - Alliance Insight Booster Display Box",
+    "status": "active",
+    "url": "/product/yugioh-alliance-insight-booster-display",
+    "price": 189.99
+  },
+  "117416235": {
+    "id": 117416235,
+    "name": "Yugioh - 25th Anniversary Rarity Collection 2 Tuckbox 2-Pack",
+    "status": "coming-soon",
+    "url": "/product/yugioh-25th-anniversary-rarity-collection-2-tuckbox-2-pack",
+    "price": 39.99
+  },
+  "117416286": {
+    "id": 117416286,
+    "name": "Harry Potter Golden Snitch Bath/Beach Towel",
+    "status": "coming-soon",
+    "url": "/product/harry-potter-gryffindor-lion-bathbeach-towel",
+    "price": 59.99
+  },
+  "117416349": {
+    "id": 117416349,
+    "name": "Harry Potter Gryffindor Oversized Hoodie Blanket",
+    "status": "coming-soon",
+    "url": "/product/harry-potter-gryffindor-oversized-hoodie-blanket",
+    "price": 159.99
+  },
+  "117416373": {
+    "id": 117416373,
+    "name": "Fanattik Harry Potter Metal Replica Envelope with Red Seal",
+    "status": "active",
+    "url": "/product/theory-11-harry-potter-puzzle",
+    "price": 59.99
+  },
+  "117416454": {
+    "id": 117416454,
+    "name": "Hot Wheels - Premium Fast & Furious Assortment (10)",
+    "status": "coming-soon",
+    "url": "/product/hot-wheels-premium-fast-furious-assortment-10",
+    "price": 99
+  },
+  "117416490": {
+    "id": 117416490,
+    "name": "Monopoly - Pokemon",
+    "status": "coming-soon",
+    "url": "/product/monopoly-pokemon",
+    "price": 39.99
+  },
+  "117416616": {
+    "id": 117416616,
+    "name": "100% Plastic Playing Cards Poker Size",
+    "status": "active",
+    "url": "/product/100-plastic-playing-cards-poker-size",
+    "price": 15.99
+  },
+  "117416634": {
+    "id": 117416634,
+    "name": "Classics Australiana Clay Poker Set - 600 Chips",
+    "status": "active",
+    "url": "/product/classics-australiana-clay-poker-set-600-chips",
+    "price": 199.99
+  },
+  "117416655": {
+    "id": 117416655,
+    "name": "WWE - Main Event Ring",
+    "status": "sold-out",
+    "url": "/product/wwe-main-event-ring",
+    "price": 49.99
+  },
+  "117416688": {
+    "id": 117416688,
+    "name": "WWE - WWE Basic Figure Assortment ",
+    "status": "coming-soon",
+    "url": "/product/wwe-wwe-basic-figure-assortment-8",
+    "price": 37.99
+  },
+  "117416709": {
+    "id": 117416709,
+    "name": "WWE - Top Picks Elite Assortment ",
+    "status": "coming-soon",
+    "url": "/product/wwe-top-picks-elite-assortment",
+    "price": 39.99
+  },
+  "117416733": {
+    "id": 117416733,
+    "name": "WWE - Mitb Feature Ring",
+    "status": "coming-soon",
+    "url": "/product/wwe-mitb-feature-ring",
+    "price": 89.99
+  },
+  "117416751": {
+    "id": 117416751,
+    "name": "WWE - Superstar Core Ring",
+    "status": "coming-soon",
+    "url": "/product/wwe-superstar-core-ring",
+    "price": 54.99
+  },
+  "117416793": {
+    "id": 117416793,
+    "name": "Hot Wheels - Premium 1:43 Assortment",
+    "status": "coming-soon",
+    "url": "/product/hot-wheels-premium-143-assortment",
+    "price": 39.99
+  },
+  "117416820": {
+    "id": 117416820,
+    "name": "Hot Wheels - Basic Car Assortment",
+    "status": "coming-soon",
+    "url": "/product/hot-wheels-basic-car-assortment",
+    "price": 4.49
+  },
+  "117416847": {
+    "id": 117416847,
+    "name": "Hot Wheels - Fast & Furious Assortment",
+    "status": "coming-soon",
+    "url": "/product/hot-wheels-fast-furious-assortment",
+    "price": 6.49
+  },
+  "117490719": {
+    "id": 117490719,
+    "name": "PANINI 2025 SELECT NFL FOOTBALL FAT PACK",
+    "status": "sold-out",
+    "url": "/product/panini-2025-select-nfl-football-fat-pack",
+    "price": 39.99
+  },
+  "117490761": {
+    "id": 117490761,
+    "name": "Panini Score 2025 NFL Retail Box",
+    "status": "active",
+    "url": "/product/panini-score-2025-nfl-retail-box",
+    "price": 8.5
+  },
+  "117523860": {
+    "id": 117523860,
+    "name": "Panini Donruss Basketball 2024-25 Fat Pack (SEALED BOX)",
+    "status": "active",
+    "url": "/product/panini-donruss-basketball-2024-25-fat-pack",
+    "price": 179.99
+  },
+  "117523863": {
+    "id": 117523863,
+    "name": "2025 Panini Haunted HOOPS Basketball 40-pack",
+    "status": "sold-out",
+    "url": "/product/prizm-basketball-counter-display",
+    "price": 19.99
+  },
+  "117523869": {
+    "id": 117523869,
+    "name": "2025 Panini NBA Donruss Optic Basketball Counter Display (SEALED BOX)",
+    "status": "sold-out",
+    "url": "/product/2025-panini-nba-donruss-optic-basketball-counter-display",
+    "price": 179.99
+  },
+  "117523944": {
+    "id": 117523944,
+    "name": "2025 Panini Donruss Optic Basketball Mega Box",
+    "status": "sold-out",
+    "url": "/product/2025-panini-donruss-optic-basketball-mega-box",
+    "price": 119.99
+  },
+  "117523986": {
+    "id": 117523986,
+    "name": "Prizm Basketball Counter Display (SEALED BOX)",
+    "status": "active",
+    "url": "/product/prizm-basketball-counter-display-1",
+    "price": 179.99
+  },
+  "117523998": {
+    "id": 117523998,
+    "name": "Panini 2025 Select Basketball Mega Box",
+    "status": "sold-out",
+    "url": "/product/panini-2025-select-basketball-mega-box",
+    "price": 129.99
+  },
+  "117524010": {
+    "id": 117524010,
+    "name": "Panini 2025 Select Basketball Blaster",
+    "status": "sold-out",
+    "url": "/product/panini-2025-select-basketball-blaster",
+    "price": 69.99
+  },
+  "117524031": {
+    "id": 117524031,
+    "name": "Panini Donruss Basketball 2024-25 Retail Display (SEALED BOX)",
+    "status": "active",
+    "url": "/product/panini-donruss-basketball-2024-25-retail-display-sealed-box",
+    "price": 149.99
+  },
+  "117524145": {
+    "id": 117524145,
+    "name": "2025 Panini Prizm FIFA Club World Cup Soccer Blaster",
+    "status": "sold-out",
+    "url": "/product/2025-panini-prizm-fifa-club-world-cup-soccer-blaster",
+    "price": 54.99
+  },
+  "117524160": {
+    "id": 117524160,
+    "name": "2025 Panini Prizm FIFA World Cup Soccer Mega Box",
+    "status": "sold-out",
+    "url": "/product/2025-panini-prizm-fifa-world-cup-soccer-mega-box",
+    "price": 109.99
+  },
+  "117524187": {
+    "id": 117524187,
+    "name": "Mosaic Football Blaster 21-22",
+    "status": "active",
+    "url": "/product/copy-of-2025-panini-prizm-fifa-club-world-cup-soccer-blaster",
+    "price": 54.99
+  },
+  "117524220": {
+    "id": 117524220,
+    "name": "Meta Zoo TCG Base Set Booster Box",
+    "status": "active",
+    "url": "/product/2022-ufc-trading-cards-prizm",
+    "price": 179.99
+  },
+  "117524241": {
+    "id": 117524241,
+    "name": "FIFA Club World Cup 2025 Pocket Tin",
+    "status": "active",
+    "url": "/product/fifa-club-world-cup-2025-pocket-tin",
+    "price": 29.99
+  },
+  "117524244": {
+    "id": 117524244,
+    "name": "Panini FIFA 365 Adrenalyn XL 2024 - STAR SIGNINGS Blister",
+    "status": "active",
+    "url": "/product/panini-fifa-365-adrenalyn-xl-2024-star-signings-blister",
+    "price": 29.99
+  },
+  "117524265": {
+    "id": 117524265,
+    "name": "FIFA 365 Adrenalyn XL 2025 Soccer Cards (SEALED BOX)",
+    "status": "active",
+    "url": "/product/fifa-365-adrenalyn-xl-2025-soccer-cards-sealed-box",
+    "price": 79.99
+  },
+  "117524280": {
+    "id": 117524280,
+    "name": "UEFA Match Attax Champions League 2023/2024 Edition Trading Card",
+    "status": "sold-out",
+    "url": "/product/uefa-match-attax-champions-league-20232024-edition-trading-card",
+    "price": 89.99
+  },
+  "117524316": {
+    "id": 117524316,
+    "name": "2022 Panini UFC Prizm Blaster Box",
+    "status": "sold-out",
+    "url": "/product/2022-panini-ufc-prizm-blaster-box",
+    "price": 69.99
+  },
+  "117559458": {
+    "id": 117559458,
+    "name": "Pokemon TCG 2-Pack Blister ",
+    "status": "sold-out",
+    "url": "/product/pokemon-tcg-2-pack-blister-pre-order",
+    "price": 22
+  },
+  "118401915": {
+    "id": 118401915,
+    "name": "Pokémon TCG Mega Zygarde ex Premium Collection (Pre-Order)",
+    "status": "coming-soon",
+    "url": "/product/pok%C3%A9mon-tcg-mega-zygarde-ex-premium-collection-pre-order",
+    "price": 99
+  },
+  "118401918": {
+    "id": 118401918,
+    "name": "Pokémon TCG: Mega Evolution Chaos Rising 3-Booster Blister (Pre-Order)",
+    "status": "coming-soon",
+    "url": "/product/pok%C3%A9mon-tcg-mega-evolution-chaos-rising-3-booster-blister-pre-order",
+    "price": 33
+  },
+  "118401924": {
+    "id": 118401924,
+    "name": "Pokémon TCG: Mega Evolution Chaos Rising Booster (Pre-Order)",
+    "status": "coming-soon",
+    "url": "/product/pok%C3%A9mon-tcg-mega-evolution-chaos-rising-booster-pre-order",
+    "price": 360
+  },
+  "118401939": {
+    "id": 118401939,
+    "name": "Pokémon TCG: Mega Evolution Chaos Rising Booster Bundle (Pre-Order)",
+    "status": "coming-soon",
+    "url": "/product/pok%C3%A9mon-tcg-mega-evolution-chaos-rising-booster-bundle-pre-order",
+    "price": 69
+  },
+  "118401948": {
+    "id": 118401948,
+    "name": "Pokémon TCG: Mega Evolution Chaos Rising Elite Trainer Box (Pre-Order)",
+    "status": "coming-soon",
+    "url": "/product/pok%C3%A9mon-tcg-mega-evolution-chaos-rising-elite-trainer-box-pre-order",
+    "price": 130
+  },
+  "118401975": {
+    "id": 118401975,
+    "name": "Pokémon TCG: Mini Portfolio",
+    "status": "active",
+    "url": "/product/pok%C3%A9mon-tcg-mini-portfolio",
+    "price": 15
+  },
+  "118402140": {
+    "id": 118402140,
+    "name": "One Piece Card Game Adventure on Kami's Island - Booster Display OP15 (Pre-Order)",
+    "status": "sold-out",
+    "url": "/product/one-piece-card-game-adventure-on-kamis-island-booster-display-op15-pre-order",
+    "price": 249.99
+  }
+}
