@@ -9,6 +9,8 @@ import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = join(__dirname, "../data");
 const SNAPSHOT_PATH = join(DATA_DIR, "coolshit-snapshot.json");
+const LOG_PATH = join(DATA_DIR, "coolshit-log.md");
+const MAX_LOG_ENTRIES = 200; // keep most recent N entries
 
 const PRODUCTS_URL = "https://www.coolshit.co.nz/products.json";
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
@@ -101,8 +103,54 @@ async function sendEmail(changes) {
   console.log("Email sent via Resend.");
 }
 
+function appendLog(entry) {
+  // Build a single-line markdown entry
+  const time = entry.timestamp;
+  const detailParts = [];
+  if (entry.changes.length > 0) {
+    const summary = entry.changes
+      .map((c) =>
+        c.type === "new"
+          ? `NEW: ${c.product.name}`
+          : `${c.from}→${c.to}: ${c.product.name}`
+      )
+      .join("; ");
+    detailParts.push(summary);
+  }
+  if (entry.emailSent) detailParts.push("email sent");
+  if (entry.emailError) detailParts.push(`email FAILED (${entry.emailError})`);
+  if (entry.firstRun) detailParts.push("baseline (first run)");
+  const details = detailParts.length > 0 ? ` — ${detailParts.join(" • ")}` : "";
+
+  const newLine = `- **${time}** · ${entry.productCount} products · ${entry.changes.length} change(s)${details}`;
+
+  // Read existing log lines (skip header)
+  const header = "# Cool Shit NZ Monitor — Run Log\n\n";
+  let existingLines = [];
+  if (existsSync(LOG_PATH)) {
+    const raw = readFileSync(LOG_PATH, "utf8");
+    existingLines = raw
+      .split("\n")
+      .filter((l) => l.startsWith("- "));
+  }
+
+  // Prepend the new line, cap to MAX_LOG_ENTRIES
+  const allLines = [newLine, ...existingLines].slice(0, MAX_LOG_ENTRIES);
+  writeFileSync(LOG_PATH, header + allLines.join("\n") + "\n", "utf8");
+}
+
 async function main() {
   mkdirSync(DATA_DIR, { recursive: true });
+
+  const runStart = new Date().toISOString();
+  let logEntry = {
+    timestamp: runStart,
+    productCount: 0,
+    changes: [],
+    emailSent: false,
+    emailError: null,
+    firstRun: false,
+  };
 
   // Load existing snapshot
   let snapshot = {};
@@ -117,14 +165,17 @@ async function main() {
   }
 
   const isFirstRun = Object.keys(snapshot).length === 0;
+  logEntry.firstRun = isFirstRun;
 
   // Fetch current products
   console.log("Fetching products from Cool Shit NZ...");
   const products = await fetchProducts();
   console.log(`Fetched ${products.length} products.`);
+  logEntry.productCount = products.length;
 
   // Detect changes (skip alerts on first run — just baseline)
   const changes = isFirstRun ? [] : detectChanges(products, snapshot);
+  logEntry.changes = changes;
 
   if (changes.length > 0) {
     console.log(`\nFound ${changes.length} change(s):`);
@@ -132,7 +183,13 @@ async function main() {
       if (c.type === "new") console.log(`  [NEW]    ${c.product.name}`);
       else console.log(`  [STOCK]  ${c.product.name} (${c.from} → ${c.to})`);
     });
-    await sendEmail(changes);
+    try {
+      await sendEmail(changes);
+      logEntry.emailSent = true;
+    } catch (err) {
+      logEntry.emailError = err.message;
+      console.error("Email send failed:", err.message);
+    }
   } else {
     if (isFirstRun) {
       console.log("First run — snapshot created. Alerts will fire on future changes.");
@@ -154,6 +211,10 @@ async function main() {
   }
   writeFileSync(SNAPSHOT_PATH, JSON.stringify(newSnapshot, null, 2), "utf8");
   console.log("Snapshot saved.");
+
+  // Append to log
+  appendLog(logEntry);
+  console.log("Log updated.");
 }
 
 main().catch((err) => {

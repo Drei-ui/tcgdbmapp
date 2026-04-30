@@ -28,10 +28,10 @@ jobs:
           ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}
         run: node scripts/coolshit-monitor.mjs
 
-      - name: Commit updated snapshot
+      - name: Commit updated snapshot and log
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/coolshit-snapshot.json
-          git diff --staged --quiet || git commit -m "chore: update coolshit product snapshot [skip ci]"
+          git add data/coolshit-snapshot.json data/coolshit-log.md
+          git diff --staged --quiet || git commit -m "chore: update coolshit snapshot and log [skip ci]"
           git push
