@@ -1,5 +1,6 @@
 # Cool Shit NZ Monitor — Run Log
 
+- **2026-05-14T11:28:18.578Z** · 194 products · 0 change(s)
 - **2026-05-14T09:41:35.138Z** · 194 products · 0 change(s)
 - **2026-05-14T07:20:17.937Z** · 194 products · 2 change(s) — NEW: POKEMON BUNDLE DEAL (Pre-Order); NEW: Pokemon TCG: Enhanced 2-Pack Blister 2026 • email FAILED (RESEND_API_KEY env var is not set)
 - **2026-05-14T04:12:42.483Z** · 189 products · 0 change(s)
@@ -199,4 +200,3 @@
 - **2026-05-01T18:43:14.415Z** · 189 products · 0 change(s)
 - **2026-05-01T17:37:09.390Z** · 189 products · 0 change(s)
 - **2026-05-01T16:37:21.878Z** · 189 products · 0 change(s)
-- **2026-05-01T15:37:32.954Z** · 189 products · 0 change(s)
