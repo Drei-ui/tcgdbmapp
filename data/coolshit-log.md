@@ -1,5 +1,6 @@
 # Cool Shit NZ Monitor — Run Log
 
+- **2026-05-19T08:47:51.321Z** · 194 products · 0 change(s)
 - **2026-05-19T05:46:16.379Z** · 194 products · 0 change(s)
 - **2026-05-19T01:35:07.512Z** · 194 products · 0 change(s)
 - **2026-05-18T23:45:09.725Z** · 194 products · 0 change(s)
@@ -199,4 +200,3 @@
 - **2026-05-05T16:20:29.807Z** · 189 products · 0 change(s)
 - **2026-05-05T12:53:31.457Z** · 189 products · 0 change(s)
 - **2026-05-05T11:43:03.366Z** · 189 products · 0 change(s)
-- **2026-05-05T10:21:23.463Z** · 189 products · 2 change(s) — sold-out→active: Pokémon TCG: Mega Evolution Chaos Rising 3-Booster Blister (Pre-Order); sold-out→active: Pokémon TCG Mega Zygarde ex Premium Collection (Pre-Order) • email FAILED (RESEND_API_KEY env var is not set)
