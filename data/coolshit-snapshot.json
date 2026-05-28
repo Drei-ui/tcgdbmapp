@@ -275,14 +275,14 @@
   "117387195": {
     "id": 117387195,
     "name": "Panini NFL Absolute Football Fat Pack 2025",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/panini-nfl-absolute-football-fat-pack-2025",
     "price": 19.99
   },
   "117387201": {
     "id": 117387201,
     "name": "Panini NFL Absolute Football Retail 2025",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/panini-nfl-absolute-football-retail-2025",
     "price": 8.5
   },
@@ -298,7 +298,7 @@
     "name": "Panini Score 2025 NFL Football Blaster Box",
     "status": "active",
     "url": "/product/panini-score-2025-nfl-football-blaster-box",
-    "price": 59.99
+    "price": 39.99
   },
   "117387219": {
     "id": 117387219,
@@ -310,7 +310,7 @@
   "117387231": {
     "id": 117387231,
     "name": "Topps WWE Universe - Hobby Value Box 2025",
-    "status": "sold-out",
+    "status": "active",
     "url": "/product/wwe",
     "price": 69.99
   },
@@ -333,7 +333,7 @@
     "name": "Panini Score 2025 NFL Football Mega Box",
     "status": "active",
     "url": "/product/panini-score-2025-nfl-football-mega-box",
-    "price": 109.99
+    "price": 69.99
   },
   "117416100": {
     "id": 117416100,
@@ -471,7 +471,7 @@
   "117490761": {
     "id": 117490761,
     "name": "Panini Score 2025 NFL Retail Box",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/panini-score-2025-nfl-retail-box",
     "price": 8.5
   },
@@ -530,13 +530,6 @@
     "status": "sold-out",
     "url": "/product/2025-panini-prizm-fifa-world-cup-soccer-mega-box",
     "price": 109.99
-  },
-  "117524187": {
-    "id": 117524187,
-    "name": "Mosaic Football Blaster 21-22",
-    "status": "active",
-    "url": "/product/copy-of-2025-panini-prizm-fifa-club-world-cup-soccer-blaster",
-    "price": 54.99
   },
   "117524220": {
     "id": 117524220,
@@ -698,5 +691,96 @@
     "status": "coming-soon",
     "url": "/product/pok%C3%A9mon-tcg-mega-greninja-ex-premium-collection-pre-order",
     "price": 99
+  },
+  "119466174": {
+    "id": 119466174,
+    "name": "Topps 2026 Baseball Series 1 Hobby Box",
+    "status": "active",
+    "url": "/product/topps-2026-baseball-series-1-hobby-box",
+    "price": 299
+  },
+  "119466183": {
+    "id": 119466183,
+    "name": "Topps Baseball 2026 Series 1 -  Mega Box",
+    "status": "active",
+    "url": "/product/ToppsBaseball2026SeriesMegaBox",
+    "price": 119.99
+  },
+  "119466186": {
+    "id": 119466186,
+    "name": "Topps 2026 Baseball Series 1 Hobby Jumbo Box",
+    "status": "active",
+    "url": "/product/Topps2026BaseballSeries1HobbyJumboBox",
+    "price": 599
+  },
+  "119466201": {
+    "id": 119466201,
+    "name": "Topps 2026 Baseball Series 1 Value Box",
+    "status": "active",
+    "url": "/product/topps-2026-baseball-series-1-value-box",
+    "price": 69.99
+  },
+  "119466210": {
+    "id": 119466210,
+    "name": "Topps 2026 Heritage Baseball Hobby Box",
+    "status": "active",
+    "url": "/product/Topps2026HeritageBaseballHobbyBox",
+    "price": 329.99
+  },
+  "119466237": {
+    "id": 119466237,
+    "name": "2026 Topps Chrome UFC Value",
+    "status": "active",
+    "url": "/product/2026-topps-chrome-ufc-value",
+    "price": 79.99
+  },
+  "119466324": {
+    "id": 119466324,
+    "name": "Panini Prizm NFL Football Blaster 2025",
+    "status": "active",
+    "url": "/product/panini-prizm-nfl-football-blaster-2025",
+    "price": 69.99
+  },
+  "119466345": {
+    "id": 119466345,
+    "name": "Panini Donruss Road to FIFA World Cup Soccer 2025-2026 - Fat Pack Box",
+    "status": "active",
+    "url": "/product/panini-donruss-road-to-fifa-world-cup-soccer-2025-2026-fat-pack-box",
+    "price": 199
+  },
+  "119466387": {
+    "id": 119466387,
+    "name": "Topps UCC Chrome Hobby Box 2025/26",
+    "status": "active",
+    "url": "/product/topps-ucc-chrome-hobby-box-202526",
+    "price": 650
+  },
+  "119466396": {
+    "id": 119466396,
+    "name": "Topps UCC Chrome Hobby Mega Box 2025/26",
+    "status": "active",
+    "url": "/product/topps-ucc-chrome-hobby-mega-box-202526",
+    "price": 169.99
+  },
+  "119466414": {
+    "id": 119466414,
+    "name": "Topps UCC Chrome Hobby Value Box 2025/26",
+    "status": "active",
+    "url": "/product/topps-ucc-chrome-hobby-value-box-202526",
+    "price": 69.99
+  },
+  "119466426": {
+    "id": 119466426,
+    "name": "Topps 2026 WWE Chrome Mega Box",
+    "status": "active",
+    "url": "/product/topps-2026-wwe-chrome-mega-box",
+    "price": 169.99
+  },
+  "119466453": {
+    "id": 119466453,
+    "name": "Panini NFL Select Football 2025 Blaster Box",
+    "status": "active",
+    "url": "/product/panini-nfl-select-football-2025-blaster-box",
+    "price": 69.99
   }
 }
