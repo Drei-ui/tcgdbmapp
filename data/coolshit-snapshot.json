@@ -646,7 +646,7 @@
   "119249325": {
     "id": 119249325,
     "name": "Pokemon TCG: First Partner Illustration Collection—Series 2 (Pre-Order)",
-    "status": "sold-out",
+    "status": "coming-soon",
     "url": "/product/Firstpartner",
     "price": 49.99
   },
@@ -782,5 +782,19 @@
     "status": "active",
     "url": "/product/panini-nfl-select-football-2025-blaster-box",
     "price": 69.99
+  },
+  "119485443": {
+    "id": 119485443,
+    "name": "Pokémon TCG: First Partner Illustration Collection—Series 3 (Pre-Order)",
+    "status": "coming-soon",
+    "url": "/product/pok%C3%A9mon-tcg-first-partner-illustration-collectionseries-3-pre-order",
+    "price": 49
+  },
+  "119485470": {
+    "id": 119485470,
+    "name": "Pokémon TCG: 2-Pack Blister Product (Pre-Order)",
+    "status": "coming-soon",
+    "url": "/product/pok%C3%A9mon-tcg-2-pack-blister-product-pre-order",
+    "price": 24
   }
 }
