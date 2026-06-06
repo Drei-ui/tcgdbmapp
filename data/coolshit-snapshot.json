@@ -632,14 +632,14 @@
   "119249295": {
     "id": 119249295,
     "name": "Pokemon TCG: Mega Moonlight Tin (Pre-Order)",
-    "status": "coming-soon",
+    "status": "sold-out",
     "url": "/product/Megamoonlight",
     "price": 24
   },
   "119249325": {
     "id": 119249325,
     "name": "Pokemon TCG: First Partner Illustration Collection—Series 2 (Pre-Order)",
-    "status": "coming-soon",
+    "status": "sold-out",
     "url": "/product/Firstpartner",
     "price": 49.99
   },
@@ -653,35 +653,35 @@
   "119465784": {
     "id": 119465784,
     "name": "Pokémon TCG: Mega Evolution Pitch Black Booster (Pre-Order)",
-    "status": "coming-soon",
+    "status": "active",
     "url": "/product/pok%C3%A9mon-tcg-mega-evolution-pitch-black-booster-pre-order",
-    "price": 359.99
+    "price": 379.99
   },
   "119465790": {
     "id": 119465790,
     "name": "Pokémon TCG: Mega Evolution Pitch Black Booster Bundle (Pre-Order)",
-    "status": "coming-soon",
+    "status": "active",
     "url": "/product/pok%C3%A9mon-tcg-mega-evolution-pitch-black-booster-bundle-pre-order",
-    "price": 69.99
+    "price": 74.99
   },
   "119465793": {
     "id": 119465793,
     "name": "Pokémon TCG: Mega Evolution— Pitch Black Elite Trainer Box(Pre-Order)",
-    "status": "coming-soon",
+    "status": "sold-out",
     "url": "/product/pok%C3%A9mon-tcg-mega-evolution-pitch-black-elite-trainer-boxpre-order",
     "price": 129.99
   },
   "119465808": {
     "id": 119465808,
     "name": "Pokémon TCG: Mega Evolution—Pitch Black Three-Booster Blister (Pre-Order)",
-    "status": "coming-soon",
+    "status": "active",
     "url": "/product/pok%C3%A9mon-tcg-mega-evolutionpitch-black-three-booster-blister-pre-order",
     "price": 29.99
   },
   "119465814": {
     "id": 119465814,
     "name": "Pokémon TCG: Mega Greninja ex Premium Collection (Pre-Order)",
-    "status": "coming-soon",
+    "status": "active",
     "url": "/product/pok%C3%A9mon-tcg-mega-greninja-ex-premium-collection-pre-order",
     "price": 99
   },
@@ -793,7 +793,7 @@
   "119596620": {
     "id": 119596620,
     "name": "Dragon Ball Super Card Game: Fusion World – Booster Display: Cross Force (Pre-Order)",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/dragon-ball-super-card-game-fusion-world-booster-display-cross-force-pre-order",
     "price": 299
   }

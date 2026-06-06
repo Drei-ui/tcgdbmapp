@@ -1,5 +1,6 @@
 # Cool Shit NZ Monitor — Run Log
 
+- **2026-06-06T23:17:31.366Z** · 114 products · 4 change(s) — coming-soon→active: Pokémon TCG: Mega Evolution Pitch Black Booster (Pre-Order); coming-soon→active: Pokémon TCG: Mega Evolution Pitch Black Booster Bundle (Pre-Order); coming-soon→active: Pokémon TCG: Mega Evolution—Pitch Black Three-Booster Blister (Pre-Order); coming-soon→active: Pokémon TCG: Mega Greninja ex Premium Collection (Pre-Order) • email FAILED (RESEND_API_KEY env var is not set)
 - **2026-06-06T22:15:53.853Z** · 114 products · 0 change(s)
 - **2026-06-06T21:13:44.060Z** · 114 products · 0 change(s)
 - **2026-06-06T20:06:15.544Z** · 114 products · 0 change(s)
@@ -199,4 +200,3 @@
 - **2026-05-19T23:10:02.676Z** · 194 products · 0 change(s)
 - **2026-05-19T22:01:46.259Z** · 194 products · 0 change(s)
 - **2026-05-19T20:52:48.742Z** · 194 products · 0 change(s)
-- **2026-05-19T19:18:17.981Z** · 194 products · 0 change(s)
