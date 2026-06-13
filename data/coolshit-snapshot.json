@@ -796,5 +796,33 @@
     "status": "sold-out",
     "url": "/product/dragon-ball-super-card-game-fusion-world-booster-display-cross-force-pre-order",
     "price": 299
+  },
+  "119714418": {
+    "id": 119714418,
+    "name": "Topps 2026 Bowman Baseball Mega SE (Pre-Order)",
+    "status": "active",
+    "url": "/product/topps-2026-bowman-baseball-mega-se-pre-order",
+    "price": 139
+  },
+  "119714511": {
+    "id": 119714511,
+    "name": "Topps Bowman Baseball 2026 Hobby Box (Pre-Order)",
+    "status": "active",
+    "url": "/product/topps-bowman-baseball-2026-hobby-box-pre-order",
+    "price": 799
+  },
+  "119714535": {
+    "id": 119714535,
+    "name": "Topps 2026 Bowman Baseball Value (Pre-Order)",
+    "status": "active",
+    "url": "/product/topps-2026-bowman-baseball-value-pre-order",
+    "price": 75
+  },
+  "119714574": {
+    "id": 119714574,
+    "name": "Topps 2026 Bowman Baseball Jumbo (Pre-Order)",
+    "status": "active",
+    "url": "/product/Topps2026BowmanBaseballJumbo",
+    "price": 1299
   }
 }
