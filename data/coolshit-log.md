@@ -1,5 +1,6 @@
 # Cool Shit NZ Monitor — Run Log
 
+- **2026-06-14T14:28:53.700Z** · 120 products · 0 change(s)
 - **2026-06-14T12:15:34.295Z** · 120 products · 0 change(s)
 - **2026-06-14T10:15:16.501Z** · 120 products · 1 change(s) — NEW: Pokémon TCG Mega Zygarde ex Premium Collection (Sealed case of 6) • email FAILED (RESEND_API_KEY env var is not set)
 - **2026-06-14T06:45:09.344Z** · 118 products · 0 change(s)
@@ -199,4 +200,3 @@
 - **2026-05-25T22:45:31.125Z** · 194 products · 0 change(s)
 - **2026-05-25T21:49:01.482Z** · 194 products · 0 change(s)
 - **2026-05-25T20:40:58.127Z** · 194 products · 0 change(s)
-- **2026-05-25T19:09:19.613Z** · 194 products · 0 change(s)
