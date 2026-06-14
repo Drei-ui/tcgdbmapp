@@ -674,7 +674,7 @@
   "119465808": {
     "id": 119465808,
     "name": "Pokémon TCG: Mega Evolution—Pitch Black Three-Booster Blister (Pre-Order)",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/pok%C3%A9mon-tcg-mega-evolutionpitch-black-three-booster-blister-pre-order",
     "price": 29.99
   },
@@ -824,5 +824,19 @@
     "status": "active",
     "url": "/product/Topps2026BowmanBaseballJumbo",
     "price": 1299
+  },
+  "119731662": {
+    "id": 119731662,
+    "name": "Pokemon TCG: Lumiose City Mini Tin (sealed case of 10)",
+    "status": "sold-out",
+    "url": "/product/PokemonTCGLumioseCityMiniTin",
+    "price": 230
+  },
+  "119731692": {
+    "id": 119731692,
+    "name": "Pokémon TCG Mega Zygarde ex Premium Collection (Sealed case of 6)",
+    "status": "active",
+    "url": "/product/premiumsealedcase",
+    "price": 579
   }
 }
