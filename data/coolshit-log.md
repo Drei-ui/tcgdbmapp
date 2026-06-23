@@ -1,5 +1,6 @@
 # Cool Shit NZ Monitor — Run Log
 
+- **2026-06-23T11:46:23.384Z** · 120 products · 0 change(s)
 - **2026-06-23T08:48:36.037Z** · 120 products · 1 change(s) — coming-soon→active: Monopoly - Pokemon • email FAILED (RESEND_API_KEY env var is not set)
 - **2026-06-23T05:48:09.023Z** · 120 products · 0 change(s)
 - **2026-06-23T01:34:12.196Z** · 120 products · 0 change(s)
@@ -199,4 +200,3 @@
 - **2026-06-02T23:13:58.650Z** · 113 products · 0 change(s)
 - **2026-06-02T21:27:09.452Z** · 113 products · 0 change(s)
 - **2026-06-02T18:25:13.335Z** · 113 products · 0 change(s)
-- **2026-06-02T14:44:51.526Z** · 113 products · 0 change(s)
