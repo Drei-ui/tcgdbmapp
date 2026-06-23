@@ -401,7 +401,7 @@
   "117416490": {
     "id": 117416490,
     "name": "Monopoly - Pokemon",
-    "status": "coming-soon",
+    "status": "active",
     "url": "/product/monopoly-pokemon",
     "price": 39.99
   },
@@ -723,7 +723,7 @@
   "119466237": {
     "id": 119466237,
     "name": "2026 Topps Chrome UFC Value",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/2026-topps-chrome-ufc-value",
     "price": 79.99
   },
@@ -800,28 +800,28 @@
   "119714418": {
     "id": 119714418,
     "name": "Topps 2026 Bowman Baseball Mega SE (Pre-Order)",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/topps-2026-bowman-baseball-mega-se-pre-order",
     "price": 139
   },
   "119714511": {
     "id": 119714511,
     "name": "Topps Bowman Baseball 2026 Hobby Box (Pre-Order)",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/topps-bowman-baseball-2026-hobby-box-pre-order",
     "price": 799
   },
   "119714535": {
     "id": 119714535,
     "name": "Topps 2026 Bowman Baseball Value (Pre-Order)",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/topps-2026-bowman-baseball-value-pre-order",
     "price": 75
   },
   "119714574": {
     "id": 119714574,
     "name": "Topps 2026 Bowman Baseball Jumbo (Pre-Order)",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/Topps2026BowmanBaseballJumbo",
     "price": 1299
   },
