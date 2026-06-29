@@ -8,10 +8,14 @@ import pg from "pg";
 const { Client } = pg;
 
 // ── Connection strings ──
-const SUPABASE_URL =
-  "postgresql://postgres.xwvhtnmwuxzruktowtcj:jLnWuELHebYXhpVI@aws-1-ap-south-1.pooler.supabase.com:5432/postgres";
-const NEON_URL =
-  "postgresql://neondb_owner:npg_rAlaIB0wT4PG@ep-spring-king-a1uqku7x.ap-southeast-1.aws.neon.tech/neondb?sslmode=require";
+// Set these in your environment or .env file — never hardcode credentials
+const SUPABASE_URL = process.env.SUPABASE_MIGRATION_URL;
+const NEON_URL = process.env.NEON_MIGRATION_URL;
+
+if (!SUPABASE_URL || !NEON_URL) {
+  console.error("Error: SUPABASE_MIGRATION_URL and NEON_MIGRATION_URL must be set in your environment.");
+  process.exit(1);
+}
 
 // Tables in FK-safe order (parents first, children after)
 const TABLES = [
