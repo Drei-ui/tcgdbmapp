@@ -186,9 +186,9 @@ export async function getSales(filters?: {
   page?: number;
 }) {
   const timer = actionTimer("getSales");
-  await requireUser();
+  const user = await requireUser();
 
-  const where: Prisma.SaleWhereInput = {};
+  const where: Prisma.SaleWhereInput = { createdById: user.id };
   if (filters?.status) where.status = filters.status as SaleStatus;
   if (filters?.channel) where.channel = filters.channel as never;
   if (filters?.dateFrom || filters?.dateTo) {
@@ -207,8 +207,10 @@ export async function getSales(filters?: {
 }
 
 export async function getSale(id: string) {
-  await requireUser();
-  return fetchSale(id);
+  const user = await requireUser();
+  const sale = await fetchSale(id);
+  if (sale && sale.createdById !== user.id) return null;
+  return sale;
 }
 
 export async function createSale(data: {
@@ -304,6 +306,7 @@ export async function confirmSale(saleId: string) {
   });
 
   if (!sale) return { error: "Sale not found" };
+  if (sale.createdById !== user.id) return { error: "Sale not found" };
   if (sale.status !== "DRAFT") return { error: "Sale is not a draft" };
 
   for (const item of sale.lineItems) {
@@ -414,6 +417,7 @@ export async function deleteSale(saleId: string) {
   });
 
   if (!sale) return { error: "Sale not found" };
+  if (sale.createdById !== user.id) return { error: "Sale not found" };
 
   if (sale.status === "CONFIRMED") {
     return {
@@ -460,6 +464,7 @@ export async function cancelSale(saleId: string) {
     where: { id: saleId },
   });
   if (!sale) return { error: "Sale not found" };
+  if (sale.createdById !== user.id) return { error: "Sale not found" };
   if (sale.status !== "DRAFT")
     return { error: "Only draft sales can be cancelled" };
 
@@ -493,6 +498,7 @@ export async function refundSale(saleId: string) {
     include: { lineItems: true },
   });
   if (!sale) return { error: "Sale not found" };
+  if (sale.createdById !== user.id) return { error: "Sale not found" };
   if (sale.status !== "CONFIRMED")
     return { error: "Only confirmed sales can be refunded" };
 

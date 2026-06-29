@@ -35,9 +35,10 @@ const fetchCashTransactions = unstable_cache(
 );
 
 const fetchCashBalance = unstable_cache(
-  async () => {
+  async (userId: string) => {
     const result = await prisma.cashTransaction.groupBy({
       by: ["type"],
+      where: { createdById: userId },
       _sum: { amount: true },
     });
 
@@ -64,9 +65,9 @@ export async function getCashTransactions(filters?: {
   page?: number;
 }) {
   const timer = actionTimer("getCashTransactions");
-  await requireUser();
+  const user = await requireUser();
 
-  const where: Prisma.CashTransactionWhereInput = {};
+  const where: Prisma.CashTransactionWhereInput = { createdById: user.id };
   if (filters?.type) where.type = filters.type as CashType;
   if (filters?.category) where.category = filters.category as never;
   if (filters?.dateFrom || filters?.dateTo) {
@@ -85,8 +86,8 @@ export async function getCashTransactions(filters?: {
 }
 
 export async function getCashBalance() {
-  await requireUser();
-  return fetchCashBalance();
+  const user = await requireUser();
+  return fetchCashBalance(user.id);
 }
 
 export async function createCashTransaction(data: {
@@ -154,6 +155,7 @@ export async function deleteCashTransaction(id: string) {
 
   const tx = await prisma.cashTransaction.findUnique({ where: { id } });
   if (!tx) return { error: "Transaction not found" };
+  if (tx.createdById !== user.id) return { error: "Transaction not found" };
 
   // Don't allow deletion of auto-linked transactions
   if (tx.linkedSaleId || tx.linkedPurchaseId) {

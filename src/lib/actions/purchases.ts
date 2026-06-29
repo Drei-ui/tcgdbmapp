@@ -37,9 +37,10 @@ const fetchSuppliers = unstable_cache(
 );
 
 const fetchPurchases = unstable_cache(
-  async (skip: number, take: number) => {
+  async (userId: string, skip: number, take: number) => {
     const [items, total] = await prisma.$transaction([
       prisma.purchase.findMany({
+        where: { createdById: userId },
         orderBy: { purchasedAt: "desc" },
         skip,
         take,
@@ -53,7 +54,7 @@ const fetchPurchases = unstable_cache(
           _count: { select: { inventoryLots: true } },
         },
       }),
-      prisma.purchase.count(),
+      prisma.purchase.count({ where: { createdById: userId } }),
     ]);
     return { items: JSON.parse(JSON.stringify(items)), total };
   },
@@ -119,20 +120,22 @@ export async function createSupplier(data: {
 
 export async function getPurchases(filters?: { page?: number }) {
   const timer = actionTimer("getPurchases");
-  await requireUser();
+  const user = await requireUser();
 
   const page = Math.max(1, filters?.page ?? 1);
   const skip = (page - 1) * PAGE_SIZE;
 
-  const result = await fetchPurchases(skip, PAGE_SIZE);
+  const result = await fetchPurchases(user.id, skip, PAGE_SIZE);
 
   timer.done();
   return { ...result, page, totalPages: Math.ceil(result.total / PAGE_SIZE) };
 }
 
 export async function getPurchase(id: string) {
-  await requireUser();
-  return fetchPurchase(id);
+  const user = await requireUser();
+  const purchase = await fetchPurchase(id);
+  if (purchase && purchase.createdById !== user.id) return null;
+  return purchase;
 }
 
 export async function createPurchase(data: {
@@ -314,6 +317,7 @@ export async function updatePurchase(
     include: { lineItems: true, inventoryLots: true },
   });
   if (!purchase) return { error: "Purchase not found" };
+  if (purchase.createdById !== user.id) return { error: "Purchase not found" };
 
   const { shippingCost, fees, notes, supplierId, purchasedAt } = parsed.data;
   const isReceived = purchase.inventoryLots.length > 0;
@@ -417,6 +421,7 @@ export async function deletePurchase(purchaseId: string) {
   });
 
   if (!purchase) return { error: "Purchase not found" };
+  if (purchase.createdById !== user.id) return { error: "Purchase not found" };
 
   // Only block deletion if lots have ACTIVE sales (CONFIRMED or DRAFT)
   const activeSaleLots = purchase.inventoryLots.filter((lot) =>
@@ -490,6 +495,7 @@ export async function receivePurchase(purchaseId: string) {
   });
 
   if (!purchase) return { error: "Purchase not found" };
+  if (purchase.createdById !== user.id) return { error: "Purchase not found" };
   if (purchase.inventoryLots.length > 0) {
     return { error: "Purchase has already been received" };
   }

@@ -12,8 +12,6 @@ export async function GET() {
   }
 
   const [
-    suppliers,
-    productCatalog,
     purchases,
     purchaseLineItems,
     inventoryLots,
@@ -22,23 +20,23 @@ export async function GET() {
     cashTransactions,
     auditLogs,
   ] = await Promise.all([
-    prisma.supplier.findMany({ orderBy: { name: "asc" } }),
-    prisma.productCatalog.findMany({ orderBy: { brand: "asc" } }),
-    prisma.purchase.findMany({ orderBy: { purchasedAt: "desc" } }),
-    prisma.purchaseLineItem.findMany(),
-    prisma.inventoryLot.findMany({ orderBy: { acquiredAt: "asc" } }),
-    prisma.sale.findMany({ orderBy: { soldAt: "desc" } }),
-    prisma.saleLineItem.findMany(),
-    prisma.cashTransaction.findMany({ orderBy: { date: "desc" } }),
-    prisma.auditLog.findMany({ orderBy: { createdAt: "desc" }, take: 1000 }),
+    prisma.purchase.findMany({ where: { createdById: user.id }, orderBy: { purchasedAt: "desc" } }),
+    prisma.purchaseLineItem.findMany({
+      where: { purchase: { createdById: user.id } },
+    }),
+    prisma.inventoryLot.findMany({ where: { createdById: user.id }, orderBy: { acquiredAt: "asc" } }),
+    prisma.sale.findMany({ where: { createdById: user.id }, orderBy: { soldAt: "desc" } }),
+    prisma.saleLineItem.findMany({
+      where: { sale: { createdById: user.id } },
+    }),
+    prisma.cashTransaction.findMany({ where: { createdById: user.id }, orderBy: { date: "desc" } }),
+    prisma.auditLog.findMany({ where: { actorId: user.id }, orderBy: { createdAt: "desc" }, take: 1000 }),
   ]);
 
   const snapshot = {
     exportedAt: new Date().toISOString(),
     exportedBy: user.id,
     tables: {
-      suppliers,
-      productCatalog,
       purchases,
       purchaseLineItems,
       inventoryLots,
@@ -48,8 +46,6 @@ export async function GET() {
       auditLogs,
     },
     counts: {
-      suppliers: suppliers.length,
-      productCatalog: productCatalog.length,
       purchases: purchases.length,
       purchaseLineItems: purchaseLineItems.length,
       inventoryLots: inventoryLots.length,

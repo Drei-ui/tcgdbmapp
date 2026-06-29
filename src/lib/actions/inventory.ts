@@ -42,8 +42,9 @@ const fetchInventoryLot = unstable_cache(
 );
 
 const fetchInventoryBrands = unstable_cache(
-  async () => {
+  async (userId: string) => {
     const brands = await prisma.inventoryLot.findMany({
+      where: { createdById: userId },
       select: { brand: true },
       distinct: ["brand"],
       orderBy: { brand: "asc" },
@@ -65,9 +66,9 @@ export async function getInventoryLots(filters?: {
   page?: number;
 }) {
   const timer = actionTimer("getInventoryLots");
-  await requireUser();
+  const user = await requireUser();
 
-  const where: Prisma.InventoryLotWhereInput = {};
+  const where: Prisma.InventoryLotWhereInput = { createdById: user.id };
 
   if (filters?.brand) where.brand = filters.brand;
   if (filters?.productType) {
@@ -99,8 +100,10 @@ export async function getInventoryLots(filters?: {
 }
 
 export async function getInventoryLot(id: string) {
-  await requireUser();
-  return fetchInventoryLot(id);
+  const user = await requireUser();
+  const lot = await fetchInventoryLot(id);
+  if (lot && lot.createdById !== user.id) return null;
+  return lot;
 }
 
 export async function createInventoryLot(formData: FormData) {
@@ -158,6 +161,9 @@ export async function updateInventoryLot(id: string, formData: FormData) {
   const timer = actionTimer("updateInventoryLot");
   const user = await requireUser();
 
+  const existing = await prisma.inventoryLot.findUnique({ where: { id }, select: { createdById: true } });
+  if (!existing || existing.createdById !== user.id) return { error: "Not found" };
+
   const raw = {
     brand: formData.get("brand") as string,
     productType: formData.get("productType") as string,
@@ -179,6 +185,7 @@ export async function updateInventoryLot(id: string, formData: FormData) {
 
   const lot = await prisma.inventoryLot.findUnique({ where: { id } });
   if (!lot) return { error: "Lot not found" };
+  if (lot.createdById !== user.id) return { error: "Not found" };
 
   await prisma.$transaction([
     prisma.inventoryLot.update({
@@ -233,6 +240,7 @@ export async function adjustInventoryQty(data: {
     where: { id: parsed.data.lotId },
   });
   if (!lot) return { error: "Lot not found" };
+  if (lot.createdById !== user.id) return { error: "Not found" };
 
   const newStatus: InventoryStatus =
     parsed.data.newQty === 0
@@ -278,6 +286,7 @@ export async function reserveInventoryLot(lotId: string) {
 
   const lot = await prisma.inventoryLot.findUnique({ where: { id: lotId } });
   if (!lot) return { error: "Lot not found" };
+  if (lot.createdById !== user.id) return { error: "Not found" };
   if (lot.status !== "ON_HAND") return { error: "Lot is not on hand" };
 
   await prisma.$transaction([
@@ -308,6 +317,7 @@ export async function unreserveInventoryLot(lotId: string) {
 
   const lot = await prisma.inventoryLot.findUnique({ where: { id: lotId } });
   if (!lot) return { error: "Lot not found" };
+  if (lot.createdById !== user.id) return { error: "Not found" };
   if (lot.status !== "RESERVED") return { error: "Lot is not reserved" };
 
   await prisma.$transaction([
@@ -334,6 +344,6 @@ export async function unreserveInventoryLot(lotId: string) {
 }
 
 export async function getInventoryBrands() {
-  await requireUser();
-  return fetchInventoryBrands();
+  const user = await requireUser();
+  return fetchInventoryBrands(user.id);
 }

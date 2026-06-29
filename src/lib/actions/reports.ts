@@ -103,14 +103,14 @@ function p(val: unknown): number {
  * Groups by sale first to avoid double-counting sale-level fields.
  */
 const fetchProfitReport = unstable_cache(
-  async (fromISO: string, toISO: string, group: string, filtersJSON: string) => {
+  async (fromISO: string, toISO: string, group: string, filtersJSON: string, userId: string) => {
     const from = new Date(fromISO);
     const to = new Date(toISO);
     const filters: ReportFilters = JSON.parse(filtersJSON);
 
-    const conditions = [`s.status = 'CONFIRMED'`, `s.sold_at >= $1`, `s.sold_at < $2`];
-    const params: unknown[] = [from, to];
-    let paramIdx = 3;
+    const conditions = [`s.status = 'CONFIRMED'`, `s.sold_at >= $1`, `s.sold_at < $2`, `s.created_by = $3`];
+    const params: unknown[] = [from, to, userId];
+    let paramIdx = 4;
 
     if (filters.channel) {
       conditions.push(`s.channel = $${paramIdx}::"SalesChannel"`);
@@ -225,12 +225,12 @@ const fetchProfitReport = unstable_cache(
 );
 
 const fetchInventoryAging = unstable_cache(
-  async (filtersJSON: string) => {
+  async (filtersJSON: string, userId: string) => {
     const filters: ReportFilters = JSON.parse(filtersJSON);
 
-    const conditions = [`il.status != 'SOLD_OUT'`, `il.qty_on_hand > 0`];
-    const params: unknown[] = [];
-    let paramIdx = 1;
+    const conditions = [`il.status != 'SOLD_OUT'`, `il.qty_on_hand > 0`, `il.created_by = $1`];
+    const params: unknown[] = [userId];
+    let paramIdx = 2;
 
     if (filters.brand) {
       conditions.push(`il.brand = $${paramIdx}`);
@@ -319,14 +319,14 @@ const fetchInventoryAging = unstable_cache(
 );
 
 const fetchBestSellers = unstable_cache(
-  async (fromISO: string, toISO: string, filtersJSON: string) => {
+  async (fromISO: string, toISO: string, filtersJSON: string, userId: string) => {
     const from = new Date(fromISO);
     const to = new Date(toISO);
     const filters: ReportFilters = JSON.parse(filtersJSON);
 
-    const conditions = [`s.status = 'CONFIRMED'`, `s.sold_at >= $1`, `s.sold_at < $2`];
-    const params: unknown[] = [from, to];
-    let paramIdx = 3;
+    const conditions = [`s.status = 'CONFIRMED'`, `s.sold_at >= $1`, `s.sold_at < $2`, `s.created_by = $3`];
+    const params: unknown[] = [from, to, userId];
+    let paramIdx = 4;
 
     if (filters.channel) {
       conditions.push(`s.channel = $${paramIdx}::"SalesChannel"`);
@@ -390,14 +390,14 @@ const fetchBestSellers = unstable_cache(
  * to replace the expensive correlated subquery.
  */
 const fetchChannelPerformance = unstable_cache(
-  async (fromISO: string, toISO: string, filtersJSON: string) => {
+  async (fromISO: string, toISO: string, filtersJSON: string, userId: string) => {
     const from = new Date(fromISO);
     const to = new Date(toISO);
     const filters: ReportFilters = JSON.parse(filtersJSON);
 
-    const conditions = [`s.status = 'CONFIRMED'`, `s.sold_at >= $1`, `s.sold_at < $2`];
-    const params: unknown[] = [from, to];
-    let paramIdx = 3;
+    const conditions = [`s.status = 'CONFIRMED'`, `s.sold_at >= $1`, `s.sold_at < $2`, `s.created_by = $3`];
+    const params: unknown[] = [from, to, userId];
+    let paramIdx = 4;
 
     if (filters.brand) {
       conditions.push(`EXISTS (
@@ -465,11 +465,10 @@ const fetchChannelPerformance = unstable_cache(
  * Cash flow: single query with conditional CASE for range vs all-time.
  */
 const fetchCashFlow = unstable_cache(
-  async (fromISO: string, toISO: string) => {
+  async (fromISO: string, toISO: string, userId: string) => {
     const from = new Date(fromISO);
     const to = new Date(toISO);
 
-    // One scan of cash_transactions: range totals via CASE + all-time balance
     const sql = `
       SELECT
         COALESCE(SUM(CASE WHEN date >= $1 AND date < $2 AND type = 'IN' THEN amount ELSE 0 END), 0)::text AS cash_in,
@@ -477,9 +476,10 @@ const fetchCashFlow = unstable_cache(
         COALESCE(SUM(CASE WHEN date >= $1 AND date < $2 THEN CASE WHEN type = 'IN' THEN amount ELSE -amount END ELSE 0 END), 0)::text AS net_change,
         COALESCE(SUM(CASE WHEN type = 'IN' THEN amount ELSE -amount END), 0)::text AS balance
       FROM cash_transactions
+      WHERE created_by = $3
     `;
 
-    const results = await prisma.$queryRawUnsafe<Record<string, unknown>[]>(sql, from, to);
+    const results = await prisma.$queryRawUnsafe<Record<string, unknown>[]>(sql, from, to, userId);
     const r = results[0] || {};
 
     return {
@@ -502,12 +502,13 @@ export async function getReportProfit(
   filters: ReportFilters
 ): Promise<ProfitReport> {
   const timer = actionTimer("getReportProfit");
-  await requireUser();
+  const user = await requireUser();
   const result = await fetchProfitReport(
     from.toISOString(),
     to.toISOString(),
     group,
-    JSON.stringify(filters)
+    JSON.stringify(filters),
+    user.id
   );
   timer.done();
   return result;
@@ -517,8 +518,8 @@ export async function getReportInventoryAging(
   filters: ReportFilters
 ): Promise<InventoryAgingReport> {
   const timer = actionTimer("getReportInventoryAging");
-  await requireUser();
-  const result = await fetchInventoryAging(JSON.stringify(filters));
+  const user = await requireUser();
+  const result = await fetchInventoryAging(JSON.stringify(filters), user.id);
   timer.done();
   return result;
 }
@@ -529,11 +530,12 @@ export async function getReportBestSellers(
   filters: ReportFilters
 ): Promise<BestSellersReport> {
   const timer = actionTimer("getReportBestSellers");
-  await requireUser();
+  const user = await requireUser();
   const result = await fetchBestSellers(
     from.toISOString(),
     to.toISOString(),
-    JSON.stringify(filters)
+    JSON.stringify(filters),
+    user.id
   );
   timer.done();
   return result;
@@ -545,11 +547,12 @@ export async function getReportChannelPerformance(
   filters: ReportFilters
 ): Promise<ChannelRow[]> {
   const timer = actionTimer("getReportChannelPerformance");
-  await requireUser();
+  const user = await requireUser();
   const result = await fetchChannelPerformance(
     from.toISOString(),
     to.toISOString(),
-    JSON.stringify(filters)
+    JSON.stringify(filters),
+    user.id
   );
   timer.done();
   return result;
@@ -560,8 +563,8 @@ export async function getReportCashFlow(
   to: Date
 ): Promise<CashFlowReport> {
   const timer = actionTimer("getReportCashFlow");
-  await requireUser();
-  const result = await fetchCashFlow(from.toISOString(), to.toISOString());
+  const user = await requireUser();
+  const result = await fetchCashFlow(from.toISOString(), to.toISOString(), user.id);
   timer.done();
   return result;
 }

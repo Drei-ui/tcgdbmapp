@@ -41,6 +41,7 @@ export async function GET(
   switch (type) {
     case "inventory": {
       const lots = await prisma.inventoryLot.findMany({
+        where: { createdById: user.id },
         orderBy: { acquiredAt: "asc" },
         include: { supplier: true },
       });
@@ -83,6 +84,7 @@ export async function GET(
 
     case "sales": {
       const sales = await prisma.sale.findMany({
+        where: { createdById: user.id },
         orderBy: { soldAt: "desc" },
         include: { lineItems: { include: { inventoryLot: true } } },
       });
@@ -145,6 +147,7 @@ export async function GET(
 
     case "cash": {
       const txns = await prisma.cashTransaction.findMany({
+        where: { createdById: user.id },
         orderBy: { date: "desc" },
       });
       const headers = [

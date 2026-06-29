@@ -68,6 +68,13 @@ export async function GET(
   const group = url.searchParams.get("group") || "day";
   const fromParam = url.searchParams.get("from") || undefined;
   const toParam = url.searchParams.get("to") || undefined;
+
+  if (fromParam && isNaN(new Date(fromParam).getTime())) {
+    return NextResponse.json({ error: "Invalid 'from' date" }, { status: 400 });
+  }
+  if (toParam && isNaN(new Date(toParam).getTime())) {
+    return NextResponse.json({ error: "Invalid 'to' date" }, { status: 400 });
+  }
   const filters = {
     brand: url.searchParams.get("brand") || undefined,
     channel: url.searchParams.get("channel") || undefined,
