@@ -1,0 +1,59 @@
+import { Suspense } from "react";
+import { getInventoryLots, getInventoryBrands } from "@/lib/actions/inventory";
+import { FilterChips } from "@/components/inventory/filter-chips";
+import { InventoryList } from "@/components/inventory/inventory-list";
+import { Pagination } from "@/components/pagination";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import Link from "next/link";
+import { serialize } from "@/lib/utils";
+import { ExportButton } from "@/components/export-button";
+
+export default async function InventoryPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    brand?: string;
+    productType?: string;
+    language?: string;
+    status?: string;
+    search?: string;
+    page?: string;
+  }>;
+}) {
+  const params = await searchParams;
+  const page = parseInt(params.page || "1", 10);
+  const [result, brands] = await Promise.all([
+    getInventoryLots({ ...params, page }),
+    getInventoryBrands(),
+  ]);
+
+  return (
+    <div className="p-4 md:p-6 space-y-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold">Inventory</h2>
+          <p className="text-muted-foreground text-sm">
+            {result.total} lot{result.total !== 1 ? "s" : ""}
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <ExportButton type="inventory" />
+          <Link href="/purchases/new">
+            <Button size="sm">
+              <Plus className="h-4 w-4 mr-1" />
+              Add Stock
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      <Suspense fallback={<div>Loading filters...</div>}>
+        <FilterChips brands={brands} />
+      </Suspense>
+
+      <InventoryList lots={serialize(result.items)} />
+      <Pagination page={result.page} totalPages={result.totalPages} total={result.total} />
+    </div>
+  );
+}

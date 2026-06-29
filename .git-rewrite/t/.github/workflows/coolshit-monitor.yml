@@ -1,0 +1,37 @@
+name: Cool Shit NZ - Stock Monitor
+
+on:
+  schedule:
+    # Runs every 5 minutes
+    - cron: "*/5 * * * *"
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  check-stock:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # Needed to commit the updated snapshot back
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run stock monitor
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}
+        run: node scripts/coolshit-monitor.mjs
+
+      - name: Commit updated snapshot and log
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/coolshit-snapshot.json data/coolshit-log.md
+          git diff --staged --quiet || git commit -m "chore: update coolshit snapshot and log [skip ci]"
+          git push
