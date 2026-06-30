@@ -303,7 +303,7 @@
   "117387231": {
     "id": 117387231,
     "name": "Topps WWE Universe - Hobby Value Box 2025",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/wwe",
     "price": 69.99
   },
@@ -324,7 +324,7 @@
   "117387270": {
     "id": 117387270,
     "name": "Panini Score 2025 NFL Football Mega Box",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/panini-score-2025-nfl-football-mega-box",
     "price": 69.99
   },
@@ -744,7 +744,7 @@
   "119466387": {
     "id": 119466387,
     "name": "Topps UCC Chrome Hobby Box 2025/26",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/topps-ucc-chrome-hobby-box-202526",
     "price": 650
   },
@@ -758,14 +758,14 @@
   "119466414": {
     "id": 119466414,
     "name": "Topps UCC Chrome Hobby Value Box 2025/26",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/topps-ucc-chrome-hobby-value-box-202526",
     "price": 69.99
   },
   "119466426": {
     "id": 119466426,
     "name": "Topps 2026 WWE Chrome Mega Box",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/topps-2026-wwe-chrome-mega-box",
     "price": 169.99
   },
