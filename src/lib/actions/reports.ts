@@ -108,7 +108,7 @@ const fetchProfitReport = unstable_cache(
     const to = new Date(toISO);
     const filters: ReportFilters = JSON.parse(filtersJSON);
 
-    const conditions = [`s.status = 'CONFIRMED'`, `s.sold_at >= $1`, `s.sold_at < $2`, `s.created_by = $3`];
+    const conditions = [`s.status = 'CONFIRMED'`, `s.sold_at >= $1`, `s.sold_at < $2`, `s.created_by = $3::uuid`];
     const params: unknown[] = [from, to, userId];
     let paramIdx = 4;
 
@@ -228,7 +228,7 @@ const fetchInventoryAging = unstable_cache(
   async (filtersJSON: string, userId: string) => {
     const filters: ReportFilters = JSON.parse(filtersJSON);
 
-    const conditions = [`il.status != 'SOLD_OUT'`, `il.qty_on_hand > 0`, `il.created_by = $1`];
+    const conditions = [`il.status != 'SOLD_OUT'`, `il.qty_on_hand > 0`, `il.created_by = $1::uuid`];
     const params: unknown[] = [userId];
     let paramIdx = 2;
 
@@ -324,7 +324,7 @@ const fetchBestSellers = unstable_cache(
     const to = new Date(toISO);
     const filters: ReportFilters = JSON.parse(filtersJSON);
 
-    const conditions = [`s.status = 'CONFIRMED'`, `s.sold_at >= $1`, `s.sold_at < $2`, `s.created_by = $3`];
+    const conditions = [`s.status = 'CONFIRMED'`, `s.sold_at >= $1`, `s.sold_at < $2`, `s.created_by = $3::uuid`];
     const params: unknown[] = [from, to, userId];
     let paramIdx = 4;
 
@@ -395,7 +395,7 @@ const fetchChannelPerformance = unstable_cache(
     const to = new Date(toISO);
     const filters: ReportFilters = JSON.parse(filtersJSON);
 
-    const conditions = [`s.status = 'CONFIRMED'`, `s.sold_at >= $1`, `s.sold_at < $2`, `s.created_by = $3`];
+    const conditions = [`s.status = 'CONFIRMED'`, `s.sold_at >= $1`, `s.sold_at < $2`, `s.created_by = $3::uuid`];
     const params: unknown[] = [from, to, userId];
     let paramIdx = 4;
 
@@ -476,7 +476,7 @@ const fetchCashFlow = unstable_cache(
         COALESCE(SUM(CASE WHEN date >= $1 AND date < $2 THEN CASE WHEN type = 'IN' THEN amount ELSE -amount END ELSE 0 END), 0)::text AS net_change,
         COALESCE(SUM(CASE WHEN type = 'IN' THEN amount ELSE -amount END), 0)::text AS balance
       FROM cash_transactions
-      WHERE created_by = $3
+      WHERE created_by = $3::uuid
     `;
 
     const results = await prisma.$queryRawUnsafe<Record<string, unknown>[]>(sql, from, to, userId);
