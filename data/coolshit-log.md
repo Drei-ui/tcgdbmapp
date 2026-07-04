@@ -1,5 +1,6 @@
 # Cool Shit NZ Monitor — Run Log
 
+- **2026-07-04T01:06:26.826Z** · 132 products · 0 change(s)
 - **2026-07-03T23:28:05.719Z** · 132 products · 0 change(s)
 - **2026-07-03T22:17:26.806Z** · 132 products · 2 change(s) — NEW: Pokémon TCG: 30th Celebration Ditto Premium Collection (Pre-Order); NEW: Pokémon TCG: 30th Celebration Tin (Pe-Order) • email FAILED (RESEND_API_KEY env var is not set)
 - **2026-07-03T21:18:20.592Z** · 120 products · 0 change(s)
@@ -199,4 +200,3 @@
 - **2026-06-15T02:08:26.786Z** · 120 products · 0 change(s)
 - **2026-06-14T23:52:43.052Z** · 120 products · 0 change(s)
 - **2026-06-14T22:46:48.999Z** · 120 products · 0 change(s)
-- **2026-06-14T21:37:37.545Z** · 120 products · 0 change(s)
