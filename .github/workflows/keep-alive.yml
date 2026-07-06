@@ -1,0 +1,32 @@
+name: Supabase Keep-Alive
+
+# Supabase pauses free-tier projects after ~7 days with no database activity.
+# This runs a trivial query on a schedule so the project registers as active.
+#
+# Setup (one-time):
+#   1. In Supabase: Project Settings -> Database -> Connection string -> URI.
+#      Use the CONNECTION POOLER string (host ends in ".pooler.supabase.com"),
+#      because GitHub runners are IPv4-only and the direct connection is IPv6-only.
+#   2. In GitHub: repo Settings -> Secrets and variables -> Actions -> New secret
+#      named SUPABASE_DB_URL, pasting that URI (it includes your DB password).
+#
+# NOTE: Scheduled workflows only run from the repo's DEFAULT branch (main).
+#       This file must be merged to main to fire on the cron.
+
+on:
+  schedule:
+    # Daily at 07:13 UTC. Off-peak minute (avoid :00, which GitHub delays/drops).
+    # Daily leaves plenty of margin under the ~7-day pause window even if a run
+    # is skipped or delayed.
+    - cron: "13 7 * * *"
+  workflow_dispatch: {} # allow manual runs from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Query the database to keep the project active
+        env:
+          # psql is preinstalled on ubuntu-latest; the pooler requires SSL.
+          PGSSLMODE: require
+        run: psql "${{ secrets.SUPABASE_DB_URL }}" -c "select now() as keep_alive;"
