@@ -93,28 +93,28 @@
   "114346548": {
     "id": 114346548,
     "name": "Liam Lawson Red Bull",
-    "status": "sold-out",
+    "status": "active",
     "url": "/product/liam-lawson-graphic-tee",
     "price": 59.99
   },
   "114346551": {
     "id": 114346551,
     "name": "Lewis Hamilton",
-    "status": "sold-out",
+    "status": "active",
     "url": "/product/lewis-hamilton-graphic-tee",
     "price": 59.99
   },
   "114346554": {
     "id": 114346554,
     "name": "Max Verstappen ",
-    "status": "sold-out",
+    "status": "active",
     "url": "/product/max-verstappen-graphic-tee",
     "price": 59.99
   },
   "114421203": {
     "id": 114421203,
     "name": "Liam Lawson Racing Bulls",
-    "status": "sold-out",
+    "status": "active",
     "url": "/product/lawson-graphic-tee",
     "price": 59.99
   },
