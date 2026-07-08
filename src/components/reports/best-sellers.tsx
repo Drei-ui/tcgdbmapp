@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/utils";
+import { useCurrency } from "@/components/currency-provider";
 import { ReportExportButton } from "./report-export-button";
 import type { BestSellersReport, BestSellerItem } from "@/lib/actions/reports";
 
@@ -29,6 +30,7 @@ const SORT_OPTIONS: { value: SortKey; label: string }[] = [
 
 export function BestSellers({ data }: BestSellersProps) {
   const [sort, setSort] = useState<SortKey>("byRevenue");
+  const currency = useCurrency();
   const items: BestSellerItem[] = data[sort];
 
   return (
@@ -81,12 +83,12 @@ export function BestSellers({ data }: BestSellersProps) {
                   {item.brand}
                 </TableCell>
                 <TableCell className="text-right">
-                  {formatCurrency(item.totalRevenue)}
+                  {formatCurrency(item.totalRevenue, currency)}
                 </TableCell>
                 <TableCell
                   className={`text-right ${item.totalProfit >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}
                 >
-                  {formatCurrency(item.totalProfit)}
+                  {formatCurrency(item.totalProfit, currency)}
                 </TableCell>
                 <TableCell className="text-right">{item.totalQty}</TableCell>
                 <TableCell className="text-right">

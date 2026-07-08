@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/utils";
+import { useCurrency } from "@/components/currency-provider";
 import type { InventoryLot } from "@prisma/client";
 
 const CHANNELS = [
@@ -66,6 +67,7 @@ export function QuickSellSheet({
   const [shippingCharged, setShippingCharged] = useState("0");
   const [shippingCostPaid, setShippingCostPaid] = useState("0");
   const [loading, setLoading] = useState(false);
+  const currency = useCurrency();
 
   if (!lot) return null;
 
@@ -108,7 +110,7 @@ export function QuickSellSheet({
           </DialogTitle>
           <DialogDescription>
             {lot.productName} — {lot.qtyOnHand} available @{" "}
-            {formatCurrency(lot.unitCost.toString())} each
+            {formatCurrency(lot.unitCost.toString(), currency)} each
           </DialogDescription>
         </DialogHeader>
 
@@ -206,7 +208,7 @@ export function QuickSellSheet({
           <span className="text-sm font-medium text-muted-foreground">
             Total Collected
           </span>
-          <span className="text-lg font-bold">{formatCurrency(total)}</span>
+          <span className="text-lg font-bold">{formatCurrency(total, currency)}</span>
         </div>
 
         <DialogFooter className="sm:flex-col gap-2">

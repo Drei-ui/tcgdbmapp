@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/utils";
+import { useCurrency } from "@/components/currency-provider";
 import { ReportExportButton } from "./report-export-button";
 import type { InventoryAgingReport } from "@/lib/actions/reports";
 
@@ -41,6 +42,7 @@ const ACTION_VARIANTS: Record<string, "default" | "secondary" | "outline" | "des
 
 export function InventoryAging({ data }: InventoryAgingProps) {
   const { buckets, items } = data;
+  const currency = useCurrency();
 
   return (
     <div className="space-y-4 mt-4">
@@ -54,7 +56,7 @@ export function InventoryAging({ data }: InventoryAgingProps) {
               </p>
               <p className="text-lg font-bold">{bucket.lotCount} lots</p>
               <p className="text-xs text-muted-foreground">
-                {bucket.totalQty} pcs &middot; {formatCurrency(bucket.totalValue)}
+                {bucket.totalQty} pcs &middot; {formatCurrency(bucket.totalValue, currency)}
               </p>
             </CardContent>
           </Card>
@@ -94,10 +96,10 @@ export function InventoryAging({ data }: InventoryAgingProps) {
                 </TableCell>
                 <TableCell className="text-right">{item.qty}</TableCell>
                 <TableCell className="text-right">
-                  {formatCurrency(item.unitCost)}
+                  {formatCurrency(item.unitCost, currency)}
                 </TableCell>
                 <TableCell className="text-right">
-                  {formatCurrency(item.totalCost)}
+                  {formatCurrency(item.totalCost, currency)}
                 </TableCell>
                 <TableCell className="text-right">{item.ageDays}d</TableCell>
                 <TableCell>

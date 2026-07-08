@@ -2,6 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
+import { useCurrency } from "@/components/currency-provider";
 import { ReportExportButton } from "./report-export-button";
 import type { CashFlowReport } from "@/lib/actions/reports";
 
@@ -10,6 +11,7 @@ interface CashFlowSummaryProps {
 }
 
 export function CashFlowSummary({ data }: CashFlowSummaryProps) {
+  const currency = useCurrency();
   return (
     <div className="space-y-4 mt-4">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -17,7 +19,7 @@ export function CashFlowSummary({ data }: CashFlowSummaryProps) {
           <CardContent className="pt-4 text-center">
             <p className="text-xs text-muted-foreground">Cash In</p>
             <p className="text-lg font-bold text-green-600 dark:text-green-400">
-              {formatCurrency(data.cashIn)}
+              {formatCurrency(data.cashIn, currency)}
             </p>
           </CardContent>
         </Card>
@@ -25,7 +27,7 @@ export function CashFlowSummary({ data }: CashFlowSummaryProps) {
           <CardContent className="pt-4 text-center">
             <p className="text-xs text-muted-foreground">Cash Out</p>
             <p className="text-lg font-bold text-red-600 dark:text-red-400">
-              {formatCurrency(data.cashOut)}
+              {formatCurrency(data.cashOut, currency)}
             </p>
           </CardContent>
         </Card>
@@ -35,7 +37,7 @@ export function CashFlowSummary({ data }: CashFlowSummaryProps) {
             <p
               className={`text-lg font-bold ${data.netChange >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}
             >
-              {formatCurrency(data.netChange)}
+              {formatCurrency(data.netChange, currency)}
             </p>
           </CardContent>
         </Card>
@@ -45,7 +47,7 @@ export function CashFlowSummary({ data }: CashFlowSummaryProps) {
             <p
               className={`text-lg font-bold ${data.currentBalance >= 0 ? "text-blue-700 dark:text-blue-300" : "text-red-600 dark:text-red-400"}`}
             >
-              {formatCurrency(data.currentBalance)}
+              {formatCurrency(data.currentBalance, currency)}
             </p>
           </CardContent>
         </Card>

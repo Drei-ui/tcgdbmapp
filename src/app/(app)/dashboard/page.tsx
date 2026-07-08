@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency, formatDateTime } from "@/lib/utils";
+import { getCurrency } from "@/lib/auth";
 import { ExportButton } from "@/components/export-button";
 import {
   Wallet,
@@ -18,6 +19,7 @@ import Link from "next/link";
 
 export default async function DashboardPage() {
   const stats = await getDashboardStats();
+  const currency = await getCurrency();
 
   return (
     <div className="p-4 md:p-6 space-y-6">
@@ -40,7 +42,7 @@ export default async function DashboardPage() {
                     <p
                       className={`text-2xl font-bold ${stats.cashBalance >= 0 ? "text-blue-700 dark:text-teal-300" : "text-red-600 dark:text-rose-400"}`}
                     >
-                      {formatCurrency(stats.cashBalance)}
+                      {formatCurrency(stats.cashBalance, currency)}
                     </p>
                   </div>
                 </div>
@@ -57,7 +59,7 @@ export default async function DashboardPage() {
                       Inventory Value
                     </p>
                     <p className="text-2xl font-bold">
-                      {formatCurrency(stats.inventoryValue)}
+                      {formatCurrency(stats.inventoryValue, currency)}
                     </p>
                   </div>
                 </div>
@@ -74,7 +76,7 @@ export default async function DashboardPage() {
                     <p
                       className={`text-2xl font-bold ${stats.sales30d.totalProfit >= 0 ? "text-violet-700 dark:text-yellow-200" : "text-red-600 dark:text-rose-400"}`}
                     >
-                      {formatCurrency(stats.sales30d.totalProfit)}
+                      {formatCurrency(stats.sales30d.totalProfit, currency)}
                     </p>
                   </div>
                 </div>
@@ -89,7 +91,7 @@ export default async function DashboardPage() {
                 <p className="text-xs text-muted-foreground">Sales Today</p>
                 <p className="text-lg font-bold">{stats.salesToday.count}</p>
                 <p className="text-xs text-muted-foreground">
-                  {formatCurrency(stats.salesToday.totalCollected)}
+                  {formatCurrency(stats.salesToday.totalCollected, currency)}
                 </p>
               </CardContent>
             </Card>
@@ -98,7 +100,7 @@ export default async function DashboardPage() {
                 <p className="text-xs text-muted-foreground">Sales 7d</p>
                 <p className="text-lg font-bold">{stats.sales7d.count}</p>
                 <p className="text-xs text-muted-foreground">
-                  {formatCurrency(stats.sales7d.totalCollected)}
+                  {formatCurrency(stats.sales7d.totalCollected, currency)}
                 </p>
               </CardContent>
             </Card>
@@ -165,7 +167,7 @@ export default async function DashboardPage() {
                   type: "sale" as const,
                   id: s.id,
                   label: s.buyerName || `Sale #${s.id.slice(0, 8)}`,
-                  detail: formatCurrency(s.totalCollected.toString()),
+                  detail: formatCurrency(s.totalCollected.toString(), currency),
                   badge: s.status,
                   date: s.createdAt,
                   href: `/sales/${s.id}`,
@@ -183,7 +185,7 @@ export default async function DashboardPage() {
                   type: "cash" as const,
                   id: c.id,
                   label: c.description,
-                  detail: `${c.type === "IN" ? "+" : "-"}${formatCurrency(c.amount.toString())}`,
+                  detail: `${c.type === "IN" ? "+" : "-"}${formatCurrency(c.amount.toString(), currency)}`,
                   badge: c.type,
                   date: c.createdAt,
                   href: "/cash",
