@@ -19,6 +19,7 @@ import { createSale } from "@/lib/actions/sales";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { formatCurrency } from "@/lib/utils";
+import { useCurrency } from "@/components/currency-provider";
 import type { InventoryLot } from "@prisma/client";
 
 const CHANNELS = [
@@ -46,6 +47,7 @@ type SaleLineItem = {
 
 export function SaleForm({ lots }: { lots: InventoryLot[] }) {
   const router = useRouter();
+  const currency = useCurrency();
   const [loading, setLoading] = useState(false);
   const [channel, setChannel] = useState("FB_PAGE");
   const [buyerName, setBuyerName] = useState("");
@@ -204,7 +206,7 @@ export function SaleForm({ lots }: { lots: InventoryLot[] }) {
                         <SelectItem key={lot.id} value={lot.id}>
                           {lot.setCode && `${lot.setCode} `}
                           {lot.productName} ({lot.language}) — {lot.qtyOnHand}x
-                          @ {formatCurrency(lot.unitCost.toString())}
+                          @ {formatCurrency(lot.unitCost.toString(), currency)}
                         </SelectItem>
                       ))}
                   </SelectContent>
@@ -318,7 +320,7 @@ export function SaleForm({ lots }: { lots: InventoryLot[] }) {
       <div className="flex items-center justify-between rounded-md bg-muted p-3">
         <span className="text-sm font-medium">Total Collected</span>
         <span className="text-lg font-bold">
-          {formatCurrency(totalCollected)}
+          {formatCurrency(totalCollected, currency)}
         </span>
       </div>
 

@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { getCurrency } from "@/lib/auth";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { ReceiveButton } from "@/components/purchases/receive-button";
@@ -29,6 +30,8 @@ export default async function PurchaseDetailPage({
   } | null;
 
   if (!purchase) notFound();
+
+  const currency = await getCurrency();
 
   const isReceived = purchase.inventoryLots.length > 0;
   const itemTotal = purchase.lineItems.reduce(
@@ -78,18 +81,18 @@ export default async function PurchaseDetailPage({
             <div>
               <span className="text-muted-foreground">Shipping</span>
               <p className="font-medium">
-                {formatCurrency(purchase.shippingCost.toString())}
+                {formatCurrency(purchase.shippingCost.toString(), currency)}
               </p>
             </div>
             <div>
               <span className="text-muted-foreground">Fees</span>
               <p className="font-medium">
-                {formatCurrency(purchase.fees.toString())}
+                {formatCurrency(purchase.fees.toString(), currency)}
               </p>
             </div>
             <div>
               <span className="text-muted-foreground">Total</span>
-              <p className="font-medium text-lg">{formatCurrency(total)}</p>
+              <p className="font-medium text-lg">{formatCurrency(total, currency)}</p>
             </div>
           </div>
           {purchase.notes && (
@@ -129,11 +132,12 @@ export default async function PurchaseDetailPage({
                 </div>
                 <div className="text-right shrink-0">
                   <p className="font-medium">
-                    {item.qty}x {formatCurrency(item.unitCost.toString())}
+                    {item.qty}x {formatCurrency(item.unitCost.toString(), currency)}
                   </p>
                   <p className="text-xs text-muted-foreground">
                     {formatCurrency(
-                      (parseFloat(item.unitCost.toString()) * item.qty).toString()
+                      (parseFloat(item.unitCost.toString()) * item.qty).toString(),
+                      currency
                     )}
                   </p>
                 </div>
@@ -163,7 +167,7 @@ export default async function PurchaseDetailPage({
                     {lot.productName}
                   </span>
                   <span className="shrink-0 text-muted-foreground">
-                    {lot.qtyOnHand}x @ {formatCurrency(lot.unitCost.toString())}
+                    {lot.qtyOnHand}x @ {formatCurrency(lot.unitCost.toString(), currency)}
                   </span>
                 </Link>
               ))}

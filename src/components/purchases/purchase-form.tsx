@@ -19,6 +19,7 @@ import { createPurchase } from "@/lib/actions/purchases";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { formatCurrency } from "@/lib/utils";
+import { useCurrency } from "@/components/currency-provider";
 import type { Supplier, ProductCatalog } from "@prisma/client";
 
 const PRODUCT_TYPES = [
@@ -62,6 +63,7 @@ export function PurchaseForm({
   catalog?: ProductCatalog[];
 }) {
   const router = useRouter();
+  const currency = useCurrency();
   const [loading, setLoading] = useState(false);
   const [supplierId, setSupplierId] = useState("");
   const [newSupplierName, setNewSupplierName] = useState("");
@@ -378,7 +380,7 @@ export function PurchaseForm({
 
       <div className="flex items-center justify-between rounded-md bg-muted p-3">
         <span className="text-sm font-medium">Total Purchase Cost</span>
-        <span className="text-lg font-bold">{formatCurrency(total)}</span>
+        <span className="text-lg font-bold">{formatCurrency(total, currency)}</span>
       </div>
 
       <Button

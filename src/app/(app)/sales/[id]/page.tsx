@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { getCurrency } from "@/lib/auth";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { SaleActions } from "@/components/sales/sale-actions";
@@ -48,6 +49,8 @@ export default async function SaleDetailPage({
   } | null;
 
   if (!sale) notFound();
+
+  const currency = await getCurrency();
 
   const totalCogs = sale.lineItems.reduce(
     (sum, li) => sum + parseFloat(li.cogsTotal.toString()),
@@ -102,25 +105,25 @@ export default async function SaleDetailPage({
             <div>
               <span className="text-muted-foreground">Subtotal</span>
               <p className="font-medium">
-                {formatCurrency(sale.subtotal.toString())}
+                {formatCurrency(sale.subtotal.toString(), currency)}
               </p>
             </div>
             <div>
               <span className="text-muted-foreground">Discount</span>
               <p className="font-medium">
-                -{formatCurrency(sale.discount.toString())}
+                -{formatCurrency(sale.discount.toString(), currency)}
               </p>
             </div>
             <div>
               <span className="text-muted-foreground">Shipping Charged</span>
               <p className="font-medium">
-                +{formatCurrency(sale.shippingCharged.toString())}
+                +{formatCurrency(sale.shippingCharged.toString(), currency)}
               </p>
             </div>
             <div>
               <span className="text-muted-foreground">Total Collected</span>
               <p className="font-medium text-lg">
-                {formatCurrency(sale.totalCollected.toString())}
+                {formatCurrency(sale.totalCollected.toString(), currency)}
               </p>
             </div>
           </div>
@@ -132,7 +135,7 @@ export default async function SaleDetailPage({
                 <div>
                   <span className="text-muted-foreground">Total Cost</span>
                   <p className="font-medium text-red-600">
-                    -{formatCurrency(totalCogs)}
+                    -{formatCurrency(totalCogs, currency)}
                   </p>
                 </div>
                 <div>
@@ -141,7 +144,8 @@ export default async function SaleDetailPage({
                     -
                     {formatCurrency(
                       parseFloat(sale.shippingCostPaid.toString()) +
-                        parseFloat(sale.platformFees.toString())
+                        parseFloat(sale.platformFees.toString()),
+                      currency
                     )}
                   </p>
                 </div>
@@ -150,7 +154,7 @@ export default async function SaleDetailPage({
                   <p
                     className={`font-bold text-lg ${netProfit >= 0 ? "text-green-600" : "text-red-600"}`}
                   >
-                    {formatCurrency(netProfit)}
+                    {formatCurrency(netProfit, currency)}
                   </p>
                 </div>
               </div>
@@ -189,18 +193,19 @@ export default async function SaleDetailPage({
                     {item.inventoryLot.productName}
                   </Link>
                   <span className="shrink-0 font-medium">
-                    {item.qty}x {formatCurrency(item.unitPrice.toString())} ={" "}
+                    {item.qty}x {formatCurrency(item.unitPrice.toString(), currency)} ={" "}
                     {formatCurrency(
                       (
                         parseFloat(item.unitPrice.toString()) * item.qty
-                      ).toString()
+                      ).toString(),
+                      currency
                     )}
                   </span>
                 </div>
                 {sale.status === "CONFIRMED" && (
                   <div className="flex justify-between text-xs text-muted-foreground mt-0.5">
                     <span>
-                      Cost: {formatCurrency(item.cogsTotal.toString())}
+                      Cost: {formatCurrency(item.cogsTotal.toString(), currency)}
                     </span>
                     <span
                       className={
@@ -209,7 +214,7 @@ export default async function SaleDetailPage({
                           : "text-red-600"
                       }
                     >
-                      Profit: {formatCurrency(item.profitTotal.toString())}
+                      Profit: {formatCurrency(item.profitTotal.toString(), currency)}
                     </span>
                   </div>
                 )}

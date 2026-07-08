@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
+import { useCurrency } from "@/components/currency-provider";
 import { ShoppingCart, Bookmark, PenLine } from "lucide-react";
 import Link from "next/link";
 import type { InventoryLot } from "@prisma/client";
@@ -19,6 +20,7 @@ export function InventoryCard({
   onReserve: (lot: InventoryLot) => void;
   onAdjust: (lot: InventoryLot) => void;
 }) {
+  const currency = useCurrency();
   const subtitle = [lot.productType.replace("_", " "), lot.setCode, lot.rarity, lot.condition]
     .filter(Boolean)
     .join(" \u2022 ");
@@ -42,7 +44,7 @@ export function InventoryCard({
         <div className="text-right shrink-0">
           <div className="text-sm font-semibold">{lot.qtyOnHand}x</div>
           <div className="text-xs text-muted-foreground">
-            {formatCurrency(lot.unitCost.toString())}
+            {formatCurrency(lot.unitCost.toString(), currency)}
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { useCurrency } from "@/components/currency-provider";
 import { CashForm } from "./cash-form";
 import { ArrowDownCircle, ArrowUpCircle } from "lucide-react";
 import Link from "next/link";
@@ -24,6 +25,7 @@ export function CashList({
   const [formType, setFormType] = useState<"IN" | "OUT">(
     defaultAction === "out" ? "OUT" : "IN"
   );
+  const currency = useCurrency();
 
   function openForm(type: "IN" | "OUT") {
     setFormType(type);
@@ -37,7 +39,7 @@ export function CashList({
         <p
           className={`text-3xl font-bold ${balance >= 0 ? "text-green-600" : "text-red-600"}`}
         >
-          {formatCurrency(balance)}
+          {formatCurrency(balance, currency)}
         </p>
       </div>
 
@@ -114,7 +116,7 @@ export function CashList({
                 className={`font-semibold shrink-0 ${tx.type === "IN" ? "text-green-600" : "text-red-600"}`}
               >
                 {tx.type === "IN" ? "+" : "-"}
-                {formatCurrency(tx.amount.toString())}
+                {formatCurrency(tx.amount.toString(), currency)}
               </span>
             </div>
           ))}
