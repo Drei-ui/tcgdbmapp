@@ -7,6 +7,7 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { getCurrency } from "@/lib/auth";
+import { getRate } from "@/lib/fx";
 
 export default async function PurchasesPage({
   searchParams,
@@ -31,6 +32,7 @@ export default async function PurchasesPage({
   };
 
   const currency = await getCurrency();
+  const rate = await getRate(currency);
 
   return (
     <div className="p-4 md:p-6 space-y-4">
@@ -83,7 +85,7 @@ export default async function PurchasesPage({
                     </div>
                     <div className="text-right shrink-0">
                       <div className="text-sm font-semibold">
-                        {formatCurrency(total, currency)}
+                        {formatCurrency(total, currency, rate)}
                       </div>
                       <Badge
                         variant={isReceived ? "default" : "secondary"}

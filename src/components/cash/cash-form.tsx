@@ -18,6 +18,8 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { createCashTransaction } from "@/lib/actions/cash";
+import { useRate } from "@/components/currency-provider";
+import { convertToBase } from "@/lib/currency";
 import { toast } from "sonner";
 
 const CATEGORIES = [
@@ -56,13 +58,15 @@ export function CashForm({
   const [description, setDescription] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("GCASH");
   const [loading, setLoading] = useState(false);
+  const rate = useRate();
 
   async function handleSubmit() {
     setLoading(true);
+    // Amount is typed in the active display currency; store it in the PHP base.
     const result = await createCashTransaction({
       type,
       category,
-      amount: parseFloat(amount) || 0,
+      amount: convertToBase(parseFloat(amount) || 0, rate),
       description,
       paymentMethod,
     });

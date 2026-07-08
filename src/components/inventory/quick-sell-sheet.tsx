@@ -21,7 +21,8 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/utils";
-import { useCurrency } from "@/components/currency-provider";
+import { useCurrency, useRate } from "@/components/currency-provider";
+import { convertToBase } from "@/lib/currency";
 import type { InventoryLot } from "@prisma/client";
 
 const CHANNELS = [
@@ -68,6 +69,7 @@ export function QuickSellSheet({
   const [shippingCostPaid, setShippingCostPaid] = useState("0");
   const [loading, setLoading] = useState(false);
   const currency = useCurrency();
+  const rate = useRate();
 
   if (!lot) return null;
 
@@ -78,14 +80,15 @@ export function QuickSellSheet({
   async function handleConfirm() {
     if (!lot) return;
     setLoading(true);
+    // Amounts are typed in the active display currency; store them in the PHP base.
     await onConfirm({
       inventoryLotId: lot.id,
       qty: parseInt(qty),
-      unitPrice: parseFloat(unitPrice),
+      unitPrice: convertToBase(parseFloat(unitPrice), rate),
       channel,
       paymentMethod,
-      shippingCharged: parseFloat(shippingCharged) || 0,
-      shippingCostPaid: parseFloat(shippingCostPaid) || 0,
+      shippingCharged: convertToBase(parseFloat(shippingCharged) || 0, rate),
+      shippingCostPaid: convertToBase(parseFloat(shippingCostPaid) || 0, rate),
     });
     setLoading(false);
     onOpenChange(false);
@@ -110,7 +113,7 @@ export function QuickSellSheet({
           </DialogTitle>
           <DialogDescription>
             {lot.productName} — {lot.qtyOnHand} available @{" "}
-            {formatCurrency(lot.unitCost.toString(), currency)} each
+            {formatCurrency(lot.unitCost.toString(), currency, rate)} each
           </DialogDescription>
         </DialogHeader>
 
