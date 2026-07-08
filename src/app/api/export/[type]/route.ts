@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
+import { getCurrency } from "@/lib/auth";
+import { getRate } from "@/lib/fx";
+import { convertFromBase } from "@/lib/currency";
 
 function toNum(val: unknown): number {
   if (typeof val === "number") return val;
@@ -35,6 +38,12 @@ export async function GET(
 
   const { type } = await params;
 
+  // Stored amounts are PHP; convert to the user's display currency for export.
+  const currency = await getCurrency();
+  const rate = await getRate(currency);
+  const money = (n: number) => convertFromBase(n, rate).toFixed(2);
+  const dateStr = new Date().toISOString().split("T")[0];
+
   let csv = "";
   let filename = "";
 
@@ -54,8 +63,8 @@ export async function GET(
         "Rarity",
         "Condition",
         "Qty",
-        "Unit Cost",
-        "Total Value",
+        `Unit Cost (${currency})`,
+        `Total Value (${currency})`,
         "Status",
         "Supplier",
         "Acquired",
@@ -70,15 +79,15 @@ export async function GET(
         lot.rarity || "",
         lot.condition || "",
         lot.qtyOnHand.toString(),
-        toNum(lot.unitCost).toFixed(2),
-        (toNum(lot.unitCost) * lot.qtyOnHand).toFixed(2),
+        money(toNum(lot.unitCost)),
+        money(toNum(lot.unitCost) * lot.qtyOnHand),
         lot.status,
         lot.supplier?.name || "",
         lot.acquiredAt.toISOString().split("T")[0],
         lot.notes || "",
       ]);
       csv = toCsv(headers, rows);
-      filename = `inventory-${new Date().toISOString().split("T")[0]}.csv`;
+      filename = `inventory-${currency}-${dateStr}.csv`;
       break;
     }
 
@@ -95,14 +104,14 @@ export async function GET(
         "Buyer",
         "Channel",
         "Payment",
-        "Subtotal",
-        "Discount",
-        "Shipping Charged",
-        "Total Collected",
-        "Total Cost",
-        "Shipping Cost",
-        "Fees",
-        "Net Profit",
+        `Subtotal (${currency})`,
+        `Discount (${currency})`,
+        `Shipping Charged (${currency})`,
+        `Total Collected (${currency})`,
+        `Total Cost (${currency})`,
+        `Shipping Cost (${currency})`,
+        `Fees (${currency})`,
+        `Net Profit (${currency})`,
         "Items",
       ];
       const rows = sales.map((sale) => {
@@ -129,19 +138,19 @@ export async function GET(
           sale.buyerName || "",
           sale.channel,
           sale.paymentMethod,
-          toNum(sale.subtotal).toFixed(2),
-          toNum(sale.discount).toFixed(2),
-          toNum(sale.shippingCharged).toFixed(2),
-          toNum(sale.totalCollected).toFixed(2),
-          cogs.toFixed(2),
-          toNum(sale.shippingCostPaid).toFixed(2),
-          toNum(sale.platformFees).toFixed(2),
-          netProfit.toFixed(2),
+          money(toNum(sale.subtotal)),
+          money(toNum(sale.discount)),
+          money(toNum(sale.shippingCharged)),
+          money(toNum(sale.totalCollected)),
+          money(cogs),
+          money(toNum(sale.shippingCostPaid)),
+          money(toNum(sale.platformFees)),
+          money(netProfit),
           items,
         ];
       });
       csv = toCsv(headers, rows);
-      filename = `sales-${new Date().toISOString().split("T")[0]}.csv`;
+      filename = `sales-${currency}-${dateStr}.csv`;
       break;
     }
 
@@ -154,7 +163,7 @@ export async function GET(
         "Date",
         "Type",
         "Category",
-        "Amount",
+        `Amount (${currency})`,
         "Description",
         "Payment Method",
       ];
@@ -162,12 +171,12 @@ export async function GET(
         tx.date.toISOString().split("T")[0],
         tx.type,
         tx.category,
-        toNum(tx.amount).toFixed(2),
+        money(toNum(tx.amount)),
         tx.description,
         tx.paymentMethod,
       ]);
       csv = toCsv(headers, rows);
-      filename = `cash-${new Date().toISOString().split("T")[0]}.csv`;
+      filename = `cash-${currency}-${dateStr}.csv`;
       break;
     }
 

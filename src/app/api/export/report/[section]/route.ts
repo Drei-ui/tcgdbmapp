@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { getCurrency } from "@/lib/auth";
+import { getRate } from "@/lib/fx";
+import { convertFromBase } from "@/lib/currency";
 import {
   getReportProfit,
   getReportInventoryAging,
@@ -84,23 +87,28 @@ export async function GET(
   const { start, end } = parseDateRange(range, fromParam, toParam);
   const dateStr = new Date().toISOString().split("T")[0];
 
+  // Report figures are aggregated in PHP; convert to the user's display currency.
+  const currency = await getCurrency();
+  const rate = await getRate(currency);
+  const money = (n: number) => convertFromBase(n, rate).toFixed(2);
+
   let csv = "";
   let filename = "";
 
   switch (section) {
     case "profit": {
       const data = await getReportProfit(start, end, group, filters);
-      const headers = ["Period", "Sales", "Total Cost", "Profit", "Margin%", "Orders"];
+      const headers = ["Period", `Sales (${currency})`, `Total Cost (${currency})`, `Profit (${currency})`, "Margin%", "Orders"];
       const rows = data.rows.map((r) => [
         new Date(r.period).toISOString().split("T")[0],
-        r.sales.toFixed(2),
-        r.cogs.toFixed(2),
-        r.profit.toFixed(2),
+        money(r.sales),
+        money(r.cogs),
+        money(r.profit),
         r.marginPct.toFixed(1),
         r.orderCount.toString(),
       ]);
       csv = toCsv(headers, rows);
-      filename = `report-profit-${dateStr}.csv`;
+      filename = `report-profit-${currency}-${dateStr}.csv`;
       break;
     }
 
@@ -112,8 +120,8 @@ export async function GET(
         "Brand",
         "Type",
         "Qty",
-        "Unit Cost",
-        "Total Cost",
+        `Unit Cost (${currency})`,
+        `Total Cost (${currency})`,
         "Age (days)",
         "Suggested Action",
       ];
@@ -123,13 +131,13 @@ export async function GET(
         item.brand,
         item.productType,
         item.qty.toString(),
-        item.unitCost.toFixed(2),
-        item.totalCost.toFixed(2),
+        money(item.unitCost),
+        money(item.totalCost),
         item.ageDays.toString(),
         item.suggestedAction,
       ]);
       csv = toCsv(headers, rows);
-      filename = `report-aging-${dateStr}.csv`;
+      filename = `report-aging-${currency}-${dateStr}.csv`;
       break;
     }
 
@@ -139,8 +147,8 @@ export async function GET(
         "Product",
         "Set",
         "Brand",
-        "Revenue",
-        "Profit",
+        `Revenue (${currency})`,
+        `Profit (${currency})`,
         "Qty Sold",
         "Avg Days Held",
       ];
@@ -148,42 +156,42 @@ export async function GET(
         item.productName,
         item.setCode || "",
         item.brand,
-        item.totalRevenue.toFixed(2),
-        item.totalProfit.toFixed(2),
+        money(item.totalRevenue),
+        money(item.totalProfit),
         item.totalQty.toString(),
         item.avgDaysHeld.toString(),
       ]);
       csv = toCsv(headers, rows);
-      filename = `report-best-sellers-${dateStr}.csv`;
+      filename = `report-best-sellers-${currency}-${dateStr}.csv`;
       break;
     }
 
     case "channels": {
       const data = await getReportChannelPerformance(start, end, filters);
-      const headers = ["Channel", "Orders", "Revenue", "Profit", "Avg Order Value"];
+      const headers = ["Channel", "Orders", `Revenue (${currency})`, `Profit (${currency})`, `Avg Order Value (${currency})`];
       const rows = data.map((ch) => [
         ch.channel,
         ch.orderCount.toString(),
-        ch.revenue.toFixed(2),
-        ch.profit.toFixed(2),
-        ch.avgOrderValue.toFixed(2),
+        money(ch.revenue),
+        money(ch.profit),
+        money(ch.avgOrderValue),
       ]);
       csv = toCsv(headers, rows);
-      filename = `report-channels-${dateStr}.csv`;
+      filename = `report-channels-${currency}-${dateStr}.csv`;
       break;
     }
 
     case "cash-flow": {
       const data = await getReportCashFlow(start, end);
-      const headers = ["Metric", "Amount"];
+      const headers = ["Metric", `Amount (${currency})`];
       const rows = [
-        ["Cash In", data.cashIn.toFixed(2)],
-        ["Cash Out", data.cashOut.toFixed(2)],
-        ["Net Change", data.netChange.toFixed(2)],
-        ["Current Balance (All-Time)", data.currentBalance.toFixed(2)],
+        ["Cash In", money(data.cashIn)],
+        ["Cash Out", money(data.cashOut)],
+        ["Net Change", money(data.netChange)],
+        ["Current Balance (All-Time)", money(data.currentBalance)],
       ];
       csv = toCsv(headers, rows);
-      filename = `report-cash-flow-${dateStr}.csv`;
+      filename = `report-cash-flow-${currency}-${dateStr}.csv`;
       break;
     }
 
