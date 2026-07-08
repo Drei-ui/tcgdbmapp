@@ -19,7 +19,8 @@ import { createPurchase } from "@/lib/actions/purchases";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { formatCurrency } from "@/lib/utils";
-import { useCurrency } from "@/components/currency-provider";
+import { useCurrency, useRate } from "@/components/currency-provider";
+import { convertToBase } from "@/lib/currency";
 import type { Supplier, ProductCatalog } from "@prisma/client";
 
 const PRODUCT_TYPES = [
@@ -64,6 +65,7 @@ export function PurchaseForm({
 }) {
   const router = useRouter();
   const currency = useCurrency();
+  const rate = useRate();
   const [loading, setLoading] = useState(false);
   const [supplierId, setSupplierId] = useState("");
   const [newSupplierName, setNewSupplierName] = useState("");
@@ -118,11 +120,12 @@ export function PurchaseForm({
 
   async function handleSubmit() {
     setLoading(true);
+    // Amounts are typed in the active display currency; store them in the PHP base.
     const result = await createPurchase({
       supplierId: supplierId && supplierId !== "new" ? supplierId : undefined,
       newSupplierName: newSupplierName || undefined,
-      shippingCost: parseFloat(shippingCost) || 0,
-      fees: parseFloat(fees) || 0,
+      shippingCost: convertToBase(parseFloat(shippingCost) || 0, rate),
+      fees: convertToBase(parseFloat(fees) || 0, rate),
       notes: notes || undefined,
       lineItems: lineItems.map((item) => ({
         brand: item.brand,
@@ -133,7 +136,7 @@ export function PurchaseForm({
         rarity: item.rarity || undefined,
         condition: item.condition || undefined,
         qty: parseInt(item.qty) || 1,
-        unitCost: parseFloat(item.unitCost) || 0,
+        unitCost: convertToBase(parseFloat(item.unitCost) || 0, rate),
       })),
     });
 

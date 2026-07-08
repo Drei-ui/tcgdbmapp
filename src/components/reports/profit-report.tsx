@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { useCurrency } from "@/components/currency-provider";
+import { useCurrency, useRate } from "@/components/currency-provider";
 import { ReportExportButton } from "./report-export-button";
 import type { ProfitReport as ProfitReportType } from "@/lib/actions/reports";
 
@@ -34,6 +34,7 @@ export function ProfitReport({
 }: ProfitReportProps) {
   const { summary, rows } = data;
   const currency = useCurrency();
+  const rate = useRate();
 
   return (
     <div className="space-y-4 mt-4">
@@ -43,7 +44,7 @@ export function ProfitReport({
           <CardContent className="pt-4 text-center">
             <p className="text-xs text-muted-foreground">Gross Sales</p>
             <p className="text-lg font-bold">
-              {formatCurrency(summary.grossSales, currency)}
+              {formatCurrency(summary.grossSales, currency, rate)}
             </p>
           </CardContent>
         </Card>
@@ -51,7 +52,7 @@ export function ProfitReport({
           <CardContent className="pt-4 text-center">
             <p className="text-xs text-muted-foreground">Total Cost</p>
             <p className="text-lg font-bold">
-              {formatCurrency(summary.cogs, currency)}
+              {formatCurrency(summary.cogs, currency, rate)}
             </p>
           </CardContent>
         </Card>
@@ -61,7 +62,7 @@ export function ProfitReport({
             <p
               className={`text-lg font-bold ${summary.grossProfit >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}
             >
-              {formatCurrency(summary.grossProfit, currency)}
+              {formatCurrency(summary.grossProfit, currency, rate)}
             </p>
           </CardContent>
         </Card>
@@ -80,7 +81,7 @@ export function ProfitReport({
           <CardContent className="pt-4 text-center">
             <p className="text-xs text-muted-foreground">Shipping Cost</p>
             <p className="text-sm font-semibold">
-              {formatCurrency(summary.shippingCost, currency)}
+              {formatCurrency(summary.shippingCost, currency, rate)}
             </p>
           </CardContent>
         </Card>
@@ -88,7 +89,7 @@ export function ProfitReport({
           <CardContent className="pt-4 text-center">
             <p className="text-xs text-muted-foreground">Platform Fees</p>
             <p className="text-sm font-semibold">
-              {formatCurrency(summary.platformFees, currency)}
+              {formatCurrency(summary.platformFees, currency, rate)}
             </p>
           </CardContent>
         </Card>
@@ -98,7 +99,7 @@ export function ProfitReport({
             <p
               className={`text-sm font-semibold ${summary.netProfit >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}
             >
-              {formatCurrency(summary.netProfit, currency)}
+              {formatCurrency(summary.netProfit, currency, rate)}
             </p>
           </CardContent>
         </Card>
@@ -145,15 +146,15 @@ export function ProfitReport({
                   {formatDate(row.period)}
                 </TableCell>
                 <TableCell className="text-right">
-                  {formatCurrency(row.sales, currency)}
+                  {formatCurrency(row.sales, currency, rate)}
                 </TableCell>
                 <TableCell className="text-right">
-                  {formatCurrency(row.cogs, currency)}
+                  {formatCurrency(row.cogs, currency, rate)}
                 </TableCell>
                 <TableCell
                   className={`text-right ${row.profit >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}
                 >
-                  {formatCurrency(row.profit, currency)}
+                  {formatCurrency(row.profit, currency, rate)}
                 </TableCell>
                 <TableCell className="text-right">
                   {row.marginPct.toFixed(1)}%
