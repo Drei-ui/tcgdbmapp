@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrency, formatDate, daysAgo, serialize } from "@/lib/utils";
 import { getCurrency } from "@/lib/auth";
+import { getRate } from "@/lib/fx";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { LotActions } from "@/components/inventory/lot-actions";
@@ -21,6 +22,7 @@ export default async function InventoryDetailPage({
   if (!lot) notFound();
 
   const currency = await getCurrency();
+  const rate = await getRate(currency);
   const age = daysAgo(lot.acquiredAt);
 
   return (
@@ -111,7 +113,7 @@ export default async function InventoryDetailPage({
             <div>
               <span className="text-muted-foreground">Unit Cost</span>
               <p className="text-xl font-bold">
-                {formatCurrency(lot.unitCost.toString(), currency)}
+                {formatCurrency(lot.unitCost.toString(), currency, rate)}
               </p>
             </div>
             <div>
@@ -121,7 +123,8 @@ export default async function InventoryDetailPage({
                   (
                     parseFloat(lot.unitCost.toString()) * lot.qtyOnHand
                   ).toString(),
-                  currency
+                  currency,
+                  rate
                 )}
               </p>
             </div>

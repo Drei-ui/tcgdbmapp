@@ -12,9 +12,11 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatCurrency(
   amount: number | string,
-  currency: CurrencyCode = DEFAULT_CURRENCY
+  currency: CurrencyCode = DEFAULT_CURRENCY,
+  rate = 1
 ): string {
-  const num = typeof amount === "string" ? parseFloat(amount) : amount;
+  const base = typeof amount === "string" ? parseFloat(amount) : amount;
+  const num = base * rate;
   const { locale } = CURRENCIES[currency] ?? CURRENCIES[DEFAULT_CURRENCY];
   return new Intl.NumberFormat(locale, {
     style: "currency",

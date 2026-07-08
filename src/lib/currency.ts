@@ -26,6 +26,16 @@ export function isCurrencyCode(value: unknown): value is CurrencyCode {
   return typeof value === "string" && value in CURRENCIES;
 }
 
+/** Convert a base-currency (PHP) amount into the display currency. */
+export function convertFromBase(amountBase: number, rate: number): number {
+  return amountBase * rate;
+}
+
+/** Convert a value typed in the display currency back into the base (PHP). */
+export function convertToBase(amount: number, rate: number): number {
+  return rate > 0 ? amount / rate : amount;
+}
+
 /** Coerce any stored/user value to a known currency, falling back to the default. */
 export function toCurrencyCode(value: unknown): CurrencyCode {
   return isCurrencyCode(value) ? value : DEFAULT_CURRENCY;

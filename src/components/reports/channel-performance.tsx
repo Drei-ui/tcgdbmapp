@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/utils";
-import { useCurrency } from "@/components/currency-provider";
+import { useCurrency, useRate } from "@/components/currency-provider";
 import { ReportExportButton } from "./report-export-button";
 import type { ChannelRow } from "@/lib/actions/reports";
 
@@ -27,6 +27,7 @@ const CHANNEL_LABELS: Record<string, string> = {
 
 export function ChannelPerformance({ data }: ChannelPerformanceProps) {
   const currency = useCurrency();
+  const rate = useRate();
   const totalRevenue = data.reduce((sum, ch) => sum + ch.revenue, 0);
 
   return (
@@ -59,7 +60,7 @@ export function ChannelPerformance({ data }: ChannelPerformanceProps) {
                 </TableCell>
                 <TableCell className="text-right">{ch.orderCount}</TableCell>
                 <TableCell className="text-right">
-                  {formatCurrency(ch.revenue, currency)}
+                  {formatCurrency(ch.revenue, currency, rate)}
                 </TableCell>
                 <TableCell className="text-right">
                   {totalRevenue > 0
@@ -70,10 +71,10 @@ export function ChannelPerformance({ data }: ChannelPerformanceProps) {
                 <TableCell
                   className={`text-right ${ch.profit >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}
                 >
-                  {formatCurrency(ch.profit, currency)}
+                  {formatCurrency(ch.profit, currency, rate)}
                 </TableCell>
                 <TableCell className="text-right">
-                  {formatCurrency(ch.avgOrderValue, currency)}
+                  {formatCurrency(ch.avgOrderValue, currency, rate)}
                 </TableCell>
               </TableRow>
             ))}

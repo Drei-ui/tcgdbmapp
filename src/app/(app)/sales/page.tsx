@@ -7,6 +7,7 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { getCurrency } from "@/lib/auth";
+import { getRate } from "@/lib/fx";
 import { ExportButton } from "@/components/export-button";
 
 const statusColors: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
@@ -39,6 +40,7 @@ export default async function SalesPage({
   };
 
   const currency = await getCurrency();
+  const rate = await getRate(currency);
 
   return (
     <div className="p-4 md:p-6 space-y-4">
@@ -88,11 +90,11 @@ export default async function SalesPage({
                     </div>
                     <div className="text-right shrink-0">
                       <div className="text-sm font-semibold">
-                        {formatCurrency(sale.totalCollected.toString(), currency)}
+                        {formatCurrency(sale.totalCollected.toString(), currency, rate)}
                       </div>
                       {sale.status === "CONFIRMED" && profit > 0 && (
                         <div className="text-xs text-green-600">
-                          +{formatCurrency(profit, currency)}
+                          +{formatCurrency(profit, currency, rate)}
                         </div>
                       )}
                       <Badge

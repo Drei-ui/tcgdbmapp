@@ -19,7 +19,8 @@ import { createSale } from "@/lib/actions/sales";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { formatCurrency } from "@/lib/utils";
-import { useCurrency } from "@/components/currency-provider";
+import { useCurrency, useRate } from "@/components/currency-provider";
+import { convertToBase } from "@/lib/currency";
 import type { InventoryLot } from "@prisma/client";
 
 const CHANNELS = [
@@ -48,6 +49,7 @@ type SaleLineItem = {
 export function SaleForm({ lots }: { lots: InventoryLot[] }) {
   const router = useRouter();
   const currency = useCurrency();
+  const rate = useRate();
   const [loading, setLoading] = useState(false);
   const [channel, setChannel] = useState("FB_PAGE");
   const [buyerName, setBuyerName] = useState("");
@@ -93,19 +95,20 @@ export function SaleForm({ lots }: { lots: InventoryLot[] }) {
 
   async function handleSubmit() {
     setLoading(true);
+    // Amounts are typed in the active display currency; store them in the PHP base.
     const result = await createSale({
       channel,
       buyerName: buyerName || undefined,
       paymentMethod,
-      discount: parseFloat(discount) || 0,
-      shippingCharged: parseFloat(shippingCharged) || 0,
-      shippingCostPaid: parseFloat(shippingCostPaid) || 0,
-      platformFees: parseFloat(platformFees) || 0,
+      discount: convertToBase(parseFloat(discount) || 0, rate),
+      shippingCharged: convertToBase(parseFloat(shippingCharged) || 0, rate),
+      shippingCostPaid: convertToBase(parseFloat(shippingCostPaid) || 0, rate),
+      platformFees: convertToBase(parseFloat(platformFees) || 0, rate),
       notes: notes || undefined,
       lineItems: lineItems.map((item) => ({
         inventoryLotId: item.inventoryLotId,
         qty: parseInt(item.qty) || 1,
-        unitPrice: parseFloat(item.unitPrice) || 0,
+        unitPrice: convertToBase(parseFloat(item.unitPrice) || 0, rate),
       })),
     });
 
@@ -206,7 +209,7 @@ export function SaleForm({ lots }: { lots: InventoryLot[] }) {
                         <SelectItem key={lot.id} value={lot.id}>
                           {lot.setCode && `${lot.setCode} `}
                           {lot.productName} ({lot.language}) — {lot.qtyOnHand}x
-                          @ {formatCurrency(lot.unitCost.toString(), currency)}
+                          @ {formatCurrency(lot.unitCost.toString(), currency, rate)}
                         </SelectItem>
                       ))}
                   </SelectContent>
