@@ -842,44 +842,44 @@
   "120030015": {
     "id": 120030015,
     "name": "Pokémon TCG: 30th Celebration Tin (Pe-Order) STRICTLY 2PP",
-    "status": "coming-soon",
+    "status": "sold-out",
     "url": "/product/pok%C3%A9mon-tcg-30th-celebration-tin-pe-order",
-    "price": 79
+    "price": 99
   },
   "120030060": {
     "id": 120030060,
     "name": "Pokémon TCG: 30th Celebration Ditto Premium Collection (Pre-Order) STRICTLY 2PP",
-    "status": "coming-soon",
+    "status": "sold-out",
     "url": "/product/30thCelebrationDittoPremiumCollection",
-    "price": 149
+    "price": 159.99
   },
   "120030162": {
     "id": 120030162,
-    "name": "Pokémon TCG: 30th Celebration Figure Collection - Mew / Mewtwo (Pre-Order)",
-    "status": "coming-soon",
+    "name": "Pokémon TCG: 30th Celebration Figure Collection - Mew / Mewtwo (Pre-Order) STRICTLY 2PP",
+    "status": "sold-out",
     "url": "/product/figure-collection-mew-mewtwo-pre-order",
-    "price": 199
+    "price": 119.99
   },
   "120030249": {
     "id": 120030249,
     "name": "Pokémon TCG: 30th Celebration Ultra-Premium Collection Day / Night (PRE-ORDER) STRICTLY 2PP",
-    "status": "coming-soon",
+    "status": "sold-out",
     "url": "/product/premiumcollection",
     "price": 699
   },
   "120030297": {
     "id": 120030297,
     "name": "Pokémon TCG: 30th Celebration Booster Bundle (Pre-Order) STRICTLY 2PP",
-    "status": "coming-soon",
+    "status": "active",
     "url": "/product/boosterbundle",
-    "price": 99
+    "price": 149
   },
   "120030363": {
     "id": 120030363,
     "name": "Pokémon TCG: 30th Celebration Mini Tin (Pre-Order) SEALED CASE OF 10 (STRICTLY 1PP)",
-    "status": "coming-soon",
+    "status": "sold-out",
     "url": "/product/copy-of-pok%C3%A9mon-tcg-30th-celebration-ultra-premium-collection-day-night",
-    "price": 390
+    "price": 419
   },
   "120030477": {
     "id": 120030477,
