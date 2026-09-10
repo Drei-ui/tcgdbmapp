@@ -1,5 +1,6 @@
 # Cool Shit NZ Monitor — Run Log
 
+- **2026-09-10T20:56:25.193Z** · 124 products · 0 change(s)
 - **2026-09-10T18:19:29.029Z** · 124 products · 0 change(s)
 - **2026-09-10T11:29:59.459Z** · 124 products · 0 change(s)
 - **2026-09-10T06:20:54.938Z** · 124 products · 0 change(s)
@@ -199,4 +200,3 @@
 - **2026-08-24T04:23:49.434Z** · 132 products · 1 change(s) — coming-soon→active: Pokémon TCG: 30th Celebration Booster Bundle (Pre-Order) STRICTLY 2PP • email FAILED (RESEND_API_KEY env var is not set)
 - **2026-08-24T03:34:19.069Z** · 132 products · 0 change(s)
 - **2026-08-24T02:37:31.789Z** · 132 products · 0 change(s)
-- **2026-08-24T01:16:58.506Z** · 132 products · 0 change(s)
