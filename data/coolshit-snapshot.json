@@ -842,29 +842,29 @@
   "120815376": {
     "id": 120815376,
     "name": "Pokémon TCG: Mega Evolution— Delta Reign Booster Bundle (PRE-ORDER)",
-    "status": "coming-soon",
+    "status": "active",
     "url": "/product/pok%C3%A9mon-tcg-mega-evolution-delta-reign-booster-bundle-pre-order",
-    "price": 69
+    "price": 79
   },
   "120815388": {
     "id": 120815388,
     "name": "         Pokémon TCG: Mega Evolution—Delta Reign Booster (PRE-ORDER)",
-    "status": "coming-soon",
+    "status": "active",
     "url": "/product/DELTABOOSTERBOX",
-    "price": 359
+    "price": 399
   },
   "120815394": {
     "id": 120815394,
     "name": "Pokémon TCG: Mega Evolution—Delta Reign Three-Booster Blister (PRE-ORDER)",
-    "status": "coming-soon",
+    "status": "active",
     "url": "/product/3PACKDELTA",
     "price": 35
   },
   "120815427": {
     "id": 120815427,
     "name": "Pokémon TCG: Mega Evolution—Delta Reign Elite Trainer Box (PRE-ORDER)",
-    "status": "coming-soon",
+    "status": "sold-out",
     "url": "/product/deltaetb",
-    "price": 130
+    "price": 149
   }
 }
