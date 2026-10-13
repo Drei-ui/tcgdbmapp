@@ -93,28 +93,28 @@
   "114346548": {
     "id": 114346548,
     "name": "Liam Lawson Red Bull",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/liam-lawson-graphic-tee",
     "price": 59.99
   },
   "114346551": {
     "id": 114346551,
     "name": "Lewis Hamilton",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/lewis-hamilton-graphic-tee",
     "price": 59.99
   },
   "114346554": {
     "id": 114346554,
     "name": "Max Verstappen ",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/max-verstappen-graphic-tee",
     "price": 59.99
   },
   "114421203": {
     "id": 114421203,
     "name": "Liam Lawson Racing Bulls",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/lawson-graphic-tee",
     "price": 59.99
   },
@@ -866,5 +866,33 @@
     "status": "sold-out",
     "url": "/product/deltaetb",
     "price": 149
+  },
+  "121568199": {
+    "id": 121568199,
+    "name": "F1 Topps Turbo Attax 2026 Mega Tin",
+    "status": "active",
+    "url": "/product/f1-topps-turbo-attax-2026-mega-tin",
+    "price": 39.99
+  },
+  "121568217": {
+    "id": 121568217,
+    "name": "F1 Topps Turbo Attax 2026 Trading Cards Display Box",
+    "status": "active",
+    "url": "/product/f1-topps-turbo-attax-2026-trading-cards-display-box",
+    "price": 209
+  },
+  "121568274": {
+    "id": 121568274,
+    "name": "Pokemon TCG ME2.5 Ascended Heroes Focused Fighters Premium Collection",
+    "status": "sold-out",
+    "url": "/product/pokemon-tcg-me25-ascended-heroes-focused-fighters-premium-collection",
+    "price": 199.99
+  },
+  "121568742": {
+    "id": 121568742,
+    "name": "Dragon Ball Super Card Game Fusion World Booster Box - Brightness of Hope [FB11] (PRE-ORDER)",
+    "status": "coming-soon",
+    "url": "/product/dragon-ball-super-card-game-fusion-world-booster-box-brightness-of-hope-fb11-pre-order",
+    "price": 275
   }
 }
