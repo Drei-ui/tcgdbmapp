@@ -6,117 +6,12 @@
     "url": "/product/cool-shit-air-freshener",
     "price": 3
   },
-  "107532552": {
-    "id": 107532552,
-    "name": "Black Core Tee",
-    "status": "active",
-    "url": "/product/cool-shit-black-tee",
-    "price": 20
-  },
-  "107532657": {
-    "id": 107532657,
-    "name": "Pink Core Tee",
-    "status": "active",
-    "url": "/product/pink-core-tee",
-    "price": 20
-  },
-  "107532675": {
-    "id": 107532675,
-    "name": "Ecru Core Tee ",
-    "status": "active",
-    "url": "/product/ecru-core-tee",
-    "price": 20
-  },
-  "107532912": {
-    "id": 107532912,
-    "name": "Cool Shit Black Tee",
-    "status": "active",
-    "url": "/product/cool-shit-black",
-    "price": 20
-  },
-  "107532969": {
-    "id": 107532969,
-    "name": "Staple Tee",
-    "status": "active",
-    "url": "/product/staple-tee",
-    "price": 20
-  },
-  "107533053": {
-    "id": 107533053,
-    "name": "If It Ain't Cool It Ain't Here Tee",
-    "status": "active",
-    "url": "/product/if-it-ain-t-cool-it-ain-t-here-tee",
-    "price": 20
-  },
-  "107568099": {
-    "id": 107568099,
-    "name": "Cool Sh*t Skateboard -",
-    "status": "active",
-    "url": "/product/cool-sh-t-skateboard-pre-order",
-    "price": 49
-  },
-  "107903385": {
-    "id": 107903385,
-    "name": "Cool Shit Club Trucker Cap",
-    "status": "active",
-    "url": "/product/cool-shit-club-trucker-cap",
-    "price": 10
-  },
-  "107903427": {
-    "id": 107903427,
-    "name": "Cream Club Hoodie",
-    "status": "active",
-    "url": "/product/cream-club-hoodie",
-    "price": 29
-  },
-  "107903448": {
-    "id": 107903448,
-    "name": "Club Tee Cream",
-    "status": "active",
-    "url": "/product/club-tee-cream",
-    "price": 13
-  },
   "112952463": {
     "id": 112952463,
     "name": "2024- 2025 Hoops Basketball GRAVITY FEED",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/2024-2025-hoops-basketball-gravity-feed",
     "price": 4
-  },
-  "113781825": {
-    "id": 113781825,
-    "name": "Chiefs Mana ",
-    "status": "sold-out",
-    "url": "/product/chiefs-mana-tee",
-    "price": 59.99
-  },
-  "114346548": {
-    "id": 114346548,
-    "name": "Liam Lawson Red Bull",
-    "status": "sold-out",
-    "url": "/product/liam-lawson-graphic-tee",
-    "price": 59.99
-  },
-  "114346551": {
-    "id": 114346551,
-    "name": "Lewis Hamilton",
-    "status": "sold-out",
-    "url": "/product/lewis-hamilton-graphic-tee",
-    "price": 59.99
-  },
-  "114346554": {
-    "id": 114346554,
-    "name": "Max Verstappen ",
-    "status": "sold-out",
-    "url": "/product/max-verstappen-graphic-tee",
-    "price": 59.99
-  },
-  "114421203": {
-    "id": 114421203,
-    "name": "Liam Lawson Racing Bulls",
-    "status": "sold-out",
-    "url": "/product/lawson-graphic-tee",
-    "price": 59.99
   },
   "115720440": {
     "id": 115720440,
@@ -249,7 +144,7 @@
     "name": "F1 Turbo Attax 2025 Starter Packs",
     "status": "active",
     "url": "/product/f1-turbo-attax-2025-starter-packs",
-    "price": 24.99
+    "price": 19
   },
   "117387159": {
     "id": 117387159,
@@ -310,14 +205,14 @@
   "117387237": {
     "id": 117387237,
     "name": "Topps Premier League 2026 - Trading Cards",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/topps-premier-league-2026-trading-cards",
     "price": 5.99
   },
   "117387246": {
     "id": 117387246,
     "name": "Panini EPL TOP Class 2025 Soccer Cards",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/panini-epl-top-class-2025-soccer-cards",
     "price": 129.99
   },
@@ -340,7 +235,7 @@
     "name": "Ultra Pro 3\" X 4\" Clear Regular Toploader 25ct",
     "status": "active",
     "url": "/product/ultra-pro-3-x-4-clear-regular-toploader-25ct",
-    "price": 5.99
+    "price": 3.99
   },
   "117416178": {
     "id": 117416178,
@@ -387,7 +282,7 @@
   "117416373": {
     "id": 117416373,
     "name": "Fanattik Harry Potter Metal Replica Envelope with Red Seal",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/theory-11-harry-potter-puzzle",
     "price": 59.99
   },
@@ -527,7 +422,7 @@
   "117524220": {
     "id": 117524220,
     "name": "Meta Zoo TCG Base Set Booster Box",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/2022-ufc-trading-cards-prizm",
     "price": 129.99
   },
@@ -536,14 +431,14 @@
     "name": "FIFA Club World Cup 2025 Pocket Tin",
     "status": "active",
     "url": "/product/fifa-club-world-cup-2025-pocket-tin",
-    "price": 29.99
+    "price": 19.99
   },
   "117524244": {
     "id": 117524244,
     "name": "Panini FIFA 365 Adrenalyn XL 2024 - STAR SIGNINGS Blister",
     "status": "active",
     "url": "/product/panini-fifa-365-adrenalyn-xl-2024-star-signings-blister",
-    "price": 29.99
+    "price": 19.99
   },
   "117524265": {
     "id": 117524265,
@@ -688,14 +583,14 @@
   "119466174": {
     "id": 119466174,
     "name": "Topps 2026 Baseball Series 1 Hobby Box",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/topps-2026-baseball-series-1-hobby-box",
     "price": 299
   },
   "119466183": {
     "id": 119466183,
     "name": "Topps Baseball 2026 Series 1 -  Mega Box",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/ToppsBaseball2026SeriesMegaBox",
     "price": 119.99
   },
@@ -704,14 +599,14 @@
     "name": "Topps 2026 Baseball Series 1 Hobby Jumbo Box",
     "status": "active",
     "url": "/product/Topps2026BaseballSeries1HobbyJumboBox",
-    "price": 599
+    "price": 499
   },
   "119466201": {
     "id": 119466201,
     "name": "Topps 2026 Baseball Series 1 Value Box",
     "status": "active",
     "url": "/product/topps-2026-baseball-series-1-value-box",
-    "price": 69.99
+    "price": 59
   },
   "119466210": {
     "id": 119466210,
@@ -751,7 +646,7 @@
   "119466396": {
     "id": 119466396,
     "name": "Topps UCC Chrome Hobby Mega Box 2025/26",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/topps-ucc-chrome-hobby-mega-box-202526",
     "price": 169.99
   },
@@ -835,9 +730,93 @@
   "119731692": {
     "id": 119731692,
     "name": "Pokémon TCG Mega Zygarde ex Premium Collection (Sealed case of 6)",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/premiumsealedcase",
     "price": 579
+  },
+  "120030015": {
+    "id": 120030015,
+    "name": "Pokémon TCG: 30th Celebration Tin (Pe-Order) STRICTLY 2PP",
+    "status": "sold-out",
+    "url": "/product/pok%C3%A9mon-tcg-30th-celebration-tin-pe-order",
+    "price": 79
+  },
+  "120030060": {
+    "id": 120030060,
+    "name": "Pokémon TCG: 30th Celebration Ditto Premium Collection (Pre-Order) STRICTLY 2PP",
+    "status": "sold-out",
+    "url": "/product/30thCelebrationDittoPremiumCollection",
+    "price": 119
+  },
+  "120030162": {
+    "id": 120030162,
+    "name": "Pokémon TCG: 30th Celebration Figure Collection - Mew / Mewtwo (Pre-Order) STRICTLY 2PP",
+    "status": "sold-out",
+    "url": "/product/figure-collection-mew-mewtwo-pre-order",
+    "price": 99
+  },
+  "120030249": {
+    "id": 120030249,
+    "name": "Pokémon TCG: 30th Celebration Ultra-Premium Collection Day / Night (PRE-ORDER) STRICTLY 2PP",
+    "status": "sold-out",
+    "url": "/product/premiumcollection",
+    "price": 499
+  },
+  "120030297": {
+    "id": 120030297,
+    "name": "Pokémon TCG: 30th Celebration Booster Bundle (Pre-Order) STRICTLY 2PP",
+    "status": "sold-out",
+    "url": "/product/boosterbundle",
+    "price": 99
+  },
+  "120030363": {
+    "id": 120030363,
+    "name": "Pokémon TCG: 30th Celebration Mini Tin (Pre-Order) SEALED CASE OF 10 (STRICTLY 1PP)",
+    "status": "sold-out",
+    "url": "/product/copy-of-pok%C3%A9mon-tcg-30th-celebration-ultra-premium-collection-day-night",
+    "price": 399
+  },
+  "120030477": {
+    "id": 120030477,
+    "name": "Pokémon TCG: 30th Celebration Binder Collection (Pre-Order) STRICTLY 1PP",
+    "status": "sold-out",
+    "url": "/product/copy-of-pok%C3%A9mon-tcg-30th-celebration-mini-tin-pre-order",
+    "price": 139
+  },
+  "120030516": {
+    "id": 120030516,
+    "name": "Pokémon TCG: 30th Celebration Elite Trainer Box (Pre- Order) STRICTLY 1PP",
+    "status": "sold-out",
+    "url": "/product/celebration",
+    "price": 299
+  },
+  "120030579": {
+    "id": 120030579,
+    "name": "Pokémon TCG: 30th Celebration Knock Out Collection (Pre-Order) STRICTLY 1PP",
+    "status": "sold-out",
+    "url": "/product/knockout",
+    "price": 39
+  },
+  "120030606": {
+    "id": 120030606,
+    "name": "Pokémon TCG: 30th Celebration Poster Collection (Pre-Order) STRICTLY 1PP",
+    "status": "sold-out",
+    "url": "/product/poster",
+    "price": 69
+  },
+  "120030618": {
+    "id": 120030618,
+    "name": "Pokemon TCG: 30th Celebration Sylveon ex Box / Greninja ex Box (Pre-Order) STRICTLY 1PP",
+    "status": "sold-out",
+    "url": "/product/copy-of-pok%C3%A9mon-tcg-30th-celebration-poster-collection-pre-order",
+    "price": 89
+  },
+  "120030711": {
+    "id": 120030711,
+    "name": "Pokémon TCG: 30th Celebration Tech Sticker Collection (Pre-Order) STRICTLY 1PP",
+    "status": "sold-out",
+    "url": "/product/techsticker",
+    "price": 59
   },
   "120815376": {
     "id": 120815376,
@@ -870,7 +849,7 @@
   "121568199": {
     "id": 121568199,
     "name": "F1 Topps Turbo Attax 2026 Mega Tin",
-    "status": "active",
+    "status": "sold-out",
     "url": "/product/f1-topps-turbo-attax-2026-mega-tin",
     "price": 39.99
   },
@@ -891,8 +870,22 @@
   "121568742": {
     "id": 121568742,
     "name": "Dragon Ball Super Card Game Fusion World Booster Box - Brightness of Hope [FB11] (PRE-ORDER)",
-    "status": "coming-soon",
+    "status": "sold-out",
     "url": "/product/dragon-ball-super-card-game-fusion-world-booster-box-brightness-of-hope-fb11-pre-order",
     "price": 275
+  },
+  "121810317": {
+    "id": 121810317,
+    "name": "     Pokémon TCG: Unova Heavy Hitters Premium Collection",
+    "status": "coming-soon",
+    "url": "/product/heavyhitters",
+    "price": 160
+  },
+  "121810320": {
+    "id": 121810320,
+    "name": "Topps Flagship Premier League 2027 - Trading Cards",
+    "status": "active",
+    "url": "/product/topps-flagship-premier-league-2027-trading-cards",
+    "price": 239.99
   }
 }
