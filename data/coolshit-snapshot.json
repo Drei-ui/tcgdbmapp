@@ -887,5 +887,26 @@
     "status": "active",
     "url": "/product/topps-flagship-premier-league-2027-trading-cards",
     "price": 239.99
+  },
+  "121872846": {
+    "id": 121872846,
+    "name": "Topps Flagship Premier League 2027 - Starter Pack",
+    "status": "active",
+    "url": "/product/starterpack",
+    "price": 29.99
+  },
+  "121872882": {
+    "id": 121872882,
+    "name": "Topps Flagship Premier League 2027 - Mega Tin",
+    "status": "active",
+    "url": "/product/megatin",
+    "price": 39.99
+  },
+  "121872969": {
+    "id": 121872969,
+    "name": "Topps Flagship Premier League 2027 - Super Tin",
+    "status": "active",
+    "url": "/product/supertin",
+    "price": 54.99
   }
 }
