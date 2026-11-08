@@ -1,5 +1,6 @@
 # Cool Shit NZ Monitor — Run Log
 
+- **2026-11-08T22:32:13.477Z** · 130 products · 0 change(s)
 - **2026-11-08T18:54:38.521Z** · 130 products · 0 change(s)
 - **2026-11-08T14:25:51.970Z** · 130 products · 0 change(s)
 - **2026-11-08T07:30:02.485Z** · 130 products · 0 change(s)
@@ -199,4 +200,3 @@
 - **2026-10-02T12:25:18.547Z** · 124 products · 0 change(s)
 - **2026-10-02T06:09:36.441Z** · 124 products · 3 change(s) — coming-soon→active:          Pokémon TCG: Mega Evolution—Delta Reign Booster (PRE-ORDER); coming-soon→active: Pokémon TCG: Mega Evolution—Delta Reign Three-Booster Blister (PRE-ORDER); coming-soon→active: Pokémon TCG: Mega Evolution— Delta Reign Booster Bundle (PRE-ORDER) • email FAILED (RESEND_API_KEY env var is not set)
 - **2026-10-02T00:40:01.966Z** · 124 products · 0 change(s)
-- **2026-10-01T21:04:09.085Z** · 124 products · 0 change(s)
