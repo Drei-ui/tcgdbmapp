@@ -547,10 +547,10 @@
   },
   "119465784": {
     "id": 119465784,
-    "name": "Pokémon TCG: Mega Evolution Pitch Black Booster (Pre-Order)",
-    "status": "sold-out",
+    "name": "Pokémon TCG: Mega Evolution Pitch Black Booster (PRE-ORDER)",
+    "status": "active",
     "url": "/product/pok%C3%A9mon-tcg-mega-evolution-pitch-black-booster-pre-order",
-    "price": 360
+    "price": 359
   },
   "119465790": {
     "id": 119465790,
@@ -830,7 +830,7 @@
     "name": "         Pokémon TCG: Mega Evolution—Delta Reign Booster (PRE-ORDER)",
     "status": "sold-out",
     "url": "/product/DELTABOOSTERBOX",
-    "price": 399
+    "price": 359
   },
   "120815394": {
     "id": 120815394,
@@ -908,5 +908,33 @@
     "status": "active",
     "url": "/product/supertin",
     "price": 54.99
+  },
+  "122208216": {
+    "id": 122208216,
+    "name": "Pokémon TCG: Mega Rayquaza ex Premium Tournament Collection (PRE-ORDER)",
+    "status": "coming-soon",
+    "url": "/product/MegaRayquaza",
+    "price": 110
+  },
+  "122208240": {
+    "id": 122208240,
+    "name": "Pokémon TCG: Pokémon Day 2027 Collection",
+    "status": "coming-soon",
+    "url": "/product/POKEMONDAY",
+    "price": 110
+  },
+  "122208261": {
+    "id": 122208261,
+    "name": "Pokémon TCG: Valentine’s Box",
+    "status": "coming-soon",
+    "url": "/product/copy-of-pok%C3%A9mon-tcg-pok%C3%A9mon-day-2027-collection",
+    "price": 36
+  },
+  "122208291": {
+    "id": 122208291,
+    "name": "Pokémon TCG: Unova Heavy Hitters Premium Collection (PRE-ORDER)",
+    "status": "sold-out",
+    "url": "/product/heavyhittersunova",
+    "price": 199
   }
 }
