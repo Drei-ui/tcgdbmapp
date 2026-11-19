@@ -1,5 +1,6 @@
 # Cool Shit NZ Monitor — Run Log
 
+- **2026-11-19T03:49:55.989Z** · 134 products · 0 change(s)
 - **2026-11-18T22:40:14.004Z** · 134 products · 0 change(s)
 - **2026-11-18T15:32:25.812Z** · 134 products · 0 change(s)
 - **2026-11-18T06:09:57.002Z** · 134 products · 1 change(s) — sold-out→active: Pokémon TCG: Mega Evolution Pitch Black Booster (PRE-ORDER) • email FAILED (RESEND_API_KEY env var is not set)
@@ -199,4 +200,3 @@
 - **2026-10-10T13:23:54.310Z** · 124 products · 0 change(s)
 - **2026-10-10T07:00:57.598Z** · 124 products · 0 change(s)
 - **2026-10-10T01:10:30.287Z** · 124 products · 0 change(s)
-- **2026-10-09T21:34:42.859Z** · 124 products · 0 change(s)
