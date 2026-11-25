@@ -1,5 +1,6 @@
 # Cool Shit NZ Monitor — Run Log
 
+- **2026-11-25T14:42:49.037Z** · 138 products · 0 change(s)
 - **2026-11-25T04:26:02.613Z** · 138 products · 0 change(s)
 - **2026-11-24T21:28:31.831Z** · 138 products · 0 change(s)
 - **2026-11-24T11:36:56.786Z** · 138 products · 0 change(s)
@@ -199,4 +200,3 @@
 - **2026-10-14T20:59:48.790Z** · 128 products · 0 change(s)
 - **2026-10-14T17:51:57.515Z** · 128 products · 0 change(s)
 - **2026-10-14T13:01:23.925Z** · 128 products · 0 change(s)
-- **2026-10-14T07:33:54.487Z** · 128 products · 0 change(s)
